@@ -1,0 +1,95 @@
+<!-- Preloader -->
+<style>
+    [data-preload] {
+        opacity: 0;
+    }
+
+    .grid-stack-item-content {
+        background: #fff;
+    }
+
+    .main-sidebar--top .main-menu.main-menu--secondary>li a i,
+    .main-sidebar--top .main-menu.main-menu--primary>li a i {
+        font-size: 24px;
+        margin-right: 16px;
+    }
+
+    aside.main-sidebar {
+        width: 98px;
+        height: 100vh;
+    }
+
+    @media only screen and (min-width: 1024px) {
+        .app-content {
+            margin-left: 98px;
+        }
+    }
+
+    .app-content:before {
+        -webkit-transition: .3s;
+        -o-transition: .3s;
+        position: absolute;
+        left: 0;
+        width: calc(100vw - 98px);
+        height: 230px;
+        background: #02a8f3;
+        content: "";
+        opacity: 1;
+        transition: .3s;
+    }
+
+    #app-wrapper.main-sidebar--top .main-head,
+    #app-wrapper.main-sidebar--top .main-content,
+    #app-wrapper.main-sidebar--top .nav-container,
+    #app-wrapper.main-sidebar--top .submenu section {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #app-wrapper.main-sidebar--top .main-head--ca.main-head,
+    #app-wrapper.main-sidebar--top.main-sidebar--ca .main-content,
+    #app-wrapper.main-sidebar--top .main-menu-html--ca .nav-container,
+    #app-wrapper.main-sidebar--top .main-menu-html--ca .submenu section {
+        max-width: 1152px;
+    }
+
+    #app-wrapper.main-sidebar--top .main-menu-html--ca .more-trigger {
+        display: none;
+    }
+
+    #app-wrapper.main-sidebar--top .main-menu-html--ca .client-area .item-grp-single:nth-child(2) {
+        position: relative;
+    }
+
+    .badge {
+        display: none;
+    }
+</style>
+<!-- <meta http-equiv="x-dns-prefetch-control" content="off">  -->
+<!-- <meta http-equiv="set-cookie" content="name=value; expires=date; path=url">  -->
+<link rel="manifest" href="manifest.json">
+
+<!-- standard -->
+<link rel="stylesheet" href="/css/external.css">
+<link rel="stylesheet" href="/css/antares.css">
+<!-- deffered -->
+<!-- <link rel="stylesheet" href="css/abovefold.css">
+<script type="text/javascript">
+	var giftofspeed = document.createElement('link');
+	giftofspeed.rel = 'stylesheet';
+	giftofspeed.href = 'css/defer.css';
+	giftofspeed.type = 'text/css';
+	var godefer = document.getElementsByTagName('link')[0];
+	// godefer.parentNode.insertBefore(giftofspeed, godefer);
+	godefer.parentNode.prepend(giftofspeed, godefer);
+
+</script> -->
+<!-- <link rel="stylesheet" href="css/external-light.css">
+<link rel="stylesheet" href="css/antares-light.css">
+ 
+
+<!-- <link rel="stylesheet" href="css/app.css"> -->
+<!-- <script src="css.js"></script> -->

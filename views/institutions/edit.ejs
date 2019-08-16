@@ -1,0 +1,68 @@
+<%- include('../partials/header') %>
+
+<div class="grid-container grid-container--1col grid-container--footer grid-container--no-padd">
+
+
+    <div class="grid-col grid-col--container">
+        <section class="generals-form gen-settings--full" data-preload="" style="opacity: 1;">
+
+            <form method="POST" action="./<%- obj.id %>" accept-charset="UTF-8" class="form--hor">
+                <input name="id" type="hidden" value="<%- obj.id %>">
+
+                <fieldset name="inputs">
+                    <legend>Detalhes da Instituição</legend>
+                    <div class="form-block " role="">
+                        <% try { 
+                            if(msg) { %>
+                        <div class="col-group">
+                            <div class="col">
+                                <p class="alert alert alert--glow alert--success alert--lg alert--border mb20"><%- msg %></p>
+                            </div>
+                        </div>
+                        <% }
+                        } catch(e) { } %>
+                        <div class="col-group ">
+                            <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
+                                <label for="name" class="form-block__name">Nome</label>
+                            </div>
+                            <div class="col-mb-16 col-18 col-dt-10 col-ld-4">
+                                <div class="input-field ">
+
+                                    <input class="form-control" name="name" type="text" value="<%- obj.name %>" id="name" required>
+                                </div>
+                                <span id="name_error" class="error nopadding">
+
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-group ">
+                            <div class="col-mb-8 col-6 col-dt-4 col-ld-3 ">
+                                <label class="form-block__name">&nbsp;</label>
+                            </div>
+                            <div class="col-mb-16 col-16 col-dt-16 col-ld-16">
+                                <div class="input-field__desc">
+                                    O campo nome é obrigatório
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="app-content__footer">
+                    <div class="btn-group">
+                        <a href="/institutions" class="btn btn--md btn--default mdl-button mdl-js-button"
+                            data-upgraded=",MaterialButton">Voltar</a>
+
+                        <button class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                            type="submit" data-upgraded=",MaterialButton,MaterialRipple">Salvar<span
+                                class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+
+                    </div>
+                </div>
+            </form>
+        </section>
+
+    </div>
+
+</div>
+
+<%- include('../partials/footer') %>
