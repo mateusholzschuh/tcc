@@ -10,8 +10,8 @@ const Lecture = require('../models/lecture.model');
 const Enrollment = require('../models/enrollment.model');
 const Hackathon = require('../models/hackathon.model');
 
-const EVENT_ID = '5d657a73da903939d4cc7629';
-const HACKATHON = '5d6af3b4e215f7149c10a15c';
+const EVENT_ID = process.env.SACI || '5d657a73da903939d4cc7629';
+const HACKATHON = process.env.HACKATHON || '5d6af3b4e215f7149c10a15c';
 
 /**
  * Rota para inscrição no evento
