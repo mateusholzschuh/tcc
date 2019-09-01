@@ -29,7 +29,7 @@ router.post('/enroll', [
     body('email').isEmail().withMessage('Email inválido').normalizeEmail(),
     body('name').isString().isLength({ min: 5, max: 30 }).withMessage('Nome inválido'),
     body('cpf').isNumeric().isLength({ min: 11, max: 11 }).withMessage('CPF inválido'),
-    body('birthdate').isEmpty().withMessage('Data de nascimento em branco')
+    body('birthdate').not().isEmpty().withMessage('Data de nascimento em branco')
 ], async (req, res, next) => {
 
     // validação dos campos
@@ -45,7 +45,7 @@ router.post('/enroll', [
         name:  req.body.name,
         email: req.body.email,
         cpf:   req.body.cpf,
-        birthdate: new Date(req.body.birthdate),
+        birthdate: new Date(Number(req.body.birthdate)),
     }
 
     // verifica se o usuário já existe no sistema
