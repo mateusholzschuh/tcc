@@ -1,0 +1,124 @@
+<%- include('../header') %>
+<section class="generals-form">
+    <h1><%- event.name %></h1>
+    <form>
+        <fieldset name="inputs">
+            <a name="AntaresInputs" id="AntaresInputs">
+                <legend>Dados Gerais</legend>
+            </a>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Nome</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field">
+                            <input type="text" placeholder="Nome do evento" value="<%- event.name %>" name="name" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name as-fs">Descrição</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field">
+                            <textarea class="" name="description" cols="30" rows="5"
+                                placeholder="Breve descrição do evento" readonly><%- event.description %></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Local do evento</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field">
+                            <input type="text" placeholder="Localização do evento" name="location" readonly value="<%- event.location %>">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Total de dias do evento</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field">
+                            <input type="number" name="days" placeholder="Número de dias do evento" readonly value="<%- event.days %>"
+                                min="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Data inicial</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <!-- <div class="input-field datepicker-icon">
+                            <input data-datepicker="true" placeholder="Data inicial do evento" name="datepicker"
+                                required="" readonly="" value="<%- event.startDate %>">
+                        </div> -->
+                        <div class="input-field datepicker-icon">
+                            <input name="startDate"
+                                value="<%- moment(event.startDate).format('DD/MM/YYYY - HH:mm') %>"
+                                placeholder="Data inicial do evento" type="datetime" required readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Data final</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <!-- <div class="input-field datepicker-icon">
+                            <input data-datepicker="true" placeholder="Data final do evento" name="datepicker"
+                                required="" readonly="" value="<%- event.finishDate %>">
+                        </div> -->
+                        <div class="input-field datepicker-icon">
+                            <input name="finishDate"
+                                value="<%- moment(event.finishDate).format('DD/MM/YYYY - HH:mm') %>"
+                                placeholder="Data final do evento" type="datetime" required readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Evento Finalizado</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field switchbox">
+                            <label class="switch">
+                                <input class="switch-checkbox" type="checkbox" <%= event.finished ? 'checked' : '' %> name="finished" readonly>
+                                <span class="switch-container"><span class="switch-handle"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="display-none app-content__footer">
+            <div class="btn-group">
+                <button class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                    type="submit">Salvar</button>
+                <a class="btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+            </div>
+        </div>
+    </form>
+
+</section>
+<%- include('../footer') %>

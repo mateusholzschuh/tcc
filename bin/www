@@ -9,13 +9,15 @@ var debug = require('debug')('eventos:server');
 var http = require('http');
 var mongoose = require('mongoose');
 
-const DB_URI = 'mongodb://localhost:27017/eventos';
+const config = require('../config');
+
+const DB_URI = config.MONGODB_URI;
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = 3000;//normalizePort(process.env.PORT || '3002');
+var port = config.SERVER_PORT;
 app.set('port', port);
 /**
  * Create HTTP server.

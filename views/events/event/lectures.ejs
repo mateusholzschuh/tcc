@@ -1,0 +1,326 @@
+<%- include('../header') %>
+<div class="grid-stack-item" data-gs-no-move="1" data-gs-no-resize="1" data-gs-x="0" data-gs-y="0" data-gs-width="24"
+    data-gs-height="19" data-gs-min-width="13" data-gs-min-height="18" data-gs-auto-position="0">
+    <div class="grid-stack-item-content">
+        <div class="card card--pagination card--tabs card--unadjustabl no-padding" data-preload>
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <div class="swiper-container swiper-mdl-tabs tab-bar--tape">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <a href="#lectures-panel" class="mdl-tabs__tab is-active">Palestras</a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="#add-panel" class="mdl-tabs__tab">Adicionar palestra</a>
+                            </div>
+                        </div>
+                        <div class="swiper-mdl-tabs-next"></div>
+                        <div class="swiper-mdl-tabs-prev"></div>
+                    </div>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="lectures-panel">
+                    
+                    <!-- TAB 1 -->
+                    <div class="tbl-c ">
+                        <div class="card-ctrls tab-search tab-search--filter swiper--no-slides with-mass-actions-containe">
+                            <div class="card-ctrls__left">
+                                <select class="mb24 select2-left select--category" name="select" data-selectAR--mdl-big="true"
+                                    data-prefix="Show: " data-select2--class="card-ctrls--select2">
+                                    <option value="" selected>Todos</option>
+                                    <!-- <option value="" selected>Second very big select for testing fucking dropdown card-ctrls</option> -->
+                                </select>
+                                <div class="search-box search-box--dark">
+                                    <i class="zmdi zmdi-search"></i>
+                                    <form action="">
+                                        <div class="search-box__mdl-textfield mdl-textfield mdl-js-textfield ">
+                                            <input class="mdl-textfield__input search-box__search-field" type="text" id="tableSearch"
+                                                autocomplete="off">
+                                            <label class="mdl-textfield__label" for="tableSearch">Buscar</label>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        
+                            <div class="card-ctrls__right">
+                                <div class="filters">
+                                    <div class="swiper-filters--box swiper-filters--no-active">
+                                        <div class="swiper-container swiper-filters">
+                                            <!-- Additional required wrapper -->
+                                            <div class="swiper-wrapper card-filters--swiper">
+                        
+                                            </div>
+                                        </div>
+                                        <div class="swiper-filters-next"></div>
+                                        <div class="swiper-filters-prev"></div>
+                                        <div class="swiper-filters-next swiper-filters-next--gradient"></div>
+                                        <div class="swiper-filters-prev swiper-filters-prev--gradient"></div>
+                                    </div>
+                        
+                                </div>
+                        
+                            </div>
+                        </div>
+
+                        <table data-table-init="true" class="antares-table" data-table-idx-select="4" cellspacing="0" width="100%">
+                                <colgroup>
+                                    <col style="width: 4%;">
+                                    <col style="width: 4%;">
+                                    <col style="width: 10%;">
+                                    <col style="width: 4%;">
+                                    <col style="width: 4%;">
+                                    <col style="width: 8%;">
+                                    <col style="width: 19%;">
+                                    <col style="width: 10%;">
+                                    <col style="width: 4%;">
+                                    <col style="width: 0%;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="no-sort">#</th>
+                                        <th class="no-sort">Palestrante</th>
+                                        <th class="no-sort">Título</th>
+                                        <th class="no-sort desktop">Data</th>
+                                        <th class="no-sort desktop">Status</th>
+                                        <th class="no-sort tabletV tabletH laptop desktop">Local</th>
+                                        <th class="no-sort"></th>
+                                        <th class="no-sort is-hidden"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% try{
+                                        list.forEach(p => { %>
+                                    <tr>
+                                        <td><%- p._id %></td>
+                                        <td class="name"><%- p.speakers.map(e => e.name) %></td>
+                                        <td><%- p.name %></td>
+                                        <td><a title="email address"><%= moment(p.date).format('DD/MM/YYYY - HH:mm') %></a>
+                                        </td>
+                                        <td><span
+                                                class="label-basic label-basic--md <%- p.confirmed ? 'label-basic--success' : 'label-basic--pending' %> ui-selectee"><%- p.confirmed ? 'Confirmada' : 'Pendente' %></span>
+                                        </td>
+                                        <td><%- p.location %></td>
+                                        <td class="dt-actions desktop"><i class="zmdi zmdi-more"></i></td>
+                                        <td class="is-hidden cm-actions">
+                                            <ul>
+                                                <li><a href="<%- fullUrl %>/<%- p.id %>/edit" data-icon="edit" data-text="Editar">First</a></li>
+                                                <li><a href="<%- fullUrl %>/<%- p.id %>/delete" class="triggerable confirm" data-icon="delete"
+                                                        data-text="Remover">Second</a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <%      });
+                                    } catch(e) { } %>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Palestrante</th>
+                                        <th>Título</th>
+                                        <th>Data</th>
+                                        <th>Confirmada</th>
+                                        <th>Local</th>
+                                        <th class="desktop"></th>
+                                        <th class="is-hidden"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        
+                        
+                    </div>
+                </div>
+                <div class="mdl-tabs__panel" id="add-panel">
+                    <!-- TAB 2 -->
+
+                    <section class="generals-form" style="width:100%">
+                        <form action="./lectures" method="POST">
+                            <div class="col-group">
+
+
+                                <fieldset name="inputs" class="col-mb-24 col-12">
+                                    <a name="AntaresInputs" id="AntaresInputs">
+                                        <legend>Dados Gerais</legend>
+                                    </a>
+                                    <!-- <div class="form-block" style="width:100%;">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Nome</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <div
+                                                        class="mdl-textfield mdl-textfield--AR mdl-js-textfield mdl-textfield--floating-label">
+                                                        <input class="mdl-textfield__input" type="text" name="sample-valmd1"
+                                                            id="sample1">
+                                                        <label class="mdl-textfield__label" for="sample1">Nome do evento...</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block" style="width:100%;">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Descrição</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--AR">
+                                                        <textarea class="mdl-textfield__input" type="text" rows="3"
+                                                            id="sample5"></textarea>
+                                                        <label class="mdl-textfield__label" for="sample5">Text lines...</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Nome</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="text" placeholder="Nome da palestra" name="name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name as-fs">Descrição</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <textarea class="" name="description" cols="30" rows="5"
+                                                        placeholder="Breve descrição do palestra"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Local da palestra</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="text" name="location"
+                                                        placeholder="Localização da palestra. Ex.: Sala 302 ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Data da palestra</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field datepicker-icon">
+                                                    <input data-alt-datetimepicker="true" name="date"
+                                                        placeholder="Data e hora da palestra" type="datetime" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Palestrante(s)</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field input-field--icon">
+                                                    <!-- <span class="input-field__icon"><i class="zmdi zmdi-accounts"></i></span> -->
+                                                    <!-- <select class="speakers-select" name="speakers" data-selectar="true"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" multiple>
+                                                    </select> -->
+                                                    <!-- <select id="ee" style="width:200px"></select> -->
+                                                    <select data-selectar--search="true" name="speakers"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" required
+                                                        multiple>
+                                                        <% try { 
+                                                            users.forEach(u => { %>
+
+                                                        <option value="<%- u._id %>"><%- u.name%></option>
+                                                        <%  })
+                                                        } catch(e) {} %>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Palestra confirmada?</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field switchbox">
+                                                    <label class="switch">
+                                                        <input class="switch-checkbox" type="checkbox" name="confirmed">
+                                                        <span class="switch-container"><span
+                                                                class="switch-handle"></span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+
+                            </div>
+                            <div class="app-content__footer">
+                                <div class="btn-group">
+                                    <button
+                                        class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="submit">Salvar</button>
+                                    <a
+                                        class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </section>
+                    <div class="display-none zd-container">
+
+                        <div class="zd zd--lg">
+                            <div class="zd__header">
+                                <i class="zmdi zmdi-email"></i>
+                            </div>
+                            <div class="zd__content">
+                                <div class="zd__title">No
+                                    invoices
+                                    to
+                                    display.
+                                </div>
+                                <div class="zd__description">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Pellentesque
+                                    fermentum magna ac efficitur.
+                                </div>
+                            </div>
+                            <div class="zd__footer">
+                                <a class="btn btn--primary btn--zd mdl-js-button mdl-js-ripple-effect">OPEN
+                                    NEW
+                                    TICKET
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../footer') %>

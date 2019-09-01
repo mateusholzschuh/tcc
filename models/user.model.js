@@ -16,6 +16,10 @@ let UserSchema = new Schema({
         trim: true, 
         // validate: /[\d]{11}/g
     },
+    birthdate: {
+        type: Date,
+        required: false,
+    },
     email: {
         type: String, 
         required: false, 
@@ -25,6 +29,10 @@ let UserSchema = new Schema({
     password: {
         type: String, 
         required: false
+    },
+    role: {
+        type: Number,
+        default: 0  // Basic user level // TODO: middleware baseado no nivel de usuario
     },
     avatar: {
         type: String, 

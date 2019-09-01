@@ -11,7 +11,7 @@ router.get('/create',   User_controller.create);
 router.post('/',        User_controller.store);
 router.get('/:id',      User_controller.view);
 router.get('/edit/:id', User_controller.edit);
-router.post('/update',  User_controller.update);
+router.post('/edit/:id',  User_controller.update);
 router.post('/delete',  User_controller.destroy);
 
 // exporta o router
