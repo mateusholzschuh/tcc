@@ -45,7 +45,7 @@ router.post('/enroll', [
         name:  req.body.name,
         email: req.body.email,
         cpf:   req.body.cpf,
-        birthdate: req.body.birthdate,
+        birthdate: new Date(req.body.birthdate),
     }
 
     // verifica se o usuário já existe no sistema
