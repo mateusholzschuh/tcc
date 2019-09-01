@@ -296,16 +296,16 @@ router.post('/hackathon', [
 });
 
 
-// router.get('/h', (req, res) => {
-//     let hackathon = {
-//         name: 'Hackathon',
-//         event: EVENT_ID
-//     }
+router.get('/h', (req, res) => {
+    let hackathon = {
+        name: 'Hackathon',
+        event: EVENT_ID
+    }
     
-//     Hackathon.create(hackathon).then(doc => {
-//         res.json(doc)
-//     })
-// });
+    Hackathon.create(hackathon).then(doc => {
+        res.json(doc)
+    })
+});
 
 router.get('/institutions', (req, res) => {
     Institution.find().select('name').then(doc => {
