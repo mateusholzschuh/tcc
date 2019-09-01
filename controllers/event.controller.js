@@ -45,7 +45,7 @@ const store = (req, res, next) => {
         name: req.body.name,
         description: req.body.description,
         location: req.body.location,
-        days: Number(req.body.days),
+        days: Number(req.body.days) || 1,
         startDate: moment(req.body.startDate, 'DD/MM/YYYY - HH:mm'),
         finishDate: moment(req.body.finishDate, 'DD/MM/YYYY - HH:mm'),
         finished: req.body.finished == 'on' ? true : false,
@@ -55,7 +55,7 @@ const store = (req, res, next) => {
     Event.create(event).then(doc => {
         res.redirect('./');
     }).catch(err => {
-        res.sendError(500);
+        next()
     })
 };
 
