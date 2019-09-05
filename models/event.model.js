@@ -40,7 +40,10 @@ let EventSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Lecture'
     }],
-    workshops: [], // * subevent***
+    workshops: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Workshop'
+    }], // * subevent***
     enrolleds: [{
         type: Schema.Types.ObjectId,
         ref: 'Enrollment'

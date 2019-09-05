@@ -4,6 +4,7 @@ const router = express.Router();
 const User = require('../models/user.model');
 const Institution = require('../models/institution.model');
 const Event = require('../models/event.model');
+const Workshop = require('../models/workshop.model');
 
 /* rotas de exemplo */
 router.get('/users', (req, res) => {
@@ -39,7 +40,14 @@ router.get('/events/:id?', (req, res, next) => {
             path: 'speakers',
             select: 'name',
         }
-    }).exec().then(r => {
+    }).populate({
+        path: 'workshops',
+        populate: {
+            path: 'speakers',
+            select: 'name'
+        }
+    })
+    .exec().then(r => {
         res.json(r)
     }).catch(err => {
         req.message = err.name;
@@ -48,6 +56,12 @@ router.get('/events/:id?', (req, res, next) => {
     })
 
 });
+
+router.get('/workshops', async (req, res) => {
+    res.json(
+        await Workshop.find().populate('event').exec()
+    )
+})
 
 router.get('/ban', (req, res, next) => {
     req.message = 'Banned';

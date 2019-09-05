@@ -4,6 +4,9 @@ const router = express.Router();
 // pega o controller
 const Event_controller = require('../controllers/event.controller');
 
+//routes workshop
+const workshop = require('../routes/workshop.routes')
+
 
 // rotas do resource
 router.get('/',         Event_controller.index);
@@ -13,6 +16,8 @@ router.get('/:id',      Event_controller.view);
 router.get('/:id/edit', Event_controller.edit);
 router.post('/:id/edit',  Event_controller.update);
 router.get('/:id/delete',  Event_controller.destroy);
+
+router.use('/:id/workshops', workshop)
 
 // router.get('/:id/lectures', Event_controller.lectures);
 
