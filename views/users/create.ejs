@@ -10,13 +10,23 @@
                     <fieldset name="inputs">
                         <legend>Detalhes do usuário</legend>
                         <div class="form-block " role="">
+                        <% try { 
+                            errors.forEach(error => { %>
+                            <div class="col-group">
+                                <div class="col">
+                                    <p class="alert alert alert--glow alert--error alert--lg alert--border mb20">
+                                        <%- error %></p>
+                                </div>
+                            </div>
+                            <% })
+                        } catch(e) { } %>
                             <div class="col-group ">
                                 <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
                                     <label for="email" class="form-block__name">E-mail</label>
                                 </div>
                                 <div class="col-mb-16 col-18 col-dt-10 col-ld-6">
                                     <div class="input-field ">
-                                        <input class="form-control" name="email" type="text" value="" id="email">
+                                        <input class="form-control" name="email" type="text" value="<%- locals.form ? form.email : ''  %>" id="email">
                                     </div>
                                     <span id="email_error" class="error nopadding">
 
@@ -41,7 +51,7 @@
                                 </div>
                                 <div class="col-mb-16 col-18 col-dt-10 col-ld-6">
                                     <div class="input-field ">
-                                        <input class="form-control" name="name" type="text" value="" id="name" required>
+                                        <input class="form-control" name="name" type="text" value="<%- locals.form ? form.name : '' %>" id="name" required>
                                     </div>
                                     <span id="name_error" class="error nopadding">
 
@@ -67,7 +77,7 @@
                                 <div class="col-mb-16 col-18 col-dt-10 col-ld-6">
                                     <div class="input-field ">
 
-                                        <input class="form-control" name="cpf" type="text" value="" id="cpf"
+                                        <input class="form-control" name="cpf" type="text" value="<%- locals.form ? form.cpf : '' %>" id="cpf"
                                             minlength="11" maxlength="11" required>
                                     </div>
                                     <span id="cpf_error" class="error nopadding">
@@ -94,8 +104,8 @@
                                 </div>
                                 <div class="col-mb-16 col-18 col-dt-10 col-ld-6">
                                     <div class="input-field datepicker-icon">
-                                        <input data-datepicker="true" name="birthdate"
-                                            placeholder="Data de nascimento" type="datetime" required>
+                                        <input data-datepicker="true" name="birthdate" placeholder="Data de nascimento"
+                                            type="datetime" value="<%- locals.forms ? form.birthdate : '' %>" required>
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +151,7 @@
                                 </div>
                                 <div class="col-mb-16 col-18 col-dt-10 col-ld-6">
                                     <div class="input-field ">
-                                        <input class="form-control" name="bio" type="text" value="" id="bio">
+                                        <input class="form-control" name="bio" type="text" value="<%- locals.forms ? form.bio : '' %>" id="bio">
                                     </div>
                                     <span id="email_error" class="error nopadding">
 
@@ -181,6 +191,21 @@
                                     </div>
                                     <span id="institute_error"
                                         class="error col-mb-16 col-18 col-dt-10 col-ld-4 nopadding">
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-block " role="">
+                            <div class="col-group ">
+                                <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
+                                    <label for="instituicao" class="form-block__name">Instituição</label>
+                                </div>
+                                <div class="col-mb-16 col-18 col-dt-10 col-ld-6">
+                                    <div class="input-field ">
+                                        <input class="form-control" name="instituicao" type="text" value="<%- locals.form ? form.instituicao : '' %>" id="instituicao">
+                                    </div>
+                                    <span id="name_error" class="error nopadding">
 
                                     </span>
                                 </div>

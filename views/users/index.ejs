@@ -6,6 +6,14 @@
         <div class="grid-stack-item-content">
             <div class="card card--pagination" data-preload>
                 <div class="card__content" style="padding: 0">
+                    <% if (locals.message && locals.message.length != 0) { %>
+                    <div class="col-group">
+                        <div class="col">
+                            <p class="alert alert alert--glow alert--success alert--lg alert--border mb20">
+                                <%- message %></p>
+                        </div>
+                    </div>
+                    <% } %>
                     <div class="tbl-c">
                         <div
                             class="card-ctrls tab-search tab-search--filter swiper--no-slides with-mass-actions-container">
@@ -86,9 +94,9 @@
                                     <td><%- u.cpf %></td>
                                     <td>
                                         <% try { -%>
-                                            <%- u.institution.name %>
+                                        <%- u.institution.name %>
                                         <% } catch(e) { -%>
-                                            <%- 'Não cadastrado' %>
+                                        <%- 'Não cadastrado' %>
                                         <% } -%>
                                     </td>
                                     <td><a><%- u.email || 'Não cadastrado' %></a></td>
@@ -102,7 +110,7 @@
                                             <li><a href="<%- fullUrl %>/<%- u._id %>" data-icon="eye"
                                                     data-text="Ver perfil">First</a></li>
                                             <li>
-                                                <a href="<%- fullUrl %>/edit/<%- u._id %>"  data-icon="edit"
+                                                <a href="<%- fullUrl %>/edit/<%- u._id %>" data-icon="edit"
                                                     data-text="Editar">Second</a>
                                             </li>
                                             <li>

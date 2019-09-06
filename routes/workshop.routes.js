@@ -6,13 +6,14 @@ const controller = require('../controllers/workshop.controller');
 
 
 // rotas do resource
-router.get('/',         controller.index);
-router.post('/',        controller.store);
-router.get('/:id',      controller.view);
-router.get('/:workshop/edit', controller.edit);
-router.post('/:workshop/edit/',controller.update);
+router.get('/',             controller.index);
+router.post('/',             controller.store);
+router.get('/:workshop',      controller.view);
+router.get('/:workshop/edit',  controller.edit);
+router.post('/:workshop/edit/', controller.update);
 router.get('/:workshop/delete',  controller.destroy);
-router.get('/:workshop/enrolleds',  controller.enrolleds);
+router.get('/:workshop/enrolleds', controller.enrolleds);
+router.post('/:workshop/enrolleds', controller.enroll)
 
 // exporta o router
 module.exports = router;

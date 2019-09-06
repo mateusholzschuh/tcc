@@ -63,6 +63,14 @@ router.get('/workshops', async (req, res) => {
     )
 })
 
+router.get('/res', async (req, res) => {
+    res.json(
+        
+        await Workshop.findOneAndUpdate({}, { 'enrolleds' : []})
+
+    )
+})
+
 router.get('/ban', (req, res, next) => {
     req.message = 'Banned';
     next()

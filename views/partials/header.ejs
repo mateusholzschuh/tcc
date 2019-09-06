@@ -34,8 +34,10 @@
 
 
                     <% if(typeof menu == 'undefined') { %>
-                    <li><a>
-                            <%- title %></a></li>
+                    <li>
+                        <a <% try{ url = turl; %><%- 'href="' + turl +'"' %><% }catch(e){} %>><%- title %></a>
+                    </li>
+                                
                     <% } else {  %>
                     <li>
                         <div class="ddown">
@@ -147,38 +149,39 @@
                                 <div class="ddown__init ddown__init--clean mdl-js-button mdl-js-ripple-effect">
                                     <div class="avatar avatar--xs" style="background: #000; border-radius:50%; height:100%; color:#fff">
                                         <!-- <img src="/img/avatars/avatar_sample_4.png" alt="Avatar"> -->
-                                        i
+                                        <%- locals.user ? user.name.charAt(0).toUpperCase() : 'A' %>
                                     </div>
                                 </div>
 
                                 <div class="ddown__content">
                                     <ul class="ddown__menu">
-                                        <li class="ddown__header">
+                                        <li class="ddown__header" style="border-bottom: none">
                                             <a class="mdl-js-button mdl-js-ripple-effect">
                                                 <div class="flex-block">
-                                                    <div class="avatar avatar--lg">
-                                                        <img src="/img/brand/brand-rsstudio--lg.png" alt="RS Studio">
+                                                    <div class="avatar avatar--xs" style="background: #AAA; border-radius:50%; height:100%; color:#fff">
+                                                        <!-- <img src="/img/brand/brand-rsstudio--lg.png" alt="RS Studio"> -->
+                                                        <%- locals.user ? user.name.charAt(0).toUpperCase() : 'A' %>
                                                     </div>
                                                     <div class="flex-block__content">
-                                                        <span class="flex-block__title">Paweł Bis</span>
-                                                        <span class="flex-block__desc">paul@rsstudio.net</span>
+                                                        <span class="flex-block__title"><%- locals.user ? user.name: 'Nome' %></span>
+                                                        <span class="flex-block__desc"><%- locals.user ? locals.user.email ? user.email : user.cpf : 'email' %></span>
                                                     </div>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li>
+                                        <li class="display-none">
                                             <a class="mdl-js-button mdl-js-ripple-effect">
                                                 <i class="zmdi zmdi-file-plus"></i> View Profile
                                             </a>
                                         </li>
-                                        <li>
+                                        <li class="display-none">
                                             <a class="mdl-js-button mdl-js-ripple-effect">
                                                 <i class="zmdi zmdi-email"></i> Something Else
                                             </a>
                                         </li>
                                         <li class="ddown__footer">
-                                            <a class="mdl-js-button mdl-js-ripple-effect">
-                                                <i class="zmdi zmdi-sign-in"></i> Sign Out
+                                            <a href="/logout" class="mdl-js-button mdl-js-ripple-effect">
+                                                <i class="zmdi zmdi-sign-in"></i> Sair
                                             </a>
                                         </li>
                                     </ul>

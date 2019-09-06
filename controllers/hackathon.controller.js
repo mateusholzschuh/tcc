@@ -1,27 +1,36 @@
 const User = require('../models/user.model');
 const Event = require('../models/event.model');
-const Workshop = require('../models/workshop.model');
+const Hackathon = require('../models/hackathon.model');
 const moment = require('moment');
 
 /**
- * Mostra a pagina com a listagem dos itens
+ * Mostra a pagina com a listagem dos times
  */
 const index = async (req, res, next) => {
-    let event = await Event.findOne({ _id: req.params.id }).populate({
-        path: 'workshops',
+    let event = await Event.findOne({ _id: req.params.id })
+    .select('hackathon enrolleds')
+    .populate([{
+        path: 'hackathon',
         populate: {
-            path: 'speakers',
-            select: 'name'
+            path: 'members',
+            select: 'name cpf'
         }
-    }).exec()
-        .catch(err => {
-            console.error(err)
-            return;
-        });
+    },{
+        path: 'enrolleds',
+        select: 'user -_id',
+        populate: {
+            path: 'user',
+            select: 'name cpf'
+        }
+    }])
+    .exec().catch(err => {
+        console.error(err)
+        return;
+    });
 
-    // res.json(event)
-
-    let users = await User.find().select('name')
+//     res.json(event)
+// return
+    let users = event.enrolleds
 
     //let event = await Event.findOne({ _id: req.params.id }).exec()
     // let event = await Event.find({}).exec().catch(err => console.error(err))
@@ -34,9 +43,9 @@ const index = async (req, res, next) => {
 
     // res.json(lectures)
 
-    res.render('events/event/workshops/index', {
-        title: 'Oficinas',
-        list: event.workshops,
+    res.render('events/event/hackathon/index', {
+        title: 'Hackathon',
+        list: event.hackathon,
         users: users,
         moment: moment, // biblioteca formatar data
         // menu: [
@@ -57,7 +66,7 @@ const store = async (req, res, next) => {
     const { name, description, location, date, limit, confirmed, speakers } = req.body;
     const event = req.params.id;
 
-    let workshop = {
+    let hackathon = {
         name,
         description,
         location,
@@ -70,15 +79,16 @@ const store = async (req, res, next) => {
 
     // res.json({lecture: lecture})
 
-    Workshop.create(workshop).then(r => {
+    Hackathon.create(hackathon).then(r => {
         // res.json(r)
-        Event.findOneAndUpdate({ _id: event }, { '$push': { 'workshops': r._id } }).then(ok => {
+        Event.findOneAndUpdate({ _id: event }, { '$push': { 'hackathon': r._id } }).then(ok => {
 
-            res.redirect('./workshops');
+            res.redirect('./hackathon');
         })
     }).catch(e => {
         res.status(500).json(e);
-    })
+    });
+
 };
 
 /**
@@ -95,8 +105,8 @@ const edit = async (req, res, next) => {
 
     let users = await User.find().select('name')
 
-    Workshop.findById(req.params.workshop).then(doc => {
-        res.render('events/event/workshops/edit', {
+    Hackathon.findById(req.params.hackathon).then(doc => {
+        res.render('events/event/hackathon/edit', {
             title: 'Editar Oficina',
             obj: doc,
             users: users,
@@ -110,28 +120,21 @@ const edit = async (req, res, next) => {
  * Função responsável por enviar a lista de inscritos e o form de inscrever
  */
 const enrolleds = async (req, res, next) => {
-    let workshop = await Workshop.findById(req.params.workshop)
+    let hackathon= await Hackathon.findById(req.params.hackathon)
         .populate({
             path: 'enrolleds.user',
             select: 'name cpf'
         }).exec();
 
-    let users = await Event.findOne({ _id : req.params.id }).select('enrolleds').populate({
-        path: 'enrolleds',
-        select: 'user -_id',
-        populate: {
-            path: 'user',
-            select: 'name cpf'
-        }
-    }).exec();
+    let users = await User.find({ _id : {'$nin' : hackathonenrolleds } }).select('name cpf').exec();
 
-    // res.json(users)
+    // res.json(hackathon
 // return
-    res.render('events/event/workshops/enrolleds', {
-        title: workshop.name || 'Inscritos na oficina',
-        turl: '/events/'+req.params.id+'/workshops',    
-        list: workshop.enrolleds,
-        users: users.enrolleds.map(e => e.user),
+    res.render('events/event/hackathon/enrolleds', {
+        title: hackathonname || 'Inscritos na oficina',
+        turl: '/events/'+req.params.id+'/hackathon',    
+        list: hackathonenrolleds,
+        users: users,
         moment: moment, // biblioteca formatar data
         // menu: [
         //     {
@@ -146,22 +149,12 @@ const enrolleds = async (req, res, next) => {
 /**
  * Função responsável por inscrever cidadão na oficina 
  */
-const enroll = async (req, res, next) => {
+const enroll = (req, res, next) => {
     const { user } = req.body;
-    const workshop = req.params.workshop;
+    const hackathon= req.params.hackathon
 
-    let count = await Workshop.findOne({ _id: workshop, enrolleds: { '$elemMatch' : { user: user } } }).count()
-    
-    // já está inscrito
-    // TODO: mostrar mgss
-    if (count != 0) {
-        
-        res.redirect('./enrolleds')
-        return 
-    }
-
-    Workshop.findByIdAndUpdate(workshop, { '$push' : { 'enrolleds' : { user: user } } }).then(doc => {
-        res.redirect('./enrolleds')
+    Hackathon.findByIdAndUpdate(hackathon, { '$push' : { 'enrolleds' : { user: user } } }).then(doc => {
+        res.json(doc)
     }).catch(err => {
         res.json(err);
         // next();
@@ -176,7 +169,7 @@ const update = (req, res, next) => {
     // ! fazer validação !
     const { name, description, location, date, limit, confirmed, speakers } = req.body;
 
-    let workshop = {
+    let hackathon= {
         name,
         description,
         location,
@@ -186,8 +179,8 @@ const update = (req, res, next) => {
         speakers
     }
 
-    Workshop.findByIdAndUpdate(req.params.workshop, workshop).then(doc => {
-        res.redirect('../../workshops');
+    Hackathon.findByIdAndUpdate(req.params.hackathon, hackathon).then(doc => {
+        res.redirect('../../hackathon');
     })
     .catch(err => {
         console.error(err)
@@ -200,9 +193,9 @@ const update = (req, res, next) => {
  * Função responsável por deletar o item do banco de dados
  */
 const destroy = (req, res, next) => {
-    Event.findByIdAndUpdate(req.params.id, { '$pull' : { 'workshops' : req.params.workshop} }).exec().then(doc => {
-        Workshop.findByIdAndDelete(req.params.workshop).then(doc => {
-            return res.redirect(`/events/${req.params.id}/workshops`)
+    Event.findByIdAndUpdate(req.params.id, { '$pull' : { 'lectures' : req.params.lecture} }).exec().then(doc => {
+        Lecture.findByIdAndDelete(req.params.lecture).then(doc => {
+            res.redirect(`/events/${req.params.id}/lectures`)
         })
     })
 };

@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-const { body, check, validationResult } = require('express-validator');
+const { body, param, check, validationResult } = require('express-validator');
 
 const User = require('../models/user.model');
 const Institution = require('../models/institution.model');
 const Event = require('../models/event.model');
 const Lecture = require('../models/lecture.model');
+const Workshop = require('../models/workshop.model');
 const Enrollment = require('../models/enrollment.model');
 const Hackathon = require('../models/hackathon.model');
 
 const EVENT_ID = process.env.SACI || '5d657a73da903939d4cc7629';
+// const EVENT_ID = process.env.SACI || '5d725ba3f385b226f28b6c13';
 const HACKATHON = process.env.HACKATHON || '5d6af3b4e215f7149c10a15c';
 
 /**
@@ -29,7 +31,8 @@ router.post('/enroll', [
     body('email').isEmail().withMessage('Email inválido').normalizeEmail(),
     body('name').isString().isLength({ min: 5, max: 30 }).withMessage('Nome inválido'),
     body('cpf').isNumeric().isLength({ min: 11, max: 11 }).withMessage('CPF inválido'),
-    body('birthdate').not().isEmpty().withMessage('Data de nascimento em branco')
+    body('birthdate').not().isEmpty().withMessage('Data de nascimento em branco'),
+    body('institution').not().isEmpty().withMessage('Instituição em branco!')
 ], async (req, res, next) => {
 
     // validação dos campos
@@ -46,6 +49,7 @@ router.post('/enroll', [
         email: req.body.email,
         cpf:   req.body.cpf,
         birthdate: new Date(Number(req.body.birthdate)),
+        instituicao: req.body.institution
     }
 
     // verifica se o usuário já existe no sistema
@@ -158,7 +162,7 @@ router.get('/enrolleds', async (req, res) => {
         select: 'user', 
         populate: { 
             path: 'user', 
-            select:'name cpf'
+            select:'name cpf instituicao'
         } 
     }).exec()
 
@@ -166,10 +170,11 @@ router.get('/enrolleds', async (req, res) => {
         return {
             enroll_id : e._id,
             name : e.user.name,
-            cpf : e.user.cpf
+            cpf : e.user.cpf,
+            institution: e.user.instituicao || 'Outra'
         }
     })
-
+    
     res.json(enrolleds)
 });
 
@@ -236,7 +241,7 @@ router.post('/hackathon', [
 
     users = await User.find({ cpf: dados.members }).select('name cpf').exec()
 
-    if (dados.members.length !== 3) {
+    if (dados.members.length !== 3 || users.length !== 3) {
         res.json({
             error: true,
             errors: ['Número inválido de participantes']
@@ -295,7 +300,40 @@ router.post('/hackathon', [
 
 });
 
+/**
+ * WORKSHOP ROUTES
+ */
 
+// lista oficinas
+router.get('/workshops', async (req, res) => {
+    let workshops = await Workshop.find({ event: EVENT_ID }).exec();
+
+    res.json({workshops})
+})
+
+router.get('/workshops/:id', [
+    param('id', 'Identificador inválido!').isMongoId(),
+], async (req, res) => {
+    let errors = validationResult(req).errors
+
+    if (errors.length != 0) {
+        return res.json({
+            error: true,
+            errors: errors.map(e=>e.msg)
+        })
+    }
+    
+    let workshop = await Workshop.findById(req.params.id).exec();
+
+    if (!workshop) {
+        return res.json({
+            error: true,
+            errors: ['Oficina não encontrada!']
+        })
+    }
+
+    res.json(workshop)
+})
 // router.get('/h', (req, res) => {
 //     let hackathon = {
 //         name: 'Hackathon',
@@ -309,23 +347,32 @@ router.post('/hackathon', [
 
 router.get('/institutions', (req, res) => {
     Institution.find().select('name').then(doc => {
-        res.json(doc.map(e => {
-            return {
-                id: e._id, 
-                name: e.name
-            }
-        }));
+        res.json({
+            institution : doc.map(e => {
+                return {
+                    id: e._id,
+                    name: e.name
+                }
+            })
+        });
     }).catch(err => {
         res.status(500).json(err);
     })
 });
 
 router.get('/limpaEnroll', (req, res) => {
-    Event.findByIdAndUpdate(EVENT_ID, { enrolleds: [] }).then(doc => {
-        Enrollment.remove({ event: EVENT_ID }).exec()
-        res.json(doc)
-    })
+    if(req.query.token == 'aw0oerakw3')
+        Event.findByIdAndUpdate(EVENT_ID, { enrolleds: [] }).then(doc => {
+            Enrollment.remove({ event: EVENT_ID }).exec()
+            res.json(doc)
+        })
+    res.json({})
+})
 
+router.get('/reseta', async (req, res) => {
+    if(req.query.token == 'aw0oerakw3')
+        await Hackathon.findByIdAndUpdate(HACKATHON, { teams: [] }).exec()
+    res.json({})
 })
 
 // exporta o router

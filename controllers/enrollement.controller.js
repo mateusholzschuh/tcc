@@ -79,6 +79,11 @@ const store = async (req, res, next) => {
     }
 
     // res.json({lecture: lecture})
+    let count = await Enrollment.find({ user: user }).count().exec()
+
+    if(count != 0) {
+        return res.redirect('./enrolleds')
+    }
 
     Enrollment.create(enrollment).then(r => {
         // res.json(r)

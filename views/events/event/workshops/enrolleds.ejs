@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <div class="mdl-tabs__panel is-active" id="lectures-panel">
+                <div class="mdl-tabs__panel is-active" id="workshops-panel">
 
                     <!-- TAB 1 -->
                     <div class="tbl-c ">
@@ -98,14 +98,12 @@
                                 <% try{
                                         list.forEach(p => { %>
                                 <tr>
-                                    <td><%- p._id %></td>
-                                    <td class="name"><%- p.name %></td>
-                                    <td><%- p.cpf %></td>
+                                    <td><%- p.user._id %></td>
+                                    <td class="name"><%- p.user.name %></td>
+                                    <td><%- p.user.cpf %></td>
                                     <td class="dt-actions desktop"><i class="zmdi zmdi-more"></i></td>
                                     <td class="is-hidden cm-actions">
                                         <ul>
-                                            <li><a href="<%- fullUrl %>/<%- p.id %>/enrolleds" data-icon="accounts-outline"
-                                                    data-text="Inscritos">enrolleds</a></li>
                                             <li><a href="<%- fullUrl %>/<%- p.id %>/edit" data-icon="edit"
                                                     data-text="Editar">edit</a></li>
                                             <li><a href="<%- fullUrl %>/<%- p.id %>/delete" class="triggerable confirm"
@@ -159,7 +157,7 @@
                                                         data-placeholder="Selecione o(s) palestrante(s)" multiple>
                                                     </select> -->
                                                     <!-- <select id="ee" style="width:200px"></select> -->
-                                                    <select data-selectar--search="true" name="enrolled"
+                                                    <select data-selectar--search="true" name="user"
                                                         data-placeholder="Selecione o ouvinte" required
                                                         >
                                                         <% try { 

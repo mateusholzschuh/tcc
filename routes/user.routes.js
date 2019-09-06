@@ -1,18 +1,28 @@
 const express = require('express');
 const router = express.Router();
 
-// pega o controller
-const User_controller = require('../controllers/user.controller');
+const {body} = require('express-validator')
 
+// pega o controller
+const controller = require('../controllers/user.controller');
+
+
+const valida = [
+    // res.json(req.body)
+    body('name').isLength({min:7, max:50}).withMessage('Nome inválido!'),
+    body('cpf').isLength({min:11, max:11}).withMessage('CPF Inválido!'),
+    body('birthdate').isString().not().isEmpty().withMessage('Data inválida!')
+
+]
 
 // rotas do resource
-router.get('/',         User_controller.index);
-router.get('/create',   User_controller.create);
-router.post('/',        User_controller.store);
-router.get('/:id',      User_controller.view);
-router.get('/edit/:id', User_controller.edit);
-router.post('/edit/:id',  User_controller.update);
-router.post('/delete',  User_controller.destroy);
+router.get('/',         controller.index);
+router.get('/create',   controller.create);
+router.post('/',        valida, controller.store);
+router.get('/:id',      controller.view);
+router.get('/edit/:id', controller.edit);
+router.post('/edit/:id',  valida, controller.update);
+router.post('/delete',  controller.destroy);
 
 // exporta o router
 module.exports = router;
