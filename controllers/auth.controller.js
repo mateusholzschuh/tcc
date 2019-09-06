@@ -21,7 +21,7 @@ const doLogin = async (req, res, next) => {
 
     let user = await User.findOne({ email: email }).select('name cpf password role').exec();
 
-    if (user && password && user.role >= 0) {
+    if (user && password && user.role > 0) {
         user.comparePassword(password, (err, match) => {
             if (err) {
                 return res.json(err)
