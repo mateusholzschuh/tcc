@@ -6,6 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var flash = require('connect-flash');
+var cors = require('cors');
 
 var config = require('./config');
 
@@ -86,7 +87,7 @@ app.use('/api/v1', apiRouter, (req, res) => {
 const open = false;
 const SACI_TOKEN = process.env.SACI_TOKEN || 'saci';
 
-app.use('/api/saci', (req, res, next) => {
+app.use('/api/saci', cors(), (req, res, next) => {
   if (open) {
     next()
     return
