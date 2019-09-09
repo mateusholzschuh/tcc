@@ -161,7 +161,7 @@ router.post('/check', [
         return
     }
 
-    user = await User.findOne({ cpf: req.body.cpf }).select('_id').exec()
+    user = await User.findOne({ cpf: req.body.cpf }).select('_id name email cpf').exec()
 
     if (!user) {
         res.json({
@@ -189,7 +189,13 @@ router.post('/check', [
     // OK
     res.json({
         success: true,
-        message: 'CPF está inscrito no evento'
+        message: 'CPF está inscrito no evento',
+        data: {
+            name: user.name,
+            email: user.email,
+            cpf: user.cpf,
+            qrcode: `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${user.cpf}&qzone=1&margin=0&size=200x200&ecc=L`
+        }
     })
 });
 
