@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const config = require('../config');
+
+const ejs = require('ejs');
+const nodemailer = require('nodemailer');
 
 const { body, param, check, validationResult } = require('express-validator');
 
@@ -14,6 +18,14 @@ const Hackathon = require('../models/hackathon.model');
 const EVENT_ID = process.env.SACI || '5d657a73da903939d4cc7629';
 // const EVENT_ID = process.env.SACI || '5d725ba3f385b226f28b6c13';
 const HACKATHON = process.env.HACKATHON || '5d6af3b4e215f7149c10a15c';
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: config.MAIL_ADDR,
+        pass: config.MAIL_PASS
+    }
+});
 
 /**
  * Rota para inscrição no evento
@@ -92,8 +104,36 @@ router.post('/enroll', [
         event: EVENT_ID
     }
 
+    const enrolled = await User.findById(enroll.user).select('name cpf email').exec()
+
     Enrollment.create(enroll).then(doc => {
         Event.findByIdAndUpdate(EVENT_ID, { '$push': { 'enrolleds' : doc._id } }).then(e => {
+            // envia email de confirmação
+            if (config.MAIL_ADDR) {
+                // load template
+                ejs.renderFile(__dirname + "/enroll.ejs", {
+                    name: enrolled.name,
+                    cpf: enrolled.cpf
+                }, (err, data) => {
+                    if(err) throw err;
+                
+                    const mailOptions = {
+                        from: `SACI IFSUL <${process.env.SACI_MAIL_ADDR}>`, // sender address
+                        to: enrolled.email, // list of receivers
+                        subject: 'Inscrição SACI 2019', // Subject line
+                        html: data, // plain text body
+                    };
+                
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if (err)
+                            console.log(err)
+                        else
+                            console.log(info);
+                    });
+                })
+            }
+
+            // resposta
             res.json({
                 success: true, 
                 message:'Inscrito com sucesso' , 
@@ -374,6 +414,7 @@ router.get('/reseta', async (req, res) => {
         await Hackathon.findByIdAndUpdate(HACKATHON, { teams: [] }).exec()
     res.json({})
 })
+
 
 // exporta o router
 module.exports = router;
