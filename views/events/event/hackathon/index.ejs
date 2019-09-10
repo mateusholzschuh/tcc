@@ -106,7 +106,7 @@
                                         <ul>
                                             <li><a href="<%- fullUrl %>/<%- p.id %>/edit" data-icon="edit"
                                                     data-text="Editar">edit</a></li>
-                                            <li><a href="<%- fullUrl %>/<%- p.id %>/delete" class="triggerable confirm"
+                                            <li><a href="<%- fullUrl %>/<%- p._id %>/delete" class="triggerable confirm"
                                                     data-icon="delete" data-text="Remover">remove</a></li>
                                         </ul>
                                     </td>
@@ -118,7 +118,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nome</th>
-                                    <th>CPF</th>
+                                    <th>Participantes</th>
                                     <!-- <th>Inscritos / Limite</th>
                                     <th>Data</th>
                                     <th>Confirmada</th>
@@ -136,7 +136,7 @@
                     <!-- TAB 2 -->
 
                     <section class="generals-form" style="width:100%">
-                        <form action="./enrolleds" method="POST">
+                        <form action="./hackathon" method="POST">
                             <div class="col-group">
 
 
@@ -145,10 +145,22 @@
                                         <legend>Dados Gerais</legend>
                                     </a>
                                     <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Nome da equipe</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="text" placeholder="Nome da equipe" name="name" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
 
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Ouvinte<label>
+                                                <label class="form-block__name">Membro #1<label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field input-field--ico">
@@ -157,8 +169,64 @@
                                                         data-placeholder="Selecione o(s) palestrante(s)" multiple>
                                                     </select> -->
                                                     <!-- <select id="ee" style="width:200px"></select> -->
-                                                    <select data-selectar--search="true" name="members" multiple
-                                                        data-placeholder="Selecione o ouvinte" required
+                                                    <select data-selectar--search="true" name="member1"
+                                                        data-placeholder="Selecione o membro 1" required
+                                                        >
+                                                        <% try { 
+                                                            users.forEach(u => { %>
+
+                                                        <option value="<%- u._id %>"><%- u.name%></option>
+                                                        <%  })
+                                                        } catch(e) {} %>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Membro #2<label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field input-field--ico">
+                                                    <!-- <span class="input-field__icon"><i class="zmdi zmdi-accounts"></i></span> -->
+                                                    <!-- <select class="speakers-select" name="speakers" data-selectar="true"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" multiple>
+                                                    </select> -->
+                                                    <!-- <select id="ee" style="width:200px"></select> -->
+                                                    <select data-selectar--search="true" name="member2"
+                                                        data-placeholder="Selecione o membro 2" required
+                                                        >
+                                                        <% try { 
+                                                            users.forEach(u => { %>
+
+                                                        <option value="<%- u._id %>"><%- u.name%></option>
+                                                        <%  })
+                                                        } catch(e) {} %>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Membro #3<label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field input-field--ico">
+                                                    <!-- <span class="input-field__icon"><i class="zmdi zmdi-accounts"></i></span> -->
+                                                    <!-- <select class="speakers-select" name="speakers" data-selectar="true"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" multiple>
+                                                    </select> -->
+                                                    <!-- <select id="ee" style="width:200px"></select> -->
+                                                    <select data-selectar--search="true" name="member3"
+                                                        data-placeholder="Selecione o membro 3" required
                                                         >
                                                         <% try { 
                                                             users.forEach(u => { %>
