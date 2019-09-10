@@ -265,11 +265,10 @@ router.post('/hackathon', [
 
     // validação dos campos
     if (validationResult(req).errors.length != 0) {
-        res.json({
-            error: true,
+        return res.json({
             errors: validationResult(req).errors.map(e => e.msg)
-        })
-        return
+        }, 400)
+        
     }
 
     let dados = {
@@ -277,14 +276,12 @@ router.post('/hackathon', [
         members: req.body.members
     }
 
-    users = await User.find({ cpf: dados.members }).select('name cpf').exec()
+    users = await User.find({ cpf: dados.members }).select('name email cpf').exec()
 
     if (dados.members.length !== 3 || users.length !== 3) {
-        res.json({
-            error: true,
+        return res.json({
             errors: ['Número inválido de participantes']
-        })
-        return
+        }, 400)        
     }
 
     // verifica se os cpfs já estão inscritos no evento
@@ -296,12 +293,10 @@ router.post('/hackathon', [
     })
 
     if (diff.length !== 0) {
-        res.json({
-            error: true,
+        return res.json({
             errors: ['Oops! CPF: ' + diff.join(', ') + ' não estão inscritos no evento'],
             extra: diff
-        })
-        return
+        }, 400)
     }
 
     // - todos membros estão inscritos no evento
@@ -310,13 +305,11 @@ router.post('/hackathon', [
     hn = await Hackathon.findOne({ _id: HACKATHON, teams: { '$elemMatch': { 'members': { '$in': users } } } }).select('teams').exec()
 
     if (hn) {
-        res.json({
-            error: true,
+        return res.json({
             errors: ['Há participantes que já estão inscritos em outra equipe neste hackathon'],
             // message: 'Há participantes que já estão inscritos na equipe "' + hn.teams[0].name + '" neste hackathon',
             // extra: users.filter(e => hn.teams[0].members.includes(e._id)).map(u => u.name)
-        })
-        return
+        }, 400)
     }
 
     let team = {
@@ -326,15 +319,39 @@ router.post('/hackathon', [
 
     let doc = await Hackathon.findByIdAndUpdate(HACKATHON, { '$push': { 'teams': team } }).exec()
 
-    res.json({
-        success: true,
+    // envia email de confirmação
+    if (config.MAIL_ADDR) {
+        // load template
+        ejs.renderFile(__dirname + "/hackathon.ejs", {
+            name: team.name,
+            members: users
+        }, (err, data) => {
+            if (err) throw err;
+
+            const mailOptions = {
+                from: `SACI IFSUL <${process.env.SACI_MAIL_ADDR}>`, // sender address
+                to: users[0].email, // list of receivers
+                subject: 'Hackathon SACI 2019', // Subject line
+                html: data, // plain text body
+            };
+
+            transporter.sendMail(mailOptions, function (err, info) {
+                if (err)
+                    console.log(err)
+                else
+                    console.log(info);
+            });
+        })
+    }
+
+    return res.json({
         message: 'Time inscrito no hackathon',
         data: { ...team, id: doc._id }
-    })
+    }, 200)
 
 
-    //teste
-    res.json(dados)
+    // //teste
+    // res.json(dados)
 
 });
 
