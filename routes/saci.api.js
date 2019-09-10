@@ -49,11 +49,9 @@ router.post('/enroll', [
 
     // validação dos campos
     if (validationResult(req).errors.length != 0) {
-        res.json({
-            error: true,
+        return res.json({
             errors: validationResult(req).errors.map(e => e.msg)
-        })
-        return
+        }, 400)
     }
 
     let user = {
@@ -90,12 +88,9 @@ router.post('/enroll', [
     let count = await Enrollment.find({ event: EVENT_ID, user: user }).count().exec()
     
     if (count != 0) {
-        res.json({
-            error: true,
-            errors: ['Usuário já inscrito'],
-            status: 302
-        })
-        return;
+        return res.json({
+            errors: ['Usuário já inscrito']
+        }, 202)
     }
     
     // faz a inscrição
@@ -134,14 +129,21 @@ router.post('/enroll', [
             }
 
             // resposta
-            res.json({
-                success: true, 
-                message:'Inscrito com sucesso' , 
-                status: 201
-            })
+            return res.json({
+                message:'Inscrito com sucesso',
+                data:{
+                    name: enrolled.name,
+                    email: enrolled.email,
+                    cpf: enrolled.cpf,
+                    code: doc.code,
+                    qrcode: `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${enrolled.cpf}&qzone=1&margin=0&size=200x200&ecc=L`
+                }
+            }, 201)
         })
     }).catch(err => {
-        res.json({...err, status: 500})
+        return res.json({
+            errors: ["Ocorreu um problema na sua inscrição!"]
+        }, 500)
     })
 });
 
@@ -154,90 +156,77 @@ router.post('/check', [
 
     // validação dos campos
     if (validationResult(req).errors.length != 0) {
-        res.json({
-            error: true,
+        return res.json({
             errors: validationResult(req).errors.map(e => e.msg)
-        })
-        return
+        }, 400)
     }
 
     user = await User.findOne({ cpf: req.body.cpf }).select('_id name email cpf').exec()
 
     if (!user) {
-        res.json({
-            error: true,
+        return res.json({
             errors: [
                 'CPF não inscrito no evento'
             ]
-        })
-        return
+        }, 404)
     }
 
-    result = await Enrollment.findOne({ event: EVENT_ID, user: user }).countDocuments().exec();
+    result = await Enrollment.findOne({ event: EVENT_ID, user: user }).select('code').exec();
 
     // usuário existe, mas não esta inscrito
     if (!result) {
-        res.json({
-            error: true,
+        return res.json({
             errors: [
                 'CPF não inscrito no evento'
             ]
-        })
-        return
+        }, 404)
     }
 
     // OK
     res.json({
-        success: true,
         message: 'CPF está inscrito no evento',
         data: {
             name: user.name,
             email: user.email,
             cpf: user.cpf,
+            code: result.code,
             qrcode: `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${user.cpf}&qzone=1&margin=0&size=200x200&ecc=L`
         }
-    })
+    }, 200)
 });
 
 /**
  * Rota para listar inscritos no evento
  */
 router.get('/enrolleds', async (req, res) => {
-    let enrolleds = await Event.findById(EVENT_ID).select('enrolleds').populate({
-        path:'enrolleds', 
-        select: 'user', 
-        populate: { 
-            path: 'user', 
-            select:'name cpf instituicao'
-        } 
+    let enrolleds = await Enrollment.find({ event: EVENT_ID }).select('user code').populate({
+        path: 'user', 
+        select:'name cpf instituicao' 
     }).exec()
 
-    enrolleds = enrolleds.enrolleds.map(e => {
+    enrolleds = enrolleds.map(e => {
         return {
-            enroll_id : e._id,
+            // enroll_id : e._id,
+            code: e.code,
             name : e.user.name,
             cpf : e.user.cpf,
             institution: e.user.instituicao || 'Outra'
         }
     })
     
-    res.json(enrolleds)
+    return res.json(enrolleds, 200)
 });
 
 /**
  * Rota para listar as palestras
  */
 router.get('/lectures', async (req, res) => {
-    let lectures = await Event.findById(EVENT_ID).select('lectures').populate({
-        path: 'lectures',
-        select: '-__v -createdAt -updatedAt -_id',
-        populate: {
-            path: 'speakers',
-            select: 'name bio -_id'
-        }
+    let lectures = await Lecture.find({ event: EVENT_ID }).select('-__v -createdAt -updatedAt -_id -event').populate({
+        path: 'speakers',
+        select: 'name bio -_id'
     })
 
-    res.json(lectures)
+    res.json(lectures, 200)
 });
 
 /**********************
@@ -352,9 +341,17 @@ router.post('/hackathon', [
 
 // lista oficinas
 router.get('/workshops', async (req, res) => {
-    let workshops = await Workshop.find({ event: EVENT_ID }).exec();
+    let workshops = await Workshop.find({ event: EVENT_ID })
+        .select('-event -__v -createdAt -updatedAt')
+        .populate([{
+            path: 'speakers',
+            select: 'name bio -_id'
+        }, {
+            path: 'enrolleds.user',
+            select: 'name -_id'
+        }]).exec();
 
-    res.json({workshops})
+    res.json(workshops, 200)
 })
 
 router.get('/workshops/:id', [
@@ -364,18 +361,24 @@ router.get('/workshops/:id', [
 
     if (errors.length != 0) {
         return res.json({
-            error: true,
             errors: errors.map(e=>e.msg)
-        })
+        }, 400)
     }
     
-    let workshop = await Workshop.findById(req.params.id).exec();
+    let workshop = await Workshop.findById(req.params.id)
+        .select('-__v -createdAt')
+        .populate([{
+            path: 'speakers',
+            select: 'name bio'
+        }, {
+            path: 'enrolleds.user',
+            select: 'name'
+        }]).exec();
 
     if (!workshop) {
         return res.json({
-            error: true,
             errors: ['Oficina não encontrada!']
-        })
+        }, 404)
     }
 
     res.json(workshop)
@@ -393,16 +396,18 @@ router.get('/workshops/:id', [
 
 router.get('/institutions', (req, res) => {
     Institution.find().select('name').then(doc => {
-        res.json({
-            institution : doc.map(e => {
+        res.json(
+            doc.map(e => {
                 return {
                     id: e._id,
                     name: e.name
                 }
             })
-        });
+        , 200);
     }).catch(err => {
-        res.status(500).json(err);
+        res.json({
+            errors: ["Ocorreu um problema!"]
+        }, 500);
     })
 });
 

@@ -73,14 +73,14 @@ app.use('*', (req, res, next) => {
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 100, // limit each IP to 100 requests per windowMs
-  message: {error:true, errors:['Muitas requisições deste endereço']}
+  message: { errors:['Muitas requisições deste endereço'] }
 });
 
 app.use('/api', apiLimiter);
 
 // routes
 app.use('/api/v1', apiRouter, (req, res) => {
-  res.json({error: true, errors: [req.message || 'What the fuck has happened?']})
+  return res.json({ errors: [req.message || 'What the fuck has happened?'] }, 400);
 });
 
 // SACI API *
@@ -96,18 +96,18 @@ app.use('/api/saci', cors(), (req, res, next) => {
   if(req.headers.authorization == 'Bearer '.concat(SACI_TOKEN)) 
     next()
   else
-    res.json({ error: true, errors: ['Opa! Esta rota não é permitida'], status: 401 });
+    return res.json({ errors: ['Opa! Esta rota não é permitida'] }, 401);
   
 }, 
 
 saciAPI,
 
 (req, res) => {
-  res.json({error: true, errors: ['Opa! Rota inválida'], status: 404})
+  return res.json({ errors: ['Opa! Rota inválida'] }, 404);
 });
 
 app.use('/api/?*', (req, res) => {
-  res.json({error: true, errors: ['Opa! Rota inválida'], status: 404})
+  return res.json({ errors: ['Opa! Rota inválida'] }, 404);
 });
 
 /*******************
