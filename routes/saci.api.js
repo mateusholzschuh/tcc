@@ -300,7 +300,7 @@ router.post('/hackathon', [
 
     if (diff.length !== 0) {
         return res.json({
-            errors: ['Oops! CPF: ' + diff.join(', ') + ' não estão inscritos no evento'],
+            errors: ['Oops! CPF: ' + diff.map(e=>formataCPF(e)).join(', ') + ' não estão inscritos no evento'],
             extra: diff
         }, 400)
     }
@@ -455,6 +455,11 @@ router.get('/reseta', async (req, res) => {
     res.json({})
 })
 
+const formataCPF = (cpf) => {
+    return cpf.length == 11 
+            ? ''.concat(cpf.slice(0,3), '.', cpf.slice(3,6), '.', cpf.slice(6,9), '-', cpf.slice(9,11)) 
+            : cpf
+}
 
 // exporta o router
 module.exports = router;
