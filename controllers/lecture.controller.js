@@ -65,7 +65,7 @@ const create = (req, res, next) => {
 const store = async (req, res, next) => {
     //res.send("Olá mundo @store vindo do controller <strong>'Lecture'</strong>");
     const { name, description, location, date, confirmed, speakers } = req.body;
-
+    const event = req.params.id;
 
     let lecture = {
         name,
@@ -73,14 +73,15 @@ const store = async (req, res, next) => {
         location,
         date: moment(date, 'DD/MM/YYYY - HH:mm'),
         confirmed: confirmed == 'on' ? true : false,
-        speakers
+        speakers,
+        event
     }
 
     // res.json({lecture: lecture})
 
     Lecture.create(lecture).then(r => {
         // res.json(r)
-        Event.findOneAndUpdate({ _id: req.params.id }, { '$push': { 'lectures': r._id } }).then(ok => {
+        Event.findOneAndUpdate({ _id: event }, { '$push': { 'lectures': r._id } }).then(ok => {
 
             res.redirect('./lectures');
         })
