@@ -281,6 +281,12 @@ router.post('/hackathon', [
             errors: ['Número inválido de participantes']
         }, 400)        
     }
+
+    if (dados.members.length != new Set(dados.members).size) {
+        return res.json({
+            errors: ['Mais de um membro utilizando o mesmo CPF']
+        }, 400)   
+    }
     
     users = await User.find({ cpf: dados.members }).select('name email cpf').exec()
 
