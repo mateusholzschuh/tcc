@@ -276,13 +276,13 @@ router.post('/hackathon', [
         members: req.body.members
     }
 
-    users = await User.find({ cpf: dados.members }).select('name email cpf').exec()
-
-    if (dados.members.length !== 3 || users.length !== 3) {
+    if (dados.members.length !== 3) {
         return res.json({
             errors: ['Número inválido de participantes']
         }, 400)        
     }
+    
+    users = await User.find({ cpf: dados.members }).select('name email cpf').exec()
 
     // verifica se os cpfs já estão inscritos no evento
     enr = await Enrollment.find({ "user": users }).select('-_id user').populate('user', '-_id name cpf').exec()
