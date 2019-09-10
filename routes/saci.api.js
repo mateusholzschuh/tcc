@@ -90,7 +90,7 @@ router.post('/enroll', [
     if (count != 0) {
         return res.json({
             errors: ['Usuário já inscrito']
-        }, 202)
+        }, 500)
     }
     
     // faz a inscrição
