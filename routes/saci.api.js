@@ -55,18 +55,30 @@ router.post('/enroll', [
     }
 
     let user = {
-        name:  req.body.name,
+        name: req.body.name,
         email: req.body.email,
-        cpf:   req.body.cpf,
+        cpf: req.body.cpf,
         birthdate: new Date(Number(req.body.birthdate)),
         instituicao: req.body.institution
     }
 
+
     // verifica se o usuário já existe no sistema
     let u = await User.findOne({ cpf: user.cpf }).exec();
 
-    // existe, atualiza os dados
-    if(u != null) {
+    // existe no sistema
+    if (u != null) {
+
+        // verifica se já está inscrito
+        let count = await Enrollment.find({ event: EVENT_ID, user: u._id }).count().exec()
+
+        if (count != 0) {
+            return res.json({
+                errors: ['Usuário já inscrito']
+            }, 500)
+        }
+
+        // atualiza os dados
         u.updateOne(user).then(doc => {
             req.user = u._id
             next()
@@ -83,26 +95,17 @@ router.post('/enroll', [
 
 }, async (req, res, next) => {
     let user = req.user
-    
-    // verifica se já está inscrito
-    let count = await Enrollment.find({ event: EVENT_ID, user: user }).count().exec()
-    
-    if (count != 0) {
-        return res.json({
-            errors: ['Usuário já inscrito']
-        }, 500)
-    }
-    
+
     // faz a inscrição
     let enroll = {
-        user : user._id,
+        user: user,
         event: EVENT_ID
     }
 
     const enrolled = await User.findById(enroll.user).select('name cpf email').exec()
 
     Enrollment.create(enroll).then(doc => {
-        Event.findByIdAndUpdate(EVENT_ID, { '$push': { 'enrolleds' : doc._id } }).then(e => {
+        Event.findByIdAndUpdate(EVENT_ID, { '$push': { 'enrolleds': doc._id } }).then(e => {
             // envia email de confirmação
             if (config.MAIL_ADDR) {
                 // load template
@@ -110,15 +113,15 @@ router.post('/enroll', [
                     name: enrolled.name,
                     cpf: enrolled.cpf
                 }, (err, data) => {
-                    if(err) throw err;
-                
+                    if (err) throw err;
+
                     const mailOptions = {
                         from: `SACI IFSUL <${process.env.SACI_MAIL_ADDR}>`, // sender address
                         to: enrolled.email, // list of receivers
                         subject: 'Inscrição SACI 2019', // Subject line
                         html: data, // plain text body
                     };
-                
+
                     transporter.sendMail(mailOptions, function (err, info) {
                         if (err)
                             console.log(err)
@@ -130,8 +133,8 @@ router.post('/enroll', [
 
             // resposta
             return res.json({
-                message:'Inscrito com sucesso',
-                data:{
+                message: 'Inscrito com sucesso',
+                data: {
                     name: enrolled.name,
                     email: enrolled.email,
                     cpf: enrolled.cpf,
@@ -151,7 +154,7 @@ router.post('/enroll', [
  * Rota para verificar inscrição
  */
 router.post('/check', [
-    body('cpf').isLength({min:11, max:11}).withMessage('CPF inválido')
+    body('cpf').isLength({ min: 11, max: 11 }).withMessage('CPF inválido')
 ], async (req, res) => {
 
     // validação dos campos
@@ -200,20 +203,20 @@ router.post('/check', [
  */
 router.get('/enrolleds', async (req, res) => {
     let enrolleds = await Enrollment.find({ event: EVENT_ID }).select('user code').populate({
-        path: 'user', 
-        select:'name cpf instituicao' 
+        path: 'user',
+        select: 'name cpf instituicao'
     }).exec()
 
     enrolleds = enrolleds.map(e => {
         return {
             // enroll_id : e._id,
             code: e.code,
-            name : e.user.name,
-            cpf : e.user.cpf,
+            name: e.user.name,
+            cpf: e.user.cpf,
             institution: e.user.instituicao || 'Outra'
         }
     })
-    
+
     return res.json(enrolleds, 200)
 });
 
@@ -233,9 +236,9 @@ router.get('/lectures', async (req, res) => {
  *  HACKATHON ROUTES
  **********************/
 
- /**
-  * Listar times
-  */
+/**
+ * Listar times
+ */
 router.get('/hackathon', async (req, res) => {
     // await Hackathon.findByIdAndUpdate(HACKATHON, { '$pull' : { 'teams' : {} } }).exec().then(e => console.log(e)).catch(err => console.error(err))
     hn = await Hackathon.find({ _id: HACKATHON }).select('-_id name teams').populate({
@@ -243,7 +246,7 @@ router.get('/hackathon', async (req, res) => {
         select: '-_id name cpf'
     }).exec()
 
-    res.status(200).json({success:true, data: hn[0]})
+    res.status(200).json({ success: true, data: hn[0] })
 });
 
 /**
@@ -283,9 +286,9 @@ router.post('/hackathon', [
         })
         return
     }
-    
+
     // verifica se os cpfs já estão inscritos no evento
-    enr = await Enrollment.find({"user" : users }).select('-_id user').populate('user', '-_id name cpf').exec()
+    enr = await Enrollment.find({ "user": users }).select('-_id user').populate('user', '-_id name cpf').exec()
     found = enr.map(e => e.user.cpf)
 
     diff = dados.members.filter(i => {
@@ -304,7 +307,7 @@ router.post('/hackathon', [
     // - todos membros estão inscritos no evento
 
     // verifica se algum já faz parte de alguma equipe no hackathon
-    hn = await Hackathon.findOne({ _id: HACKATHON, teams : { '$elemMatch' : { 'members' : {'$in' : users } } } }).select('teams').exec()
+    hn = await Hackathon.findOne({ _id: HACKATHON, teams: { '$elemMatch': { 'members': { '$in': users } } } }).select('teams').exec()
 
     if (hn) {
         res.json({
@@ -321,12 +324,12 @@ router.post('/hackathon', [
         members: users
     }
 
-    let doc = await Hackathon.findByIdAndUpdate(HACKATHON, { '$push': { 'teams' : team } }).exec()
+    let doc = await Hackathon.findByIdAndUpdate(HACKATHON, { '$push': { 'teams': team } }).exec()
 
     res.json({
-        success: true, 
-        message: 'Time inscrito no hackathon', 
-        data: {...team, id: doc._id}
+        success: true,
+        message: 'Time inscrito no hackathon',
+        data: { ...team, id: doc._id }
     })
 
 
@@ -361,10 +364,10 @@ router.get('/workshops/:id', [
 
     if (errors.length != 0) {
         return res.json({
-            errors: errors.map(e=>e.msg)
+            errors: errors.map(e => e.msg)
         }, 400)
     }
-    
+
     let workshop = await Workshop.findById(req.params.id)
         .select('-__v -createdAt')
         .populate([{
@@ -388,7 +391,7 @@ router.get('/workshops/:id', [
 //         name: 'Hackathon',
 //         event: EVENT_ID
 //     }
-    
+
 //     Hackathon.create(hackathon).then(doc => {
 //         res.json(doc)
 //     })
@@ -403,7 +406,7 @@ router.get('/institutions', (req, res) => {
                     name: e.name
                 }
             })
-        , 200);
+            , 200);
     }).catch(err => {
         res.json({
             errors: ["Ocorreu um problema!"]
@@ -412,7 +415,7 @@ router.get('/institutions', (req, res) => {
 });
 
 router.get('/limpaEnroll', (req, res) => {
-    if(req.query.token == 'aw0oerakw3')
+    if (req.query.token == 'aw0oerakw3')
         Event.findByIdAndUpdate(EVENT_ID, { enrolleds: [] }).then(doc => {
             Enrollment.remove({ event: EVENT_ID }).exec()
             res.json(doc)
@@ -421,7 +424,7 @@ router.get('/limpaEnroll', (req, res) => {
 })
 
 router.get('/reseta', async (req, res) => {
-    if(req.query.token == 'aw0oerakw3')
+    if (req.query.token == 'aw0oerakw3')
         await Hackathon.findByIdAndUpdate(HACKATHON, { teams: [] }).exec()
     res.json({})
 })
