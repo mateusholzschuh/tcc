@@ -319,6 +319,9 @@ router.post('/hackathon', [
 
     let doc = await Hackathon.findByIdAndUpdate(HACKATHON, { '$push': { 'teams': team } }).exec()
 
+    // busca integrante #1
+    let member = await User.findOne({ cpf: dados.members[0] }).select('email').exec();
+
     // envia email de confirmação
     if (config.MAIL_ADDR) {
         // load template
@@ -330,7 +333,7 @@ router.post('/hackathon', [
 
             const mailOptions = {
                 from: `SACI IFSUL <${process.env.SACI_MAIL_ADDR}>`, // sender address
-                to: users[0].email, // list of receivers
+                to: member.email, // list of receivers
                 subject: 'Hackathon SACI 2019', // Subject line
                 html: data, // plain text body
             };
