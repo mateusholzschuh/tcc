@@ -125,7 +125,7 @@ app.use('/', webLimiter)
 
 // setting routes
 app.use('/', authRouter)
-app.use('/', /*isAuth,*/ indexRouter);
+app.use('/', isAuth, indexRouter);
 app.use('/users', usersRouter);
 app.use('/institutions', institutionsRouter);
 
