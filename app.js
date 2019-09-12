@@ -23,6 +23,7 @@ var eventsRouter = require('./routes/event.routes');
 // var lecturesRouter = require('./routes/lecture.routes');
 // var enrolledsRouter = require('./routes/enrolleds.routes');
 
+var ajaxRouter = require('./routes/ajax-internal.routes');
 var apiRouter = require('./routes/api.routes');
 var saciAPI = require('./routes/saci.api');
 
@@ -54,7 +55,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    maxAge: 60 * 60 * 1000
+    maxAge: 2 * 60 * 60 * 1000 // 2h
   },
 }));  
 app.use(flash());
@@ -71,7 +72,7 @@ app.use('*', (req, res, next) => {
 
 // rate-limit protection
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
+  windowMs: 2 * 60 * 1000, // 2 min
   max: 100, // limit each IP to 100 requests per windowMs
   message: { errors:['Muitas requisições deste endereço'] }
 });
@@ -126,14 +127,17 @@ app.use('/', webLimiter)
 // setting routes
 app.use('/', authRouter)
 app.use('/', isAuth, indexRouter);
+app.use('/ajax', ajaxRouter)
 app.use('/users', usersRouter);
 app.use('/institutions', institutionsRouter);
 
 app.use('/events', eventsRouter);
-app.use('/limpa', (req, res) => {
-  require('./models/event.model').updateMany({}, { enrolleds: [] }).exec()
-  require('./models/enrollment.model').remove({}).exec()
-})
+
+// ! debug removido produção
+// app.use('/limpa', (req, res) => {
+//   require('./models/event.model').updateMany({}, { enrolleds: [] }).exec()
+//   require('./models/enrollment.model').remove({}).exec()
+// })
 // app.use('/events/:id/lectures', lecturesRouter);
 // app.use('/events/:id/enrolleds', enrolledsRouter);
 

@@ -16,8 +16,17 @@ const lectures = require('../routes/lecture.routes')
 //routes enrolleds
 const enrolleds = require('../routes/enrolleds.routes')
 
-router.get('/:id/*', (req, res, next) => {
+const checkins = require('../routes/checkin.routes')
+
+// css menu
+router.all('/*', (req, res, next) => {
+    res.locals.mainMenu = 'events'
+    next()
+})
+
+router.all('/:id/*', (req, res, next) => {
     res.locals.baseUrl = `/events/${req.params.id}`
+    
     next()
 })
 
@@ -40,6 +49,7 @@ router.use('/:id/enrolleds', enrolleds);
 
 router.use('/:id/subevents', controller.subevents);
 
+router.use('/:id/checkin', checkins);
 
 // exporta o router
 module.exports = router;

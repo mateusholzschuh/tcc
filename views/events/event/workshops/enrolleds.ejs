@@ -104,10 +104,8 @@
                                     <td class="dt-actions desktop"><i class="zmdi zmdi-more"></i></td>
                                     <td class="is-hidden cm-actions">
                                         <ul>
-                                            <li><a href="<%- fullUrl %>/<%- p.id %>/edit" data-icon="edit"
-                                                    data-text="Editar">edit</a></li>
-                                            <li><a href="<%- fullUrl %>/<%- p.id %>/delete" class="triggerable confirm"
-                                                    data-icon="delete" data-text="Remover">remove</a></li>
+                                            <li><a href="<%- fullUrl %>/<%- p._id %>/delete" class="triggerable confirm"
+                                                    data-icon="delete" data-text="Remover inscrição">remove</a></li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -163,7 +161,7 @@
                                                         <% try { 
                                                             users.forEach(u => { %>
 
-                                                        <option value="<%- u._id %>"><%- u.name%></option>
+                                                        <option value="<%- u.user._id %>"><%- u.code + ' - ' + u.user.name + ' - ' + u.user.cpf %></option>
                                                         <%  })
                                                         } catch(e) {} %>
                                                     </select>

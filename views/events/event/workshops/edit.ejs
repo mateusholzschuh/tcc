@@ -31,39 +31,20 @@
                                     <a name="AntaresInputs" id="AntaresInputs">
                                         <legend>Dados Gerais</legend>
                                     </a>
-                                    <!-- <div class="form-block" style="width:100%;">
+
+                                    <div class="form-block">
+                                        <% if (locals.errors) { 
+                                                errors.forEach(error => { %>
                                         <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Nome</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <div class="input-field">
-                                                    <div
-                                                        class="mdl-textfield mdl-textfield--AR mdl-js-textfield mdl-textfield--floating-label">
-                                                        <input class="mdl-textfield__input" type="text" name="sample-valmd1"
-                                                            id="sample1">
-                                                        <label class="mdl-textfield__label" for="sample1">Nome do evento...</label>
-                                                    </div>
-                                                </div>
+                                            <div class="col">
+                                                <p class="alert alert alert--glow alert--error alert--md alert--border mb20">
+                                                    <%- error %></p>
                                             </div>
                                         </div>
+                                        <%     })
+                                          } %>
                                     </div>
-                                    <div class="form-block" style="width:100%;">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Descrição</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <div class="input-field">
-                                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--AR">
-                                                        <textarea class="mdl-textfield__input" type="text" rows="3"
-                                                            id="sample5"></textarea>
-                                                        <label class="mdl-textfield__label" for="sample5">Text lines...</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
+
                                     <div class="form-block">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
@@ -71,7 +52,8 @@
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <input type="text" placeholder="Nome da Oficina" name="name" value="<%- obj.name %>">
+                                                    <input type="text" placeholder="Nome da Oficina" name="name" required
+                                                        value="<%- obj.name %>">
                                                 </div>
                                             </div>
                                         </div>
@@ -96,8 +78,9 @@
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <input type="text" name="location"
-                                                        placeholder="Localização da Oficina. Ex.: Sala 302 " value="<%- obj.location %>">
+                                                    <input type="text" name="location" required
+                                                        placeholder="Localização da Oficina. Ex.: Sala 302 "
+                                                        value="<%- obj.location %>">
                                                 </div>
                                             </div>
                                         </div>
@@ -110,7 +93,8 @@
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field datepicker-icon">
-                                                    <input data-alt-datetimepicker="true" name="date" value="<%- moment(obj.date).format('DD/MM/YYYY - HH:mm') %>"
+                                                    <input data-alt-datetimepicker="true" name="date"
+                                                        value="<%- moment(obj.date).format('DD/MM/YYYY - HH:mm') %>"
                                                         placeholder="Data e hora da Oficina" type="datetime" required>
                                                 </div>
                                             </div>
@@ -135,7 +119,9 @@
                                                         <% try { 
                                                             users.forEach(u => { %>
 
-                                                        <option value="<%- u._id %>" <%- obj.speakers.includes(u._id) ? 'selected' : '' %> ><%- u.name%></option>
+                                                        <option value="<%- u._id %>"
+                                                            <%- obj.speakers.includes(u._id) ? 'selected' : '' %>>
+                                                            <%- u.name%></option>
                                                         <%  })
                                                         } catch(e) {} %>
                                                     </select>
@@ -151,8 +137,9 @@
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <input type="number" name="limit"
-                                                        placeholder="Limite de participantes" value="<%- obj.limit %>" min="1">
+                                                    <input type="number" name="limit" required
+                                                        placeholder="Limite de participantes" value="<%- obj.limit %>"
+                                                        min="1">
                                                 </div>
                                             </div>
                                         </div>
@@ -165,7 +152,8 @@
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field switchbox">
                                                     <label class="switch">
-                                                        <input class="switch-checkbox" type="checkbox" name="confirmed" <%- obj.confirmed ? 'checked' : '' %>>
+                                                        <input class="switch-checkbox" type="checkbox" name="confirmed"
+                                                            <%- obj.confirmed ? 'checked' : '' %>>
                                                         <span class="switch-container"><span
                                                                 class="switch-handle"></span></span>
                                                     </label>
@@ -173,20 +161,41 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <hr>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col alert alert--error pt10 pb10 pl10">
+                                                <span class="mr10"><strong>ATENÇÃO:</strong> ESTA AÇÃO É IRREVERSÍVEL,
+                                                    TENHA CUIDADO</span>
+                                                <a id="removeBtn"
+                                                    class="btn btn--md btn--red mdl-button mdl-js-button mdl-js-ripple-effect"
+                                                    data-upgraded=",MaterialButton,MaterialRipple">REMOVER OFICINA<span
+                                                        class="mdl-button__ripple-container"><span
+                                                            class="mdl-ripple is-animating"
+                                                            style="width: 148.86px; height: 148.86px; transform: translate(-50%, -50%) translate(42px, 22px);"></span></span></a>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            document.getElementById('removeBtn').onclick = () => {
+                                                if (confirm('Deseja realmente remover a oficina?\nIsso fará com que todas inscrições desta oficina sejam perdidas'))
+                                                    window.location = './delete'
+                                            }
+                                        </script>
+                                    </div>
 
                                 </fieldset>
-                                
+
                             </div>
                             <div class="app-content__footer">
                                 <div class="btn-group">
                                     <button
-                                    class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
-                                    type="submit">Salvar</button>
-                                    
+                                        class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="submit">Salvar</button>
+
                                     <a
-                                    class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
-                                    
-                                    
+                                        class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+
+
                                 </div>
                             </div>
                         </form>

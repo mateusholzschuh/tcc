@@ -11,10 +11,13 @@
                         <div class="swiper-wrapper">
                             <!-- Slides -->
                             <div class="swiper-slide">
-                                <a href="#enrolleds-panel" class="mdl-tabs__tab is-active">Inscritos</a>
+                                <a href="#enrolleds-panel"
+                                    class="mdl-tabs__tab  <%- locals.tab && tab=='list' ? 'is-active' : '' %>">Inscritos</a>
                             </div>
                             <div class="swiper-slide">
-                                <a href="#add-panel" class="mdl-tabs__tab">Nova Inscrição</a>
+                                <a href="#add-panel"
+                                    class="mdl-tabs__tab  <%- locals.tab && tab=='add' ? 'is-active' : '' %>">Nova
+                                    Inscrição</a>
                             </div>
                         </div>
                         <div class="swiper-mdl-tabs-next"></div>
@@ -22,22 +25,23 @@
                     </div>
                 </div>
 
-                <div class="mdl-tabs__panel is-active" id="enrolleds-panel">
+                <div class="mdl-tabs__panel <%- locals.tab && tab=='list' ? 'is-active' : '' %>" id="enrolleds-panel">
                     <!-- TAB 1 -->
                     <div class="tbl-c tbl-c--nopadding">
-                        <div class="card-ctrls tab-search tab-search--filter swiper--no-slides with-mass-actions-container">
+                        <div
+                            class="card-ctrls tab-search tab-search--filter swiper--no-slides with-mass-actions-container">
                             <div class="card-ctrls__left">
-                                <select class="mb24 select2-left select--category" name="select" data-selectar--mdl-big="true"
-                                    data-prefix="Show: " data-select2--class="card-ctrls--select2">
+                                <select class="mb24 select2-left select--category" name="select"
+                                    data-selectar--mdl-big="true" data-prefix="Show: "
+                                    data-select2--class="card-ctrls--select2">
                                     <option value="" selected="selected">Todos</option>
-                                    <!-- <option value="" selected>Second very big select for testing fucking dropdown card-ctrls</option> -->
                                 </select>
                                 <div class="search-box search-box--dark">
                                     <i class="zmdi zmdi-search"></i>
                                     <form action="">
                                         <div class="search-box__mdl-textfield mdl-textfield mdl-js-textfield">
-                                            <input class="mdl-textfield__input search-box__search-field" type="text" id="tableSearch"
-                                                autocomplete="off">
+                                            <input class="mdl-textfield__input search-box__search-field" type="text"
+                                                id="tableSearch" autocomplete="off">
                                             <label class="mdl-textfield__label" for="tableSearch">Buscar...</label>
                                         </div>
                                     </form>
@@ -45,15 +49,15 @@
                             </div>
 
                             <div class="card-ctrls__right">
-                                <div class="filters">                                    
+                                <div class="filters">
                                 </div>
                             </div>
                         </div>
 
                         <!--* data-table-idx-select ==> usado para alimentar o filtro do select* -->
                         <!-- classe css 'no-index' desabilita a auto numeração na primeira coluna -->
-                        <table data-table-init="true" data-table-idx-select="5" class="antares-table"
-                            cellspacing="0" width="100%">
+                        <table data-table-init="true" data-table-idx-select="5" class="antares-table" cellspacing="0"
+                            width="100%">
                             <colgroup>
                                 <col style="width: 6%;">
                                 <col style="width: 14%;">
@@ -76,7 +80,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% try { 
+                                <% if (locals.list) {
                                     list.forEach(e => { %>
                                 <tr>
                                     <td><%- e._id %></td>
@@ -84,27 +88,16 @@
                                     <td class="name"><%- e.user.name %></td>
                                     <td><%- e.user.cpf %></td>
                                     <td><a><%- e.user.email %></a></td>
-                                    <td><%- e.user.institution ? e.user.institution.name : '---' %></td>
+                                    <td><%- e.user.instituicao ? e.user.instituicao : '---' %></td>
                                     <!-- <td class="dt-actions desktop"><i class="zmdi zmdi-more"></i></td>
                                                 <td class="is-hidden cm-actions">
                                                     <ul>
                                                         <li><a href="http://modulesgarden.com" data-icon="google" data-text="451231">First</a></li>
-                                                        <li><a href="http://modulesgarden.com" data-icon="twitter" data-text="1231231">Second</a></li>
-                                                        <li>
-                                                            <a data-text="Third - Submenu">Third</a>
-                                                            <ul>
-                                                                <li><a href="http://modulesgarden.com" data-icon="codepen"
-                                                                        data-text="Deep #1">Sub
-                                                                        One</a></li>
-                                                                <li><a href="http://modulesgarden.com" data-icon="google" data-text="Deep #2">Sub
-                                                                        Two</a></li>
-                                                            </ul>
-                                                        </li>
                                                     </ul>
                                                 </td> -->
                                 </tr>
-                                <%});
-                                 } catch(e) {} %>
+                                <%  });
+                                   }  %>
 
                             </tbody>
                             <tfoot>
@@ -124,9 +117,7 @@
 
                     </div>
                 </div>
-                <div class="mdl-tabs__panel" id="add-panel">
-                    <!-- TAB 2 -->
-
+                <div class="mdl-tabs__panel <%- locals.tab && tab=='add' ? 'is-active' : '' %>" id="add-panel">
                     <section class="generals-form" style="width:100%">
                         <form action="./enrolleds" method="POST">
                             <div class="col-group">
@@ -136,47 +127,30 @@
                                     <a name="AntaresInputs" id="AntaresInputs">
                                         <legend>Dados Gerais</legend>
                                     </a>
-                                    <!-- <div class="form-block" style="width:100%;">
+
+                                    <div class="form-block">
+                                        <% if (locals.errors) { 
+                                            errors.forEach(error => { %>
                                         <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Nome</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <div class="input-field">
-                                                    <div
-                                                        class="mdl-textfield mdl-textfield--AR mdl-js-textfield mdl-textfield--floating-label">
-                                                        <input class="mdl-textfield__input" type="text" name="sample-valmd1"
-                                                            id="sample1">
-                                                        <label class="mdl-textfield__label" for="sample1">Nome do evento...</label>
-                                                    </div>
-                                                </div>
+                                            <div class="col">
+                                                <p
+                                                    class="alert alert alert--glow alert--error alert--md alert--border mb20">
+                                                    <%- error %></p>
                                             </div>
                                         </div>
+                                        <% })
+                                          } %>
                                     </div>
-                                    <div class="form-block" style="width:100%;">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Descrição</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <div class="input-field">
-                                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--AR">
-                                                        <textarea class="mdl-textfield__input" type="text" rows="3"
-                                                            id="sample5"></textarea>
-                                                        <label class="mdl-textfield__label" for="sample5">Text lines...</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="form-block">
+
+                                    <div class="form-block">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
                                                 <label class="form-block__name">Nome</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <input type="text" placeholder="Nome da palestra" name="name">
+                                                    <input type="text" placeholder="Nome do inscrito" name="name"
+                                                        value="<%- locals.form ? form.name : ''%>" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -184,12 +158,13 @@
                                     <div class="form-block">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name as-fs">Descrição</label>
+                                                <label class="form-block__name">CPF</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <textarea class="" name="description" cols="30" rows="5"
-                                                        placeholder="Breve descrição do palestra"></textarea>
+                                                    <input type="text" placeholder="CPF do inscrito" name="cpf"
+                                                        value="<%- locals.form ? form.cpf : ''%>" maxlength="14"
+                                                        required>
                                                 </div>
                                             </div>
                                         </div>
@@ -197,11 +172,12 @@
                                     <div class="form-block">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Local da palestra</label>
+                                                <label class="form-block__name">Email</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <input type="text" name="location" placeholder="Localização da palestra. Ex.: Sala 302 ">
+                                                    <input type="email" placeholder="Email do inscrito" name="email"
+                                                        value="<%- locals.form ? form.email : ''%>" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -210,39 +186,37 @@
                                         <div class="col-group">
 
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Data da palestra</label>
+                                                <label class="form-block__name">Data de nascimento</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field datepicker-icon">
-                                                    <input data-alt-datetimepicker="true" name="date" placeholder="Data e hora da palestra"
-                                                        type="datetime" required>
+                                                    <input data-datepicker="true" name="birthdate"
+                                                        placeholder="Data de nascimento" type="datetime"
+                                                        value="<%- locals.form ? form.birthdate : '' %>" required>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="form-block">
 
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Usuário</label>
+                                                <label class="form-block__name">Instituição</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field ">
-                                                    <!-- <span class="input-field__icon"><i class="zmdi zmdi-accounts"></i></span> -->
-                                                    <!-- <select class="speakers-select" name="speakers" data-selectar="true"
-                                                        data-placeholder="Selecione o(s) palestrante(s)" multiple>
-                                                    </select> -->
-                                                    <!-- <select id="ee" style="width:200px"></select> -->
-                                                    <select data-selectar--search="true" name="user" data-placeholder="Selecione o usuario"
-                                                        required>
-                                                        <% try { 
-                                                            users.forEach(u => { %>
+                                                    <select data-selectar--search name="institution"
+                                                        data-placeholder="Selecione a instituição" required>
+                                                        <option value="">---</option>
+                                                        <option value="ifsul-bage">IFsul - Campus Bagé</option>
+                                                        <option value="ifsul-pelotas">IFsul - Campus Pelotas</option>
+                                                        <option value="unipampa">Unipampa</option>
+                                                        <option value="urcamp">Urcamp</option>
+                                                        <option value="ideau">IDEAU</option>
+                                                        <option value="unicesumar">Unicesumar</option>
+                                                        <option value="estacio">Estácio</option>
+                                                        <option value="outros">Outros</option>
 
-                                                        <option value="<%- u._id %>">
-                                                            <%- u.name%>
-                                                        </option>
-                                                        <%  })
-                                                        } catch(e) {} %>
                                                     </select>
 
                                                 </div>
@@ -254,9 +228,11 @@
                             </div>
                             <div class="app-content__footer">
                                 <div class="btn-group">
-                                    <button class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                                    <button
+                                        class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
                                         type="submit">Salvar</button>
-                                    <a class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+                                    <a
+                                        class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
                                 </div>
                             </div>
                         </form>

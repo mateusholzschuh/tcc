@@ -4,6 +4,11 @@ const router = express.Router();
 // pega o controller
 const controller = require('../controllers/institution.controller');
 
+// css menu
+router.get('/*', (req, res, next) => {
+    res.locals.mainMenu = 'institutions'
+    next()
+})
 
 // rotas do resource
 router.get('/',         controller.index);

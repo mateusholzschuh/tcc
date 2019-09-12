@@ -440,20 +440,21 @@ router.get('/institutions', (req, res) => {
     })
 });
 
-router.get('/limpaEnroll', (req, res) => {
-    if (req.query.token == 'aw0oerakw3')
-        Event.findByIdAndUpdate(EVENT_ID, { enrolleds: [] }).then(doc => {
-            Enrollment.remove({ event: EVENT_ID }).exec()
-            res.json(doc)
-        })
-    res.json({})
-})
+// ! remove produção
+// router.get('/limpaEnroll', (req, res) => {
+//     if (req.query.token == 'aw0oerakw3')
+//         Event.findByIdAndUpdate(EVENT_ID, { enrolleds: [] }).then(doc => {
+//             Enrollment.remove({ event: EVENT_ID }).exec()
+//             res.json(doc)
+//         })
+//     res.json({})
+// })
 
-router.get('/reseta', async (req, res) => {
-    if (req.query.token == 'aw0oerakw3')
-        await Hackathon.findByIdAndUpdate(HACKATHON, { teams: [] }).exec()
-    res.json({})
-})
+// router.get('/reseta', async (req, res) => {
+//     if (req.query.token == 'aw0oerakw3')
+//         await Hackathon.findByIdAndUpdate(HACKATHON, { teams: [] }).exec()
+//     res.json({})
+// })
 
 const formataCPF = (cpf) => {
     return cpf.length == 11 

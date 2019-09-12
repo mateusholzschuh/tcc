@@ -75,8 +75,6 @@ router.get('/ban', (req, res, next) => {
     req.message = 'Banned';
     next()
 })
-// Exemplo de rota utilizando função do controller
-// router.get('/funcao',   referenciaDoController.funcao);
 
 // exporta o router
 module.exports = router;

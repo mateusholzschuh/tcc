@@ -1,0 +1,145 @@
+<%- include('../../header') %>
+<div class="grid-stack-item" data-gs-no-move="1" data-gs-no-resize="1" data-gs-x="0" data-gs-y="0" data-gs-width="24"
+    data-gs-height="19" data-gs-min-width="13" data-gs-min-height="18" data-gs-auto-position="0">
+    <div class="grid-stack-item-content">
+        <div class="card card--pagination card--tabs no-padding" data-preload>
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <div class="swiper-container swiper-mdl-tabs tab-bar--tape">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <a href="#checkin-panel" class="mdl-tabs__tab is-active">CHECK-IN</a>
+                            </div>
+                        </div>
+                        <div class="swiper-mdl-tabs-next"></div>
+                        <div class="swiper-mdl-tabs-prev"></div>
+                    </div>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="checkin-panel">
+                    <!-- TAB 2 -->
+
+                    <section class="generals-form" style="width:100%">
+                        <form action="<%- obj._id%>/update" method="POST">
+                            <div class="col-group">
+                                <script>
+                                    function mfc(i, j) {
+                                        let check = document.getElementsByName('day[' + i + ']')[0];
+                                        let checked = check.checked;
+                                        let message = document.getElementById('msg[' + i + ']');
+                                        let loader = document.getElementById('loader[' + i + ']');
+
+                                        if (loader.classList.contains('display-none'))
+                                            loader.classList.remove('display-none');
+
+                                        check.readOnly = true;
+
+                                        var xhr = new XMLHttpRequest();
+                                        xhr.open("POST", '/ajax/checkin', true);
+
+                                        // Envia a informação do cabeçalho junto com a requisição.
+                                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                                        xhr.onreadystatechange = function () { // Chama a função quando o estado mudar.
+
+                                            if (xhr.readyState === 4 && xhr.status == 200) {
+                                                if (!loader.classList.contains('display-none'))
+                                                    loader.classList.add('display-none');
+
+                                                if (!message.classList.contains('alert-success'))
+                                                    message.classList.add('alert--success');
+
+                                                message.innerHTML = '<i class="zmdi zmdi-sm zmdi-check-circle" style="margin-right: 3px;"></i>Atualizado'
+                                                setTimeout(() => {
+                                                    if (message.classList.contains('alert--success'))
+                                                        message.classList.remove('alert--success');
+                                                    message.innerText = '';
+
+                                                    check.readOnly = false;
+                                                }, 1000)
+                                            }
+                                            else if (xhr.readyState === 4 && xhr.status != 200) {
+                                                if (!loader.classList.contains('display-none'))
+                                                    loader.classList.add('display-none');
+
+                                                if (!message.classList.contains('alert--error'))
+                                                    message.classList.add('alert--error');
+
+                                                check.checked = !checked;
+
+                                                message.innerHTML = '<i class="zmdi zmdi-sm zmdi-alert-circle" style="margin-right: 3px;"></i>Ocorreu um erro!';
+                                                setTimeout(() => {
+                                                    if (message.classList.contains('alert--error'))
+                                                        message.classList.remove('alert--error');
+                                                    message.innerHTML = '';
+
+                                                    check.readOnly = false;
+                                                }, 1000)
+                                            }
+                                        }
+                                        xhr.send(String('day=' + i + '&enroll=' + j + '&checked=' + (checked)));
+                                    }
+
+                                </script>
+
+                                <fieldset name="inputs" class="col-mb-24 col-12">
+                                    <a name="AntaresInputs" id="AntaresInputs">
+                                        <legend>Presenças de: <strong><%- obj.user.name %></strong> <small>(<%- obj.user.cpf %>)</small></legend>
+                                    </a>
+                                    <% if (locals.obj.event.days) {
+                                        for (i=0; i < obj.event.days*2; i++) { %>
+                                    <div class="form-block <%- i&1 ? 'mb30' : '' %>">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Dia <%- parseInt(i/2)+1 %> (<%- i&1 ? 'Tarde' : 'Manhã' %>)</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field switchbox">
+                                                    <label class="switch">
+                                                        <input class="switch-checkbox" type="checkbox" <%- obj.presences[i] ? 'checked' : '' %>
+                                                            name="day[<%- i %>]"
+                                                            onchange="javascript:mfc(<%-i%>, '<%- obj._id%>')">
+                                                        <span class="switch-container"><span
+                                                                class="switch-handle"></span></span>
+                                                    </label>
+                                                    <div style="margin-left: 1.5em">
+                                                        <i id="loader[<%-i%>]"
+                                                            class="display-none zmdi zmdi-refresh zmdi-hc-spin zmdi-hc-2x"></i>
+                                                        <div id="msg[<%-i%>]" class="alert alert--glow" style="padding:0 4px 0 4px; border-radius: 5px">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <%  }
+                                       } %>
+
+                                </fieldset>
+
+                            </div>
+                            <div class="app-content__footer">
+                                <div class="btn-group">
+                                    <button
+                                        class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="submit">Salvar</button>
+                                    <a
+                                        class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../../footer') %>

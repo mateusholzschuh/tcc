@@ -86,25 +86,25 @@
                     </li>
                 </ul>
                 <ul class="main-menu main-menu--primary">
-                    <li data-index="0" data-name="dashboard">
+                    <li data-index="0" data-name="dashboard" class="<%- mainMenu ? (mainMenu == 'dashboard')  ? 'is-active' : '' : '' %>">
                         <a href="/">
                             <i class="zmdi zmdi-view-dashboard"></i>
                             <span class="text">Dashboard</span>
                         </a>
                     </li>
-                    <li data-index="1" data-name="users">
+                    <li data-index="1" data-name="users" class="<%- mainMenu ? (mainMenu == 'users')  ? 'is-active' : '' : '' %>">
                         <a href="/users">
                             <i class="zmdi zmdi-accounts"></i>
                             <span class="text">Usuários</span>
                         </a>
                     </li>
-                    <li data-index="2" data-name="dashboard">
+                    <li data-index="2" data-name="dashboard" class="<%- mainMenu ? (mainMenu == 'events')  ? 'is-active' : '' : '' %>">
                         <a href="/events">
                             <i class="zmdi zmdi-globe-alt"></i>
                             <span class="text">Eventos</span>
                         </a>
                     </li>
-                    <li data-index="3" data-name="institutions">
+                    <li data-index="3" data-name="institutions" class="<%- mainMenu ? (mainMenu == 'institutions')  ? 'is-active' : '' : '' %>">
                         <a href="/institutions">
                             <i class="zmdi zmdi-graduation-cap"></i>
                             <span class="text">Intituições</span>

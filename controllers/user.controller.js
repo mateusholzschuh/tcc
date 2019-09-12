@@ -18,7 +18,8 @@ const index = async (req, res, next) => {
     res.render('users/index', {
         title: 'Usuários',
         list: users,
-        message: req.flash('message'),       
+        message: req.flash('message'),
+        moment: moment,
         menu: [
             {
                 title: 'Adicionar novo',

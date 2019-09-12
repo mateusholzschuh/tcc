@@ -1,0 +1,121 @@
+<%- include('../../header') %>
+<div class="grid-stack-item" data-gs-no-move="1" data-gs-no-resize="1" data-gs-x="0" data-gs-y="0" data-gs-width="24"
+    data-gs-height="19" data-gs-min-width="13" data-gs-min-height="18" data-gs-auto-position="0">
+    <div class="grid-stack-item-content">
+        <div class="card card--pagination card--tabs no-padding" data-preload>
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <div class="swiper-container swiper-mdl-tabs tab-bar--tape">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <a href="#enrolleds-panel" class="mdl-tabs__tab is-active">Inscritos</a>
+                            </div>
+                        </div>
+                        <div class="swiper-mdl-tabs-next"></div>
+                        <div class="swiper-mdl-tabs-prev"></div>
+                    </div>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="enrolleds-panel">
+                    <!-- TAB 1 -->
+                    <div class="tbl-c tbl-c--nopadding">
+                        <div
+                            class="card-ctrls tab-search tab-search--filter swiper--no-slides with-mass-actions-container">
+                            <div class="card-ctrls__left">
+                                <select class="mb24 select2-left select--category" name="select"
+                                    data-selectar--mdl-big="true" data-prefix="Show: "
+                                    data-select2--class="card-ctrls--select2">
+                                    <option value="" selected="selected">Todos</option>
+                                    <!-- <option value="" selected>Second very big select for testing fucking dropdown card-ctrls</option> -->
+                                </select>
+                                <div class="search-box search-box--dark">
+                                    <i class="zmdi zmdi-search"></i>
+                                    <form action="">
+                                        <div class="search-box__mdl-textfield mdl-textfield mdl-js-textfield">
+                                            <input class="mdl-textfield__input search-box__search-field" type="text"
+                                                id="tableSearch" autocomplete="off">
+                                            <label class="mdl-textfield__label" for="tableSearch">Buscar...</label>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="card-ctrls__right">
+                                <div class="filters">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--* data-table-idx-select ==> usado para alimentar o filtro do select* -->
+                        <!-- classe css 'no-index' desabilita a auto numeração na primeira coluna -->
+                        <table data-table-init="true" data-table-idx-select="5" class="antares-table" cellspacing="0"
+                            width="100%">
+                            <colgroup>
+                                <col style="width: 6%;">
+                                <col style="width: 14%;">
+                                <col style="width: 18%;">
+                                <col style="width: 20%;">
+                                <col style="width: 30%;">
+                                <!-- <col style="width: 2%;">
+                                <col style="width: 0%;"> -->
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="no-sort">#</th>
+                                    <th class="no-sort">CÓD.</th>
+                                    <th class="no-sort">Nome</th>
+                                    <th class="no-sort">CPF</th>
+                                    <th class="no-sort desktop">Email</th>
+                                    <th class="no-sort tabletV tabletH laptop desktop">Instituição</th>
+                                    <th class="no-sort"></th>
+                                    <th class="no-sort is-hidden"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% try { 
+                                    list.forEach(e => { %>
+                                <tr>
+                                    <td><%- e._id %></td>
+                                    <td><%- e.code %></td>
+                                    <td class="name"><%- e.user.name %></td>
+                                    <td><%- e.user.cpf %></td>
+                                    <td><a><%- e.user.email %></a></td>
+                                    <td><%- e.user.instituicao ? e.user.instituicao : '---' %></td>
+                                    <td class="dt-actions desktop"><i class="zmdi zmdi-more"></i></td>
+                                    <td class="is-hidden cm-actions">
+                                        <ul>
+                                            <li><a href="<%- fullUrl %>/<%- e._id %>" data-icon="check"
+                                                    data-text="CHECK-IN">checkin</a></li>
+
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <%});
+                                 } catch(e) {} %>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>CÓD.</th>
+                                    <th>Nome</th>
+                                    <th>CPF</th>
+                                    <th>Email</th>
+                                    <th>Instituição</th>
+                                    <th class="desktop"></th>
+                                    <th class="is-hidden"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../../footer') %>

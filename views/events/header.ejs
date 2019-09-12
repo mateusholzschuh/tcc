@@ -4,31 +4,31 @@
     <div class="grid-col grid-col--menu">
         <div class="menu-aside-container" data-scrollable>
             <ul class="menu-aside">
-                <li class=""> <!--is-active-->
+                <li class="<%- locals.eventMenu ? (eventMenu == 'main') ? 'is-active' : '' : '' %>"> <!--is-active-->
                     <a href="<%- baseUrl %>/" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-view-dashboard"></i>
                         <span>Geral</span>
                     </a>
                 </li>
-                <li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'enrolleds') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/enrolleds" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-accounts-list"></i>
                         <span>Inscritos</span>
                     </a>
                 </li>
-                <li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'lectures') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/lectures" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-comment-alt-text"></i>
                         <span>Palestras</span>
                     </a>
                 </li>
-                <li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'workshops') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/workshops" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-gamepad"></i>
                         <span>Oficinas</span>
                     </a>
                 </li>
-                <li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'hackathon') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/hackathon" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-code"></i>
                         <span>Hackathon</span>
@@ -80,7 +80,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'checkin') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/checkin" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-check-all"></i>
                         <span>Check-in</span>

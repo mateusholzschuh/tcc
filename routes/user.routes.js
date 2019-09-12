@@ -15,6 +15,12 @@ const valida = [
 
 ]
 
+// css menu
+router.get('/*', (req, res, next) => {
+    res.locals.mainMenu = 'users'
+    next()
+})
+
 // rotas do resource
 router.get('/',         controller.index);
 router.get('/create',   controller.create);
