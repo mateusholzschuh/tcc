@@ -265,6 +265,51 @@ router.post('/checkin/get', [
 });
 
 /**
+ * Rota atualiza preseças => app
+ */
+router.post('/checkin/put', [
+    body('enroll').isMongoId().withMessage('id inválido'),
+    body('checked').isBoolean().withMessage('estado inválido'),
+    body('day').isNumeric().withMessage('Dia inválido')
+], async (req, res) => {
+
+    const { enroll, checked, day } = req.body;
+
+    // validação dos campos
+    if (validationResult(req).errors.length != 0) {
+        return res.json({
+            errors: validationResult(req).errors.map(e => e.msg)
+        }, 400)
+    }
+
+    // busca inscrição
+    result = await Enrollment.findOne({ _id: enroll }).select('presences').exec();
+    
+    // inscrição não encontrada
+    if (!result) {
+        return res.json({
+            errors: [
+                'Ocorreu um erro ao processar esta operação'
+            ]
+        }, 500)
+    }
+    
+    result.presences[day] = checked;
+
+    Enrollment.updateOne({ _id: enroll }, result).exec().then(doc => {
+        return res.json({
+            message: 'Presença atualizada com sucesso'
+        });
+    }).catch(err => {
+        return res.json({
+            errors: ['Ocorreu um erro ao processar sua requisição']
+        }, 500);
+    })
+
+});
+
+
+/**
  * Rota para listar inscritos no evento
  */
 router.get('/enrolleds', async (req, res) => {
