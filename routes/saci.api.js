@@ -199,6 +199,72 @@ router.post('/check', [
 });
 
 /**
+ * Rota get preseças => app
+ */
+router.post('/checkin/get', [
+    body('cpf').isLength({ min: 11, max: 11 }).withMessage('CPF inválido')
+], async (req, res) => {
+
+    // validação dos campos
+    if (validationResult(req).errors.length != 0) {
+        return res.json({
+            errors: validationResult(req).errors.map(e => e.msg)
+        }, 400)
+    }
+
+    user = await User.findOne({ cpf: req.body.cpf }).select('_id name email cpf').exec()
+
+    if (!user) {
+        return res.json({
+            errors: [
+                'CPF não inscrito no evento'
+            ]
+        }, 404)
+    }
+
+    // busca inscrição
+    result = await Enrollment.findOne({ event: EVENT_ID, user: user }).select('presences').exec();
+    
+    // usuário existe, mas não esta inscrito
+    if (!result) {
+        return res.json({
+            errors: [
+                'CPF não inscrito no evento'
+            ]
+        }, 404)
+    }
+    
+    // pega numero de dias do evento
+    event = await Event.findById(EVENT_ID).select('days').exec();
+
+    days = event.days
+    
+    // payload
+    let arr = []
+
+    let k = 0;
+    for (i=0; i<days; i++) {
+        for (j=0; j<2; j++) {
+            arr.push({
+                enroll: result._id,
+                day: k,
+                checked: result.presences[k] ? true : false,
+                text: `Dia ${i+1} (${ j ? 'Tarde' : 'Manhã'})`
+            })
+            k++;
+        }
+    }
+
+    return res.json({
+        user: {
+            name: user.name,
+            cpf: user.cpf
+        },
+        days:arr
+    })
+});
+
+/**
  * Rota para listar inscritos no evento
  */
 router.get('/enrolleds', async (req, res) => {
