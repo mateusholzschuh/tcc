@@ -41,7 +41,7 @@ var transporter = nodemailer.createTransport({
  */
 router.post('/enroll', [
     body('email').isEmail().withMessage('Email inválido').normalizeEmail(),
-    body('name').isString().isLength({ min: 5, max: 30 }).withMessage('Nome inválido'),
+    body('name').isString().isLength({ min: 5, max: 70 }).withMessage('Nome inválido'),
     body('cpf').isNumeric().isLength({ min: 11, max: 11 }).withMessage('CPF inválido'),
     body('birthdate').not().isEmpty().withMessage('Data de nascimento em branco'),
     body('institution').not().isEmpty().withMessage('Instituição em branco!')
