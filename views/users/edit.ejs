@@ -82,7 +82,7 @@
                                 <div class="input-field ">
 
                                     <input class="form-control" name="cpf" type="text" value="<%- obj.cpf %>" id="cpf"
-                                        minlength="11" maxlength="11" required>
+                                        minlength="11" maxlength="11" required readonly>
                                 </div>
                                 <span id="cpf_error" class="error nopadding">
 
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-block " role="">
+                    <div class="display-none form-block " role="">
                         <div class="col-group ">
                             <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
                                 <label for="password" class="form-block__name">Senha</label>
@@ -182,7 +182,7 @@
                                     <select class="select2-accessible" data-selectar="1"
                                         placeholder="selecione uma instituição..." id="institution" name="institution"
                                         tabindex="-1" aria-hidden="true">
-                                        <!-- <option value="">---</option> -->
+                                        <option value="">---</option>
                                         <% institutions.forEach(i => { %>
 
                                         <option value="<%- i._id %>"><%- i.name %></option>
@@ -197,8 +197,23 @@
                             </div>
                         </div>
                     </div>
-                    <legend>Avatar</legend>
-                    <div class="col-group">
+                    <div class="form-block " role="">
+                        <div class="col-group ">
+                            <div class="col-mb-8 col-6 col-dt-4">
+                                <label for="instituicao" class="form-block__name">Instituição</label>
+                            </div>
+                            <div class="col-mb-16 col-18 col-dt-10">
+                                <div class="input-field ">
+                                    <input class="form-control" name="instituicao" placeholder="Instituição (texto)" type="text" value="<%- obj.instituicao %>" id="instituicao">
+                                </div>
+                                <span id="name_error" class="error nopadding">
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <legend class="display-none">Avatar</legend>
+                    <div class="display-none col-group">
                         <div class="col-14">
                             <div class="form-block">
                                 <div class="input-field mb8">

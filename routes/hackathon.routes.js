@@ -8,7 +8,7 @@ const controller = require('../controllers/hackathon.controller');
 const Hackathon = require('../models/hackathon.model');
 
 // css menu
-router.get('/*', (req, res, next) => {
+router.all('/*', (req, res, next) => {
     res.locals.eventMenu = 'hackathon'
     next()
 })

@@ -150,6 +150,7 @@ const update = (req, res, next) => {
         email: req.body.email,
         password: 'DEFAULT',
         institution: req.body.institution || null,        
+        instituicao: req.body.instituicao || '',        
         bio: req.body.bio,
         birthdate: moment(req.body.birthdate, 'DD/MM/YYYY') || null
     };

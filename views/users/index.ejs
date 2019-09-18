@@ -96,7 +96,7 @@
                                         <% try { -%>
                                         <%- u.institution.name %>
                                         <% } catch(e) { -%>
-                                        <%- 'Não cadastrado' %>
+                                        <%- u.instituicao || 'Não cadastrado' %>
                                         <% } -%>
                                     </td>
                                     <td><a><%- u.email || 'Não cadastrado' %></a></td>

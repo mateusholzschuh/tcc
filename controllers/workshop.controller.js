@@ -145,6 +145,7 @@ const enrolleds = async (req, res, next) => {
         title: workshop.name || 'Inscritos na oficina',
         turl: '/events/' + req.params.id + '/workshops',
         list: workshop.enrolleds,
+        workshop: workshop._id,
         users: users.enrolleds,
         moment: moment, // biblioteca formatar data
         // menu: [
