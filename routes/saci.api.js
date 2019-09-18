@@ -316,7 +316,7 @@ router.get('/enrolleds', async (req, res) => {
     let enrolleds = await Enrollment.find({ event: EVENT_ID }).select('user code').populate({
         path: 'user',
         select: 'name cpf instituicao'
-    }).exec()
+    }).sort('-code').exec()
 
     enrolleds = enrolleds.map(e => {
         return {
