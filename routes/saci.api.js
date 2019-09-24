@@ -551,6 +551,18 @@ router.get('/institutions', (req, res) => {
     })
 });
 
+router.post('/auth', (req, res) => {
+    if (process.env.SACI_CODE && process.env.SACI_CODE == req.body.code) {
+        return res.status(200).json({
+            message: "Sucesso!"
+        })
+    }
+
+    return res.status(400).json({
+        errors: ["Ops! Ocorreu um erro ao entrar"]
+    })
+});
+
 // ! remove produção
 // router.get('/limpaEnroll', (req, res) => {
 //     if (req.query.token == 'aw0oerakw3')
