@@ -11,5 +11,9 @@ router.post('/login', controller.doLogin);
 
 router.get('/logout', controller.doLogout);
 
+router.get('/password/reset', controller.getChangepass)
+
+router.post('/password/reset', controller.postChangepass)
+
 // exporta o router
 module.exports = router;

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
     <title>
-        Login
+        Change password
     </title>
     <meta name="theme-color" content="#02A8F3">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -94,17 +94,19 @@
     <link rel="manifest" href="manifest.json">
 
     <!-- standard -->
-    <link rel="stylesheet" href="css/external.css">
-    <link rel="stylesheet" href="css/antares.css">
+    <link rel="stylesheet" href="/css/external.css">
+    <link rel="stylesheet" href="/css/antares.css">
 </head>
 
 <body>
     <div class="app-content page-login">
-        <div class="img-logo"></div>
+        <!-- <div class="img-logo"></div> -->
         <section class="main-content">
             <div class="login-box">
-                <form action="/login" method="post" data-preload>
+                <form action="/password/reset" method="post" data-preload>
                     <fieldset>
+                        <h1>Alterar senha</h1>
+                        <hr>
                         <div class="form-block">
                             <% if (locals.message) { %>
                             <div class="alert alert--error alert--md alert--border alert--noicon mb20" >
@@ -113,44 +115,43 @@
                                 <i class="alert__close zmdi zmdi-close"></i>
                             </div>
                             <% } %>
+                        </div>
+                        <div class="form-block">
                             <div class="input-field">
                                 <div class="mdl-textfield mdl-textfield--AR mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" value="<%- locals.form ? form.email : '' %>" type="text" name="email" id="login">
-                                    <label class="mdl-textfield__label" for="login">Email</label>
+                                    <input class="mdl-textfield__input" value="" type="password" name="pActual" id="password">
+                                    <label class="mdl-textfield__label" for="password">Senha Atual</label>
                                 </div>
                             </div>
                         </div>
                         <div class="form-block">
                             <div class="input-field">
                                 <div class="mdl-textfield mdl-textfield--AR mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" value="" type="password" name="password" id="password">
-                                    <label class="mdl-textfield__label" for="password">Senha</label>
+                                    <input class="mdl-textfield__input" value="" type="password" name="pNew" id="pNew">
+                                    <label class="mdl-textfield__label" for="pNew">Nova Senha</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-block">
+                            <div class="input-field">
+                                <div class="mdl-textfield mdl-textfield--AR mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" value="" type="password" name="pCheck" id="pCheck">
+                                    <label class="mdl-textfield__label" for="pCheck">Repita a nova Senha</label>
                                 </div>
                             </div>
                         </div>
                     </fieldset>
 
-                    <div class="display-none login-box__remember">
-                        <input type="checkbox" data-icheck="true" name="remember_login" id="login-box__remember">
-                        <span>Remember me</span>
-                    </div>
-                        <button type="submit" class="btn btn--submit btn--s-extra-large btn--primary mdl-button mdl-js-button mdl-js-ripple-effect">
-                            Entrar</button>
+                        <button type="submit" class="btn btn--submit btn--s-extra-large btn--dark mdl-button mdl-js-button mdl-js-ripple-effect">
+                            Alterar senha</button>
                    
-                    <div class="link-group display-none">
-                        <a class="password-reset">Recuperar senha</a>
-                    </div>
                 </form>
             </div>
         </section>
     </div>
 
-    <!-- reload plugin -->
-    <!-- <script src="js/asset_listener.js"></script> -->
-    <!-- <script src="http://localhost:35725/livereload.js"></script> -->
-
-    <script type="text/javascript" src="js/app_cache.js?a13c6ebafdb81e7f8fdf"></script>
-    <script type="text/javascript" src="js/forms_standard.js?a13c6ebafdb81e7f8fdf"></script>
+    <script type="text/javascript" src="/js/app_cache.js?a13c6ebafdb81e7f8fdf"></script>
+    <script type="text/javascript" src="/js/forms_standard.js?a13c6ebafdb81e7f8fdf"></script>
 </body>
 
 </html>

@@ -70,4 +70,66 @@ const doLogout = (req, res) => {
     });
 };
 
-module.exports = { login, doLogin, doLogout }
+/**
+ * Retorna página de alteração de senha
+ */
+const getChangepass = (req, res) => {
+    return res.render('auth/changepass', {});
+};
+
+/**
+ * Faz a alteração da senha
+ */
+const postChangepass = async (req, res) => {
+    const { pActual, pNew, pCheck } = req.body;
+
+    if (!(pActual && pNew && pCheck)) {
+        return res.render('auth/changepass', {
+            message: 'Dados inválidos'
+        })
+    }
+
+    if (pNew != pCheck) {
+        return res.render('auth/changepass', {
+            message: 'Senha de confirmação incorreta!'
+        })
+    }
+
+    let user = await User.findById(req.session.user).select('password').exec();
+console.log(user)
+    if (user) {
+        user.comparePassword(pActual, (err, match) => {
+            if (err) {
+                return res.render('auth/changepass', {
+                    message: 'Ocorreu um erro!'
+                })
+            }
+            if (match) {
+                
+                user.password = pNew;
+
+                user.save().then(ok => {
+                    return res.redirect('/events/');
+                }).catch(err => {
+                    return res.render('auth/changepass', {
+                        message: 'Ocorreu um erro ao alterar sua senha'
+                    })
+                })
+
+            } else {
+
+                return res.render('auth/changepass', {
+                    message: 'Senha atual errado!'
+                })
+            }
+        })
+    } else {
+
+        return res.render('auth/changepass', {
+            message: 'Ocorreu um erro ao alterar sua senha'
+        })
+    }
+
+};
+
+module.exports = { login, doLogin, doLogout, getChangepass, postChangepass }
