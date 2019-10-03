@@ -1,70 +1,68 @@
-var createError = require('http-errors');
-var express = require('express');
-var session = require('express-session');
-var mongoSession = require('connect-mongodb-session')(session);
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var flash = require('connect-flash');
-var cors = require('cors');
+const createError = require('http-errors')
+const express = require('express')
+const session = require('express-session')
+const mongoSession = require('connect-mongodb-session')(session)
+const path = require('path')
+const cookieParser = require('cookie-parser')
+const logger = require('morgan')
+const flash = require('connect-flash')
+const cors = require('cors')
 
-var config = require('./config');
+const config = require('./config')
 
 // middlewares
-var rateLimit = require('express-rate-limit');
-var isAuth = require('./middlewares/is-auth');
+const rateLimit = require('express-rate-limit')
+const isAuth = require('./middlewares/is-auth')
 
 // importing routers
-var indexRouter = require('./routes/index');
-var authRouter = require('./routes/auth.routes');
-var usersRouter = require('./routes/user.routes');
-var institutionsRouter = require('./routes/institution.routes');
-var eventsRouter = require('./routes/event.routes');
-// var lecturesRouter = require('./routes/lecture.routes');
-// var enrolledsRouter = require('./routes/enrolleds.routes');
+var indexRouter = require('./routes/index')
+var authRouter = require('./routes/auth.routes')
+var usersRouter = require('./routes/user.routes')
+var institutionsRouter = require('./routes/institution.routes')
+var eventsRouter = require('./routes/event.routes')
 
-var ajaxRouter = require('./routes/ajax-internal.routes');
-var apiRouter = require('./routes/api.routes');
-var saciAPI = require('./routes/saci.api');
+var ajaxRouter = require('./routes/ajax-internal.routes')
+var apiRouter = require('./routes/api.routes')
+var saciAPI = require('./routes/saci.api')
 
-var app = express();
+const app = express()
 
-var store = new mongoSession({
+const store = new mongoSession({
   uri: config.MONGODB_URI,
   collection: 'sessions'
-});
+})
 
 // Catch errors
 store.on('error', function(error) {
-  console.log(error);
-});
+  console.log(error)
+})
 
-app.disable('x-powered-by');
+app.disable('x-powered-by')
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
 app.use(session({
   secret: 'session-secret-35431651354',
   store: store,
   resave: false,
   saveUninitialized: false,
-  cookie: { 
+  cookie: {
     maxAge: 2 * 60 * 60 * 1000 // 2h
   },
-}));  
-app.use(flash());
-app.use(express.static(path.join(__dirname, 'public')));
+}))
+app.use(flash())
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('*', (req, res, next) => {
-  res.locals.fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  res.locals.fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
   next()
-});
+})
 
 /*******************
  * Rotas API
@@ -75,41 +73,40 @@ const apiLimiter = rateLimit({
   windowMs: 2 * 60 * 1000, // 2 min
   max: 100, // limit each IP to 100 requests per windowMs
   message: { errors:['Muitas requisições deste endereço'] }
-});
+})
 
-app.use('/api', apiLimiter);
+app.use('/api', apiLimiter)
 
 // routes
 app.use('/api/v1', apiRouter, (req, res) => {
-  return res.json({ errors: [req.message || 'What the fuck has happened?'] }, 400);
-});
+  return res.json({ errors: [req.message || 'What the fuck has happened?'] }, 400)
+})
 
 // SACI API *
-const open = false;
-const SACI_TOKEN = process.env.SACI_TOKEN || 'saci';
+const open = false
+const SACI_TOKEN = process.env.SACI_TOKEN || 'saci'
 
 app.use('/api/saci', cors(), (req, res, next) => {
   if (open) {
-    next()
-    return
+    return next()
   }
 
   if(req.headers.authorization == 'Bearer '.concat(SACI_TOKEN)) 
     next()
   else
-    return res.json({ errors: ['Opa! Esta rota não é permitida'] }, 401);
+    return res.json({ errors: ['Opa! Esta rota não é permitida'] }, 401)
   
 }, 
 
 saciAPI,
 
 (req, res) => {
-  return res.json({ errors: ['Opa! Rota inválida'] }, 404);
-});
+  return res.json({ errors: ['Opa! Rota inválida'] }, 404)
+})
 
 app.use('/api/?*', (req, res) => {
-  return res.json({ errors: ['Opa! Rota inválida'] }, 404);
-});
+  return res.json({ errors: ['Opa! Rota inválida'] }, 404)
+})
 
 /*******************
  * Rotas WEB
@@ -120,41 +117,40 @@ const webLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 min
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Muitas requisições deste endereço'
-});
+})
 
 app.use('/', webLimiter)
 
 // setting routes
 app.use('/', authRouter)
-app.use('/', isAuth, indexRouter);
+app.use('/', isAuth, indexRouter)
 app.use('/ajax', ajaxRouter)
-app.use('/users', usersRouter);
-app.use('/institutions', institutionsRouter);
-
-app.use('/events', eventsRouter);
+app.use('/users', usersRouter)
+app.use('/institutions', institutionsRouter)
+app.use('/events', eventsRouter)
 
 // ! debug removido produção
 // app.use('/limpa', (req, res) => {
 //   require('./models/event.model').updateMany({}, { enrolleds: [] }).exec()
 //   require('./models/enrollment.model').remove({}).exec()
 // })
-// app.use('/events/:id/lectures', lecturesRouter);
-// app.use('/events/:id/enrolleds', enrolledsRouter);
+// app.use('/events/:id/lectures', lecturesRouter)
+// app.use('/events/:id/enrolleds', enrolledsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
-});
+  next(createError(404))
+})
 
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+  res.status(err.status || 500)
+  res.render('error')
+})
 
-module.exports = app;
+module.exports = app

@@ -1,19 +1,31 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-// pega o controller
-const controller = require('../controllers/auth.controller');
+const isAuth = require('../middlewares/is-auth')
+
+// controller
+const controller = require('../controllers/auth.controller')
+
+// validador
+const validator = require('../middlewares/validators/auth')
 
 
-// rotas
-router.get('/login',  controller.login);
-router.post('/login', controller.doLogin);
+// ROTAS DE AUTENTICAÇÃO
 
-router.get('/logout', controller.doLogout);
+// rota que exibe a tela de login
+router.get('/login', controller.getLogin)
 
-router.get('/password/reset', controller.getChangepass)
+// rota que faz o login
+router.post('/login', validator.onLogin, controller.postLogin)
 
-router.post('/password/reset', controller.postChangepass)
+// rota que faz logout
+router.get('/logout', controller.doLogout)
+
+// rota que exibe pagina para alterar a senha
+router.get('/password/reset', isAuth, controller.getChangepass)
+
+// rota que troca a senha do usuario da sessão
+router.post('/password/reset', isAuth, validator.onChangePass, controller.postChangepass)
 
 // exporta o router
-module.exports = router;
+module.exports = router

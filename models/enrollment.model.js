@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 let EnrollmentSchema = new Schema({
     code: {
@@ -20,7 +20,7 @@ let EnrollmentSchema = new Schema({
 
 }, {
     timestamps: true
-});
+})
 
 EnrollmentSchema.pre('save', function (next) {
     // quando a inscrição é criada
@@ -31,8 +31,8 @@ EnrollmentSchema.pre('save', function (next) {
             .then(res => {
                 // não tem inscrições ainda
                 if (res === 0) {
-                    this.code = 1; // recebe o primeiro codigo
-                    next();
+                    this.code = 1 // recebe o primeiro codigo
+                    next()
                 }
                 else {
                     mongoose.model('Enrollment', EnrollmentSchema)
@@ -42,20 +42,20 @@ EnrollmentSchema.pre('save', function (next) {
                         .limit(1)   // pega o primeiro [maior]
                         .exec()
                         .then(max => {
-                            this.code = max[0].code + 1; // incrementa
-                            next();
+                            this.code = max[0].code + 1 // incrementa
+                            next()
                         })
                         .catch(err => { // caso de erro
-                            console.error(err);
-                            this.code = -1;
-                            next();
+                            console.error(err)
+                            this.code = -1
+                            next()
                         })
                 }
-            });
+            })
     } else {
-        next();
+        next()
     }
-});
+})
 
 // Exporta o modelo
-module.exports = mongoose.model('Enrollment', EnrollmentSchema);
+module.exports = mongoose.model('Enrollment', EnrollmentSchema)

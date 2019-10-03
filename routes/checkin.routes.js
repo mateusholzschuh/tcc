@@ -1,22 +1,22 @@
-const express = require('express');
-const router = express.Router({mergeParams: true});
+const express = require('express')
+const router = express.Router({ mergeParams: true })
 
-// pega o controller
-const controller = require('../controllers/checkin.controller');
+// controller
+const controller = require('../controllers/checkin.controller')
 
 // css menu
-router.get('/*', (req, res, next) => {
+router.all('/*', (req, res, next) => {
     res.locals.eventMenu = 'checkin'
     next()
 })
 
-// rotas do resource
+// ROTAS DO RESOURCE
 
 // rota da listagem de inscritos
-router.get('/',         controller.index);
+router.get('/', controller.index)
 
-// rota para mostrar as presenças de um inscrito
-router.get('/:enroll',   controller.edit);
+// rota para mostrar/editar as presenças de um inscrito
+router.get('/:enroll', controller.edit)
 
 // exporta o router
-module.exports = router;
+module.exports = router

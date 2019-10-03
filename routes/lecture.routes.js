@@ -1,56 +1,37 @@
-const express = require('express');
-const router = express.Router({ mergeParams: true });
+const express = require('express')
+const router = express.Router({ mergeParams: true })
 
-const { body } = require('express-validator')
+// controller
+const controller = require('../controllers/lecture.controller')
 
-// pega o controller
-const controller = require('../controllers/lecture.controller');
+// validador
+const validator = require('../middlewares/validators/lectures')
 
 // css menu
-router.get('/*', (req, res, next) => {
+router.all('/*', (req, res, next) => {
     res.locals.eventMenu = 'lectures'
     next()
 })
 
-// rotas do resource
+// ROTAS DO RESOURCE
+
 // rota para listar as palestras
-router.get('/', controller.index);
+router.get('/', controller.index)
+
+// rota que exibe o form para adicionar uma palestra
+router.get('/add', controller.create)
 
 // rota para salvar nova palestra
-router.post('/', [
-    // validação
-    body('name').isString().isLength({ min: 5, max: 50 }).withMessage('Nome inválido'),
-    
-    body('location').isString().isLength({ min: 5, max: 50 }).withMessage('Local inválido'),
+router.post('/add', validator.onSave, controller.store)
 
-    body('date').not().isEmpty().withMessage('Data em branco'),
-
-    body('speakers').not().isEmpty().withMessage('Nenhum palestrante selecionado')
-
-], 
-// manda para o controller
-controller.store);
-
-// rota para editar palestra
-router.get('/:lecture/edit', controller.edit);
+// rota que exibe form para editar palestra
+router.get('/:lecture/edit', controller.edit)
 
 // rota para atualizar palestra
-router.post('/:lecture/edit/', [
-    // validação
-    body('name').isString().isLength({ min: 5, max: 50 }).withMessage('Nome inválido'),
-    
-    body('location').isString().isLength({ min: 5, max: 50 }).withMessage('Local inválido'),
-
-    body('date').not().isEmpty().withMessage('Data em branco'),
-
-    body('speakers').not().isEmpty().withMessage('Nenhum palestrante selecionado')
-
-], 
-// manda para o controller
-controller.update);
+router.post('/:lecture/edit/', validator.onUpdate, controller.update)
 
 // rota para remover palestra
-router.get('/:lecture/delete', controller.destroy);
+router.get('/:lecture/delete', controller.destroy)
 
 // exporta o router
-module.exports = router;
+module.exports = router

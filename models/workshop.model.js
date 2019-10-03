@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 let WorkshopSchema = new Schema({
     // Atributos...
@@ -54,7 +54,7 @@ let WorkshopSchema = new Schema({
     }
 }, {
     timestamps: true
-});
+})
     
 // Exporta o modelo
-module.exports = mongoose.model('Workshop', WorkshopSchema);
+module.exports = mongoose.model('Workshop', WorkshopSchema)

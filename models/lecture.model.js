@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 let LectureSchema = new Schema({
     // Atributos...
@@ -38,7 +38,7 @@ let LectureSchema = new Schema({
     }
 }, {
     timestamps: true
-});
+})
     
 // Exporta o modelo
-module.exports = mongoose.model('Lecture', LectureSchema);
+module.exports = mongoose.model('Lecture', LectureSchema)

@@ -1,8 +1,8 @@
-<%- include('../header') %>
+<%- include('../../header') %>
 <div class="grid-stack-item" data-gs-no-move="1" data-gs-no-resize="1" data-gs-x="0" data-gs-y="0" data-gs-width="24"
     data-gs-height="19" data-gs-min-width="13" data-gs-min-height="18" data-gs-auto-position="0">
     <div class="grid-stack-item-content">
-        <div class="card card--pagination card--tabs card--unadjustable no-padding" data-preload>
+        <div class="card card--pagination card--tabs card--unadjustabl no-padding" data-preload>
             <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
                 <div class="mdl-tabs__tab-bar">
@@ -11,7 +11,12 @@
                         <div class="swiper-wrapper">
                             <!-- Slides -->
                             <div class="swiper-slide">
-                                <a href="#edit-panel" class="mdl-tabs__tab is-active">Editar Palestra</a>
+                                <a href="../workshops" onclick="window.location='../workshops'"
+                                    class="mdl-tabs__tab">Lista de Oficinas</a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="#add-panel"
+                                    class="mdl-tabs__tab is-active">Adicionar Oficina</a>
                             </div>
                         </div>
                         <div class="swiper-mdl-tabs-next"></div>
@@ -19,11 +24,13 @@
                     </div>
                 </div>
 
-                <div class="mdl-tabs__panel is-active" id="edit-panel">
+                <div class="mdl-tabs__panel is-active" id="add-panel">
                     <!-- TAB 2 -->
+
                     <section class="generals-form" style="width:100%">
-                        <form action="./edit" method="POST">
+                        <form action="../workshops/add" method="POST">
                             <div class="col-group">
+
 
                                 <fieldset name="inputs" class="col-mb-24 col-12">
                                     <a name="AntaresInputs" id="AntaresInputs">
@@ -40,8 +47,8 @@
                                                     <%- error %></p>
                                             </div>
                                         </div>
-                                        <% })
-                                              } %>
+                                        <%     })
+                                          } %>
                                     </div>
 
                                     <div class="form-block">
@@ -51,8 +58,7 @@
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <input type="text" placeholder="Nome da palestra" name="name"
-                                                        value="<%- obj.name %>">
+                                                    <input type="text" placeholder="Nome da oficina" name="name" required value="<%- locals.form ? form.name : '' %>">
                                                 </div>
                                             </div>
                                         </div>
@@ -65,7 +71,7 @@
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
                                                     <textarea class="" name="description" cols="30" rows="5"
-                                                        placeholder="Breve descrição do palestra"><%- obj.description %></textarea>
+                                                        placeholder="Breve descrição do oficina"><%- locals.form ? form.description : '' %></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -73,13 +79,12 @@
                                     <div class="form-block">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Local da palestra</label>
+                                                <label class="form-block__name">Local da oficina</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field">
-                                                    <input type="text" name="location"
-                                                        placeholder="Localização da palestra. Ex.: Sala 302 "
-                                                        value="<%- obj.location %>">
+                                                    <input type="text" name="location" required  value="<%- locals.form ? form.location : '' %>"
+                                                        placeholder="Localização da oficina. Ex.: Sala 302 ">
                                                 </div>
                                             </div>
                                         </div>
@@ -88,13 +93,12 @@
                                         <div class="col-group">
 
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Data da palestra</label>
+                                                <label class="form-block__name">Data da oficina</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field datepicker-icon">
-                                                    <input data-alt-datetimepicker="true" name="date"
-                                                        value="<%- moment(obj.date).format('DD/MM/YYYY - HH:mm') %>"
-                                                        placeholder="Data e hora da palestra" type="datetime" required>
+                                                    <input data-alt-datetimepicker="true" name="date"  value="<%- locals.form ? form.date : '' %>"
+                                                        placeholder="Data e hora da oficina" type="datetime" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -118,9 +122,7 @@
                                                         <% try { 
                                                             users.forEach(u => { %>
 
-                                                        <option value="<%- u._id %>"
-                                                            <%- obj.speakers.includes(u._id) ? 'selected' : '' %>>
-                                                            <%- u.name%></option>
+                                                        <option value="<%- u._id %>"  <%- locals.form ? form.speakers.includes(u._id) ? 'selected' : '' : '' %>><%- u.name%></option>
                                                         <%  })
                                                         } catch(e) {} %>
                                                     </select>
@@ -132,40 +134,31 @@
                                     <div class="form-block">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Palestra confirmada?</label>
+                                                <label class="form-block__name">Limite de participantes</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="number" name="limit" required
+                                                        placeholder="Limite de participantes" value="<%- locals.form ? form.limit : '' %>" min="1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Oficina confirmada?</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field switchbox">
                                                     <label class="switch">
-                                                        <input class="switch-checkbox" type="checkbox" name="confirmed"
-                                                            <%- obj.confirmed ? 'checked' : '' %>>
+                                                        <input class="switch-checkbox" type="checkbox" name="confirmed" <%- locals.form ? form.confirmed ? 'checked' : '' : '' %>>
                                                         <span class="switch-container"><span
                                                                 class="switch-handle"></span></span>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <hr>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col alert alert--error pt10 pb10 pl10">
-                                                <span class="mr10"><strong>ATENÇÃO:</strong> ESTA AÇÃO É IRREVERSÍVEL,
-                                                    TENHA CUIDADO</span>
-                                                <span class="mr10"><a id="removeBtn"
-                                                    class="btn btn--md btn--red mdl-button mdl-js-button mdl-js-ripple-effect"
-                                                    data-upgraded=",MaterialButton,MaterialRipple">REMOVER PALESTRA<span
-                                                        class="mdl-button__ripple-container"><span
-                                                            class="mdl-ripple is-animating"
-                                                            style="width: 148.86px; height: 148.86px; transform: translate(-50%, -50%) translate(42px, 22px);"></span></span></a></span>
-                                            </div>
-                                        </div>
-                                        <script>
-                                            document.getElementById('removeBtn').onclick = () => {
-                                                if (confirm('Deseja realmente remover a palestra?'))
-                                                    window.location = './delete'
-                                            }
-                                        </script>
                                     </div>
 
                                 </fieldset>
@@ -176,14 +169,12 @@
                                     <button
                                         class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
                                         type="submit">Salvar</button>
-
                                     <a
                                         class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
-
-
                                 </div>
                             </div>
                         </form>
+
                     </section>
                 </div>
             </div>
@@ -191,4 +182,4 @@
     </div>
 </div>
 
-<%- include('../footer') %>
+<%- include('../../footer') %>

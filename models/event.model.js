@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 let EventSchema = new Schema({
     // attributes...
@@ -56,7 +56,7 @@ let EventSchema = new Schema({
 {
     // auto manage `createdAt` and `updatedAt`
     timestamps: true
-});
+})
 
 // export the model
-module.exports = mongoose.model('Event', EventSchema);
+module.exports = mongoose.model('Event', EventSchema)

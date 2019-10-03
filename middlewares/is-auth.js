@@ -1,16 +1,15 @@
-const User = require('../models/user.model');
+const User = require('../models/user.model')
 
 module.exports = (req, res, next) => {
     if (req.session.user) {
         User.findById(req.session.user)
             .then(user => {
-                req.user = user;
-                next();
+                req.user = user
+                next()
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
     } else {
-        req.user = null;
-        return res.redirect('/login');
+        req.user = null
+        return res.redirect('/login')
     }
-
 }

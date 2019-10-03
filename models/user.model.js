@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
-const BCRYPT_SALT = 7;
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt')
+const BCRYPT_SALT = 7
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 let UserSchema = new Schema({
     // attributes...
@@ -60,30 +60,30 @@ let UserSchema = new Schema({
 {
     // auto manage `createdAt` and `updatedAt`
     timestamps: true
-});
+})
 
 UserSchema.pre('save', function(next) {
-    var user = this;
+    var user = this
 
     // only hash the password if it has been modified (or is new)
-    if (!user.isModified('password')) return next();
+    if (!user.isModified('password')) return next()
 
     // hash the password using our new salt
     bcrypt.hash(user.password, BCRYPT_SALT, function(err, hash) {
-        if (err) return next(err);
+        if (err) return next(err)
 
         // override the cleartext password with the hashed one
-        user.password = hash;
-        next();
-    });
-});
+        user.password = hash
+        next()
+    })
+})
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-        if (err) return cb(err);
-        cb(null, isMatch);
-    });
-};
+        if (err) return cb(err)
+        cb(null, isMatch)
+    })
+}
 
 // export the model
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema)

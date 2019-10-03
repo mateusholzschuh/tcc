@@ -1,0 +1,191 @@
+<%- include('../../header') %>
+<div class="grid-stack-item" data-gs-no-move="1" data-gs-no-resize="1" data-gs-x="0" data-gs-y="0" data-gs-width="24"
+    data-gs-height="19" data-gs-min-width="13" data-gs-min-height="18" data-gs-auto-position="0">
+    <div class="grid-stack-item-content">
+        <div class="card card--pagination card--tabs card--unadjustable no-padding" data-preload>
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <div class="swiper-container swiper-mdl-tabs tab-bar--tape">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <a href="#edit-panel" class="mdl-tabs__tab is-active">Editar Palestra</a>
+                            </div>
+                        </div>
+                        <div class="swiper-mdl-tabs-next"></div>
+                        <div class="swiper-mdl-tabs-prev"></div>
+                    </div>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="edit-panel">
+                    <!-- TAB 2 -->
+                    <section class="generals-form" style="width:100%">
+                        <form action="./edit" method="POST">
+                            <div class="col-group">
+
+                                <fieldset name="inputs" class="col-mb-24 col-12">
+                                    <a name="AntaresInputs" id="AntaresInputs">
+                                        <legend>Dados Gerais</legend>
+                                    </a>
+
+                                    <div class="form-block">
+                                        <% if (locals.errors) { 
+                                                errors.forEach(error => { %>
+                                        <div class="col-group">
+                                            <div class="col">
+                                                <p
+                                                    class="alert alert alert--glow alert--error alert--md alert--border mb20">
+                                                    <%- error %></p>
+                                            </div>
+                                        </div>
+                                        <% })
+                                              } %>
+                                    </div>
+
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Nome</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="text" placeholder="Nome da palestra" name="name"
+                                                        value="<%- obj.name %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name as-fs">Descrição</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <textarea class="" name="description" cols="30" rows="5"
+                                                        placeholder="Breve descrição do palestra"><%- obj.description %></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Local da palestra</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="text" name="location"
+                                                        placeholder="Localização da palestra. Ex.: Sala 302 "
+                                                        value="<%- obj.location %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Data da palestra</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field datepicker-icon">
+                                                    <input data-alt-datetimepicker="true" name="date"
+                                                        value="<%- moment(obj.date).format('DD/MM/YYYY - HH:mm') %>"
+                                                        placeholder="Data e hora da palestra" type="datetime" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Palestrante(s)</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field input-field--icon">
+                                                    <!-- <span class="input-field__icon"><i class="zmdi zmdi-accounts"></i></span> -->
+                                                    <!-- <select class="speakers-select" name="speakers" data-selectar="true"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" multiple>
+                                                    </select> -->
+                                                    <!-- <select id="ee" style="width:200px"></select> -->
+                                                    <select data-selectar--search="true" name="speakers"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" required
+                                                        multiple>
+                                                        <% try { 
+                                                            users.forEach(u => { %>
+
+                                                        <option value="<%- u._id %>"
+                                                            <%- obj.speakers.includes(u._id) ? 'selected' : '' %>>
+                                                            <%- u.name%></option>
+                                                        <%  })
+                                                        } catch(e) {} %>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Palestra confirmada?</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field switchbox">
+                                                    <label class="switch">
+                                                        <input class="switch-checkbox" type="checkbox" name="confirmed"
+                                                            <%- obj.confirmed ? 'checked' : '' %>>
+                                                        <span class="switch-container"><span
+                                                                class="switch-handle"></span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col alert alert--error pt10 pb10 pl10">
+                                                <span class="mr10"><strong>ATENÇÃO:</strong> ESTA AÇÃO É IRREVERSÍVEL, TENHA CUIDADO</span>
+                                                <span class="mr10"><a id="removeBtn"
+                                                    class="btn btn--md btn--red mdl-button mdl-js-button mdl-js-ripple-effect"
+                                                    data-upgraded=",MaterialButton,MaterialRipple">REMOVER PALESTRA<span
+                                                        class="mdl-button__ripple-container"><span
+                                                            class="mdl-ripple is-animating"
+                                                            style="width: 148.86px; height: 148.86px; transform: translate(-50%, -50%) translate(42px, 22px);"></span></span></a></span>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            document.getElementById('removeBtn').onclick = () => {
+                                                if (confirm('Deseja realmente remover a palestra?'))
+                                                    window.location = './delete'
+                                            }
+                                        </script>
+                                    </div>
+
+                                </fieldset>
+
+                            </div>
+                            <div class="app-content__footer">
+                                <div class="btn-group">
+                                    <button
+                                        class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="submit">Salvar</button>
+
+                                    <a class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../footer') %>

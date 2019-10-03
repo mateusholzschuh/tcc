@@ -1,60 +1,40 @@
-const express = require('express');
-const router = express.Router({mergeParams: true});
+const express = require('express')
+const router = express.Router({ mergeParams: true })
 
-const { body } = require('express-validator')
+// controller
+const controller = require('../controllers/workshop.controller')
 
-// pega o controller
-const controller = require('../controllers/workshop.controller');
+// validador
+const validator = require('../middlewares/validators/workshop')
 
 // css menu
-router.get('/*', (req, res, next) => {
+router.all('/*', (req, res, next) => {
     res.locals.eventMenu = 'workshops'
     next()
 })
 
-// rotas do resource
+// ROTAS DO RESOURCE
 
 // rota listagem de oficinas
-router.get('/', controller.index);
+router.get('/', controller.index)
+
+// rota que mostra o form para adicionar nova oficina
+router.get('/add', controller.create)
 
 // rota para salvar nova oficina
-router.post('/', [
-    // validação
-    body('name').isString().isLength({ min: 5, max: 50 }).withMessage('Nome inválido'),
-    
-    body('location').isString().isLength({ min: 5, max: 50 }).withMessage('Local inválido'),
+router.post('/add', validator.onSave, controller.store)
 
-    body('date').not().isEmpty().withMessage('Data em branco'),
-
-    body('speakers').not().isEmpty().withMessage('Nenhum palestrante selecionado')
-
-], 
-// manda para o controller
-controller.store);
-
-// rota para editar oficina
-router.get('/:workshop/edit', controller.edit);
+// rota que mostra o form para editar oficina
+router.get('/:workshop/edit', controller.edit)
 
 // rota para atualizar oficina
-router.post('/:workshop/edit/', [
-    // validação
-    body('name').isString().isLength({ min: 5, max: 50 }).withMessage('Nome inválido'),
-    
-    body('location').isString().isLength({ min: 5, max: 50 }).withMessage('Local inválido'),
-
-    body('date').not().isEmpty().withMessage('Data em branco'),
-
-    body('speakers').not().isEmpty().withMessage('Nenhum palestrante selecionado')
-
-], 
-// manda para o controller
-controller.update);
+router.post('/:workshop/edit/', validator.onUpdate, controller.update)
 
 // rota para remover oficina
-router.get('/:workshop/delete', controller.destroy);
+router.get('/:workshop/delete', controller.destroy)
 
 // rota para ver inscritos na oficina
-router.get('/:workshop/enrolleds', controller.enrolleds);
+router.get('/:workshop/enrolleds', controller.enrolleds)
 
 // rota para inscrever na oficina
 router.post('/:workshop/enrolleds', controller.enroll)
@@ -63,4 +43,4 @@ router.post('/:workshop/enrolleds', controller.enroll)
 router.get('/:workshop/enrolleds/:enroll/delete', controller.unEnroll)
 
 // exporta o router
-module.exports = router;
+module.exports = router

@@ -1,21 +1,25 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-// pega o controller
-const controller = require('../controllers/event.controller');
+// controller
+const controller = require('../controllers/event.controller')
 
-//routes workshop
+// validator
+const validator = require('../middlewares/validators/events')
+
+// routes workshop
 const workshop = require('../routes/workshop.routes')
 
-//routes hackathon
+// routes hackathon
 const hackathon = require('../routes/hackathon.routes')
 
-//routes lectures
+// routes lectures
 const lectures = require('../routes/lecture.routes')
 
-//routes enrolleds
+// routes enrolleds
 const enrolleds = require('../routes/enrolleds.routes')
-
+ 
+// routes checkin
 const checkins = require('../routes/checkin.routes')
 
 // css menu
@@ -25,31 +29,50 @@ router.all('/*', (req, res, next) => {
 })
 
 router.all('/:id/*', (req, res, next) => {
-    res.locals.baseUrl = `/events/${req.params.id}`
-    
+    res.locals.baseUrl = `/events/${req.params.id}`    
     next()
 })
 
-// rotas do resource
-router.get('/',         controller.index);
-router.get('/create',   controller.create);
-router.post('/',        controller.store);
-router.get('/:id',      controller.view);
-router.get('/:id/edit', controller.edit);
-router.post('/:id/edit',  controller.update);
-router.get('/:id/delete',  controller.destroy);
+// ROTAS DO RESOURCE
 
-router.use('/:id/workshops', workshop);
+// rota que exibe lista de eventos
+router.get('/', controller.index)
 
-router.use('/:id/hackathon', hackathon);
+// rota que mostra form para criar evento
+router.get('/create', controller.create)
 
-router.use('/:id/lectures', lectures);
+// rota que salva um novo evento
+router.post('/', validator.onSave, controller.store)
 
-router.use('/:id/enrolleds', enrolleds);
+// rota que mostra um evento
+router.get('/:id', controller.view)
 
-router.use('/:id/subevents', controller.subevents);
+// rota que mostra form edição de um evento
+router.get('/:id/edit', controller.edit)
 
-router.use('/:id/checkin', checkins);
+// rota que atualiza informações do evento
+router.post('/:id/edit', validator.onUpdate, controller.update)
+
+// rota para remover eventos
+router.get('/:id/delete', controller.destroy)
+
+// rotas das oficinas
+router.use('/:id/workshops', workshop)
+
+// rotas do hackathon
+router.use('/:id/hackathon', hackathon)
+
+// rotas das palestras
+router.use('/:id/lectures', lectures)
+
+// rotas dos inscritos
+router.use('/:id/enrolleds', enrolleds)
+
+// rotas dos subeventos
+router.use('/:id/subevents', controller.subevents)
+
+// rotas do checkin
+router.use('/:id/checkin', checkins)
 
 // exporta o router
-module.exports = router;
+module.exports = router

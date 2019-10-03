@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 let HackathonSchema = new Schema({
     // attributes...
@@ -51,7 +51,7 @@ let HackathonSchema = new Schema({
 {
     // auto manage `createdAt` and `updatedAt`
     timestamps: true
-});
+})
 
 // export the model
-module.exports = mongoose.model('Hackathon', HackathonSchema);
+module.exports = mongoose.model('Hackathon', HackathonSchema)
