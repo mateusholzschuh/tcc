@@ -4,7 +4,7 @@ const Hackathon = require('../models/hackathon.model')
 /**
  * Mostra a pagina com a listagem dos times
  */
-const index = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     let hackathon = await Hackathon.findOne({ event: req.params.id }).populate({
         path: 'teams.members',
         select: 'name cpf'
@@ -19,7 +19,7 @@ const index = async (req, res, next) => {
 /**
  * Mostra a página para adicionar novo time
  */
-const create = async (req, res) => {
+exports.create = async (req, res) => {
     let users = await Enrollment.find({ event: req.params.id }).populate('user', 'name cpf').exec()
     users = users.map(e => e.user)
 
@@ -32,7 +32,7 @@ const create = async (req, res) => {
 /**
  * Função responsável por salvar novo time no hackathon
  */
-const store = async (req, res, next) => {
+exports.store = async (req, res, next) => {
     let form = { name, member1, member2, member3 } = req.body
     let event = req.params.id
 
@@ -52,13 +52,10 @@ const store = async (req, res, next) => {
 /**
  * Função responsável por deletar time do hackathon
  */
-const destroy = (req, res, next) => {
+exports.destroy = (req, res, next) => {
     Hackathon.findOneAndUpdate({ event: req.params.id }, { '$pull': { 'teams': { '_id': req.params.team } } }).then(doc => {
         return res.redirect(`/events/${req.params.id}/hackathon`)
     }).catch(err => {
         next()
     })
 }
-
-// exporta as funções
-module.exports = { index, create, store, destroy }

@@ -7,7 +7,7 @@ const moment = require('moment')
 /**
  * Mostra a pagina com a listagem das inscrições
  */
-const index = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     let enrolleds = await Enrollment.find({ event: req.params.id }).populate('user', 'name cpf email institution instituicao').exec()
 
     return res.render('events/event/enrolleds/list', {
@@ -19,7 +19,7 @@ const index = async (req, res, next) => {
 /**
  * Mostra formulário para nova inscrição no evento
  */
-const create = (req, res) => {
+exports.create = (req, res) => {
     return res.render('events/event/enrolleds/add', {
         title: 'Nova inscrição'
     })
@@ -28,7 +28,7 @@ const create = (req, res) => {
 /**
  * Função responsável por salvar a inscrição no evento
  */
-const store = async (req, res, next) => {
+exports.store = async (req, res, next) => {
     let event = req.params.id
     let form = { name, email, cpf, birthdate, institution } = req.body
 
@@ -67,13 +67,10 @@ const store = async (req, res, next) => {
 /**
  * Função responsável por deletar inscrição //! Não deve ser usada em produção
  */
-const destroy = (req, res, next) => {
+exports.destroy = (req, res, next) => {
     Event.findByIdAndUpdate(req.params.id, { '$pull': { 'enrolleds': req.params.enroll } }).exec().then(doc => {
         Enrollment.findByIdAndDelete(req.params.enroll).then(doc => {
             return res.redirect('..')
         })
     })
 }
-
-// exporta as funções
-module.exports = { index, create, store, destroy }

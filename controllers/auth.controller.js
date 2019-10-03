@@ -3,7 +3,7 @@ const User = require('../models/user.model')
 /**
  * Mostra pagina de login
  */
-const getLogin = (req, res, next) => {
+exports.getLogin = (req, res, next) => {
     if (!req.session.user)
         return res.render('auth/login')
 
@@ -13,7 +13,7 @@ const getLogin = (req, res, next) => {
 /**
  * Executa login
  */
-const postLogin = async (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
     let { email } = req.body
 
     let user = await User.findOne({ email: email }).select('name cpf role').exec()
@@ -30,7 +30,7 @@ const postLogin = async (req, res, next) => {
 /**
  * Executa o logout
  */
-const doLogout = (req, res) => {
+exports.doLogout = (req, res) => {
     req.user = null
     req.session.destroy(() => {
         return res.redirect('/login')
@@ -40,14 +40,14 @@ const doLogout = (req, res) => {
 /**
  * Retorna página de alteração de senha
  */
-const getChangepass = (req, res) => {
+exports.getChangepass = (req, res) => {
     return res.render('auth/changepass', {})
 }
 
 /**
  * Faz a alteração da senha
  */
-const postChangepass = async (req, res) => {
+exports.postChangepass = async (req, res) => {
     const { pNew } = req.body
 
     let user = await User.findById(req.session.user).select('password').exec()
@@ -69,5 +69,3 @@ const postChangepass = async (req, res) => {
         })
     }
 }
-
-module.exports = { getLogin, postLogin, doLogout, getChangepass, postChangepass }

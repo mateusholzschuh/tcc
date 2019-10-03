@@ -2,12 +2,13 @@ const User = require('../models/user.model')
 const Event = require('../models/event.model')
 const Enrollment = require('../models/enrollment.model')
 const Workshop = require('../models/workshop.model')
+
 const moment = require('moment')
 
 /**
  * Mostra a pagina com a listagem das oficinas
  */
-const index = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     let workshops = await Workshop.find({ event: req.params.id }).populate('speakers', 'name').exec()
     let users = await User.find().select('name')
 
@@ -19,11 +20,10 @@ const index = async (req, res, next) => {
     })
 }
 
-
 /**
  * Mostra a página de adicionar novo item
  */
-const create = async (req, res) => {
+exports.create = async (req, res) => {
     let users = await User.find().select('name').exec()
 
     return res.render('events/event/workshops/add', {
@@ -35,7 +35,7 @@ const create = async (req, res) => {
 /**
  * Função responsável por salvar nova oficina
  */
-const store = async (req, res, next) => {
+exports.store = async (req, res, next) => {
     let event = req.params.id    
     const form = { name, description, location, date, limit, confirmed, speakers } = req.body
 
@@ -63,7 +63,7 @@ const store = async (req, res, next) => {
 /**
  * Mostra a página de edição de um item
  */
-const edit = async (req, res, next) => {
+exports.edit = async (req, res, next) => {
     let users = await User.find().select('name')
 
     Workshop.findById(req.params.workshop).then(doc => {
@@ -79,7 +79,7 @@ const edit = async (req, res, next) => {
 /**
  * Função responsável por enviar a lista de inscritos e o form de inscrever
  */
-const enrolleds = async (req, res, next) => {
+exports.enrolleds = async (req, res, next) => {
     let workshop = await Workshop.findById(req.params.workshop).populate({
         path: 'enrolleds.user',
         select: 'name cpf'
@@ -100,7 +100,7 @@ const enrolleds = async (req, res, next) => {
 /**
  * Função responsável por inscrever cidadão na oficina 
  */
-const enroll = async (req, res, next) => {
+exports.enroll = async (req, res, next) => {
     const { user } = req.body
     const workshop = req.params.workshop
 
@@ -118,13 +118,12 @@ const enroll = async (req, res, next) => {
         // res.json(err)
         next()
     })
-
 }
 
 /**
  * Função para remover inscrição de uma oficina
  */
-const unEnroll = (req, res, next) => {
+exports.unEnroll = (req, res, next) => {
     const { enroll, workshop, id } = req.params
 
     Workshop.updateOne({ _id: workshop }, { '$pull': { 'enrolleds': { '_id' : enroll } } }).then(doc => {
@@ -135,11 +134,10 @@ const unEnroll = (req, res, next) => {
     })
 }
 
-
 /**
  * Função responsável por salvar as alterações do item vindos da rota "edit" 
  */
-const update = async (req, res, next) => {
+exports.update = async (req, res, next) => {
     const form = { name, description, location, date, limit, confirmed, speakers } = req.body
 
     let workshop = {
@@ -164,7 +162,7 @@ const update = async (req, res, next) => {
 /**
  * Função responsável por deletar o item do banco de dados
  */
-const destroy = (req, res, next) => {
+exports.destroy = (req, res, next) => {
     Event.findByIdAndUpdate(req.params.id, { '$pull': { 'workshops': req.params.workshop } }).exec().then(doc => {
         Workshop.findByIdAndDelete(req.params.workshop).then(doc => {
             return res.redirect(`/events/${req.params.id}/workshops`)
@@ -172,7 +170,7 @@ const destroy = (req, res, next) => {
     })
 }
 
-const ajax = {
+exports.ajax = {
     /**
      * Atualiza presença de um inscrito na oficina
      */
@@ -187,6 +185,3 @@ const ajax = {
         })
     }
 }
-
-// exporta as funções
-module.exports = { index, create, store, edit, update, destroy, enrolleds, enroll, unEnroll, ajax }

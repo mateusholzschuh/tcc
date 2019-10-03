@@ -3,7 +3,7 @@ const Enrollment = require('../models/enrollment.model')
 /**
  * Mostra a pagina com a listagem dos inscritos
  */
-const index = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     let enrolleds = await Enrollment.find({ event: req.params.id }).populate('user', 'name cpf email instituicao').exec()
 
     return res.render('events/event/checkin/list', {
@@ -15,7 +15,7 @@ const index = async (req, res, next) => {
 /**
  * Mostra a página de edição das presenças
  */
-const edit = async (req, res, next) => {
+exports.edit = async (req, res, next) => {
     Enrollment.findById(req.params.enroll)
         .populate('user', 'name cpf')
         .populate('event', 'days')
@@ -31,7 +31,7 @@ const edit = async (req, res, next) => {
         })
 }
 
-const ajax = {
+exports.ajax = {
     /**
      * Atualiza presença de uma inscrição
      */
@@ -50,6 +50,3 @@ const ajax = {
         return res.status(200).json({message: 'Presença atualizada com sucesso'})
     }
 }
-
-// exporta as funções
-module.exports = { index, edit, ajax }
