@@ -78,7 +78,12 @@ exports.onUpdate = [
                       .withMessage('Data final não pode estar em branco'),
 
     body('days').not().isEmpty()
-                .withMessage('Total de dias não pode estar em branco')
+                .withMessage('Total de dias não pode estar em branco'),
+
+    body('hours').not().isEmpty()
+                 .withMessage('Total de horas não pode estar em branco')
+                 .isNumeric()
+                 .withMessage('Horas inválidas')
 
 ],
 async (req, res, next) => {
