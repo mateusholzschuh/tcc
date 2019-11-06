@@ -37,15 +37,23 @@ exports.create = (req, res, next) => {
  * Função responsável por salvar os dados vindos da rota "create"
  */
 exports.store = (req, res, next) => {
-    let form = { name, description, location, days, startDate, finishDate, finished } = req.body
+    let form = { name, description, location, days, startDate, finishDate } = req.body
 
     let event = {
         ...form,
         days: Number(days) || 1,
         startDate: moment(startDate, 'DD/MM/YYYY - HH:mm'),
         finishDate: moment(finishDate, 'DD/MM/YYYY - HH:mm'),
-        finished: finished == 'on' ? true : false,
+        periods: {}
     }
+
+    let periods = {
+        morning : form['periods[morning]'] == 'on' ? true : false,
+        afternoon : form['periods[afternoon]'] == 'on' ? true : false,
+        night : form['periods[night]'] == 'on' ? true : false,
+    }
+
+    event.periods = periods
 
     Event.create(event).then(doc => {
         return res.redirect('./')

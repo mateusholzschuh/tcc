@@ -21,8 +21,17 @@ let EventSchema = new Schema({
     finished: {
         type: Boolean,
         default: false
+    },    
+    periods: {
+        morning: Boolean,
+        afternoon: Boolean,
+        night: Boolean
     },
     days: {
+        type: Number,
+        default: 1
+    },
+    hours: {
         type: Number,
         default: 1
     },

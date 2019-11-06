@@ -21,6 +21,16 @@ exports.onSave = [
                      
     body('finishDate').not().isEmpty()
                       .withMessage('Data final não pode estar em branco'),
+                      
+    body('periods[]').custom((inp, { req }) => {
+        let b = req.body
+        if (!(b['periods[morning]']   == 'on' ||
+              b['periods[afternoon]'] == 'on' ||
+              b['periods[night]']     == 'on' )) {
+                return Promise.reject('Ao menos um período deve ser selecionado')
+        }
+        return true
+    })
 
 ],
 async (req, res, next) => {
@@ -29,6 +39,15 @@ async (req, res, next) => {
     if (errors.length != 0) {
         let form = { name, location, startDate, finishDate } = req.body
 
+        let periods = {
+            morning : form['periods[morning]'] == 'on' ? true : false,
+            afternoon : form['periods[afternoon]'] == 'on' ? true : false,
+            night : form['periods[night]'] == 'on' ? true : false,
+        }
+
+        form.periods = periods
+
+        // return res.json(form)
         return res.render('events/create', {
             title: 'Novo evento',
             form,

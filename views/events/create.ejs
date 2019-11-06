@@ -119,6 +119,54 @@
                         </div>
                     </div>
                 </fieldset>
+                <fieldset>
+                    <legend>Turnos*</legend>
+                    <div class="form-block">
+                        <div class="col-group">
+                            <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
+                                <label class="form-block__name">Manhã</label>
+                            </div>
+                            <div class="col-mb-16 col-18 col-dt-10 col-ld-8">
+                                <div class="input-field switchbox">
+                                    <label class="switch">
+                                        <input class="switch-checkbox" type="checkbox" name="periods[morning]" <%= locals.form ? form.periods.morning ? 'checked' : '' : '' %>>
+                                        <span class="switch-container"><span class="switch-handle"></span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="col-group">
+                            <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
+                                <label class="form-block__name">Tarde</label>
+                            </div>
+                            <div class="col-mb-16 col-18 col-dt-10 col-ld-8">
+                                <div class="input-field switchbox">
+                                    <label class="switch">
+                                        <input class="switch-checkbox" type="checkbox" name="periods[afternoon]" <%= locals.form ? form.periods.afternoon ? 'checked' : '' : '' %>>
+                                        <span class="switch-container"><span class="switch-handle"></span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="col-group">
+                            <div class="col-mb-8 col-6 col-dt-4 col-ld-3">
+                                <label class="form-block__name">Noite</label>
+                            </div>
+                            <div class="col-mb-16 col-18 col-dt-10 col-ld-8">
+                                <div class="input-field switchbox">
+                                    <label class="switch">
+                                        <input class="switch-checkbox" type="checkbox" name="periods[night]" <%= locals.form ? form.periods.night ? 'checked' : '' : '' %>>
+                                        <span class="switch-container"><span class="switch-handle"></span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
                 <div class="app-content__footer">
                     <div class="btn-group">
                         <a href="./" class="btn btn--md btn--default mdl-button mdl-js-button"
