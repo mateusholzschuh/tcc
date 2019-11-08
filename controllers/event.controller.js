@@ -93,11 +93,12 @@ exports.edit = async (req, res, next) => {
  * Função responsável por salvar as alterações do item vindos da rota "edit" 
  */
 exports.update = (req, res, next) => {
-    let form = { name, description, location, days, startDate, finishDate, finished } = req.body
+    let form = { name, description, location, days, hours, startDate, finishDate, finished } = req.body
 
     let event = {
         ...form,
-        days: Number(days),
+        days: Number(days) || 1,
+        hours: Number(hours) || 1,
         startDate: moment(startDate, 'DD/MM/YYYY - HH:mm'),
         finishDate: moment(finishDate, 'DD/MM/YYYY - HH:mm'),
         finished: finished == 'on' ? true : false,

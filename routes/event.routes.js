@@ -22,6 +22,9 @@ const enrolleds = require('../routes/enrolleds.routes')
 // routes checkin
 const checkins = require('../routes/checkin.routes')
 
+// routes organizers
+const organizers = require('../routes/organizers.routes')
+
 // css menu
 router.all('/*', (req, res, next) => {
     res.locals.mainMenu = 'events'
@@ -73,6 +76,9 @@ router.use('/:id/subevents', controller.subevents)
 
 // rotas do checkin
 router.use('/:id/checkin', checkins)
+
+// rotas dos organizadores
+router.use('/:id/organizers', organizers)
 
 // exporta o router
 module.exports = router

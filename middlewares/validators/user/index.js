@@ -47,6 +47,8 @@ async (req, res, next) => {
                     errors: errors.map(e => e.msg),
                 })
     }
+
+    next()
 }]
 
 /**
@@ -85,4 +87,6 @@ async (req, res, next) => {
                     moment
                 })
     }
+
+    next()
 }]

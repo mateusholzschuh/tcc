@@ -18,7 +18,7 @@ exports.index = async (req, res, next) => {
 exports.edit = async (req, res, next) => {
     Enrollment.findById(req.params.enroll)
         .populate('user', 'name cpf')
-        .populate('event', 'days')
+        .populate('event', 'days periods')
         .then(doc => {
             return res.render('events/event/checkin/edit', {
                 title: 'Check-in',

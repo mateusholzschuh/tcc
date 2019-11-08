@@ -1,0 +1,161 @@
+<%- include('../../header') %>
+<div class="grid-stack-item" data-gs-no-move="1" data-gs-no-resize="1" data-gs-x="0" data-gs-y="0" data-gs-width="24"
+    data-gs-height="19" data-gs-min-width="13" data-gs-min-height="18" data-gs-auto-position="0">
+    <div class="grid-stack-item-content">
+        <div class="card card--pagination card--tabs card--unadjustabl no-padding" data-preload>
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <div class="swiper-container swiper-mdl-tabs tab-bar--tape">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <a href="../add" onclick="window.location='../organizers'"
+                                    class="mdl-tabs__tab">Organizadores</a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="#add-panel" onclick="window.location='./organizers/add'"
+                                    class="mdl-tabs__tab is-active">Adicionar Organizador</a>
+                            </div>
+                        </div>
+                        <div class="swiper-mdl-tabs-next"></div>
+                        <div class="swiper-mdl-tabs-prev"></div>
+                    </div>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="add-panel">
+                    <!-- TAB 2 -->
+
+                    <section class="generals-form" style="width:100%">
+                        <form action="../organizers/add" method="POST">
+                            <div class="col-group">
+
+
+                                <fieldset name="inputs" class="col-mb-24 col-12">
+                                    <a name="AntaresInputs" id="AntaresInputs">
+                                        <legend>Dados Gerais</legend>
+                                    </a>
+                                    <div class="form-block">
+                                        <% if (locals.errors) { 
+                                                errors.forEach(error => { %>
+                                        <div class="col-group">
+                                            <div class="col">
+                                                <p
+                                                    class="alert alert alert--glow alert--error alert--md alert--border mb20">
+                                                    <%- error %></p>
+                                            </div>
+                                        </div>
+                                        <%      })
+                                            } %>
+
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Pessoa<label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field input-field--ico">
+                                                    <!-- <span class="input-field__icon"><i class="zmdi zmdi-accounts"></i></span> -->
+                                                    <!-- <select class="speakers-select" name="speakers" data-selectar="true"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" multiple>
+                                                    </select> -->
+                                                    <!-- <select id="ee" style="width:200px"></select> -->
+                                                    <select data-selectar--search="true" name="user"
+                                                        data-placeholder="Selecione o ouvinte" required>
+                                                        <% try { 
+                                                            users.forEach(u => { %>
+
+                                                        <option value="<%- u.user._id %>" <%- locals.form ? form.user == u.user._id ? 'selected' : '' : '' %>>
+                                                            <%- u.code + ' - ' + u.user.name + ' - ' + u.user.cpf %>
+                                                        </option>
+                                                        <%  })
+                                                        } catch(e) {} %>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Cargo<label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field input-field--ico">
+                                                    <!-- <span class="input-field__icon"><i class="zmdi zmdi-accounts"></i></span> -->
+                                                    <!-- <select class="speakers-select" name="speakers" data-selectar="true"
+                                                        data-placeholder="Selecione o(s) palestrante(s)" multiple>
+                                                    </select> -->
+                                                    <!-- <select id="ee" style="width:200px"></select> -->
+                                                    <select data-selectar--search="true" name="role"
+                                                        data-placeholder="Selecione o cargo" required>
+                                                        <option value="coordinator"
+                                                            <%- locals.form ? form.role=='coordinator' ? 'selected' : '' : '' %>>Coordenação
+                                                            Geral</option>
+                                                        <option value="accreditation"
+                                                            <%- locals.form ? form.role=='accreditation' ? 'selected' : '' : '' %>>
+                                                            Credenciamento</option>
+                                                        <option value="organization"
+                                                            <%- locals.form ? form.role=='organization' ? 'selected' : '' : '' %>>
+                                                            Apoio/Organização</option>
+                                                        <option value="speaker"
+                                                            <%- locals.form ? form.role=='speaker' ? 'selected' : '' : '' %>>Palestrante
+                                                        </option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                            </div>
+                            <div class="app-content__footer">
+                                <div class="btn-group">
+                                    <button
+                                        class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="submit">Salvar</button>
+                                    <a
+                                        class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </section>
+                    <div class="display-none zd-container">
+
+                        <div class="zd zd--lg">
+                            <div class="zd__header">
+                                <i class="zmdi zmdi-email"></i>
+                            </div>
+                            <div class="zd__content">
+                                <div class="zd__title">No
+                                    invoices
+                                    to
+                                    display.
+                                </div>
+                                <div class="zd__description">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Pellentesque
+                                    fermentum magna ac efficitur.
+                                </div>
+                            </div>
+                            <div class="zd__footer">
+                                <a class="btn btn--primary btn--zd mdl-js-button mdl-js-ripple-effect">OPEN
+                                    NEW
+                                    TICKET
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../footer') %>

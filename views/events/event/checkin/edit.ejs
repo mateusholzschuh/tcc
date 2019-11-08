@@ -89,12 +89,29 @@
                                     <a name="AntaresInputs" id="AntaresInputs">
                                         <legend>Presenças de: <strong><%- obj.user.name %></strong> <small>(<%- obj.user.cpf %>)</small></legend>
                                     </a>
+                                    <%
+                                        let days = obj.event.days
+                                        let periods = obj.event.periods
+                                        let numPeriods = Object.values(periods)
+                                        numPeriods = numPeriods.splice(1).filter(e => e).length
+
+                                        console.log('-------')
+                                        console.log(days)
+                                        console.log(periods)
+                                        console.log(numPeriods)
+
+                                        function getPeriod(i) {
+                                            // TODO: C
+                                        }
+
+                                    
+                                    %>
                                     <% if (locals.obj.event.days) {
-                                        for (i=0; i < obj.event.days*2; i++) { %>
+                                        for (i=0; i < days*numPeriods; i++) { %>
                                     <div class="form-block <%- i&1 ? 'mb30' : '' %>">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Dia <%- parseInt(i/2)+1 %> (<%- i&1 ? 'Tarde' : 'Manhã' %>)</label>
+                                                <label class="form-block__name">Dia <%- parseInt(i/numPeriods)+1 %> (<%- i&1 ? 'Tarde' : 'Manhã' %>)</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field switchbox">

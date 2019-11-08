@@ -92,6 +92,12 @@
                         <span>Configurações</span>
                     </a>
                 </li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'organizers') ? 'is-active' : '' : '' %>">
+                    <a href="<%- baseUrl %>/organizers" class="mdl-js-button mdl-js-ripple-effect">
+                        <i class="zmdi zmdi-accounts-alt"></i>
+                        <span>Organizadores</span>
+                    </a>
+                </li>
 
             </ul>
         </div>

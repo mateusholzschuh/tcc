@@ -48,8 +48,9 @@ exports.store = async (req, res, next) => {
         name,
         cpf, 
         email,
-        institution,
+        institution: institution ? institution : null,
         instituicao,
+        password: 'default',
         bio,
         birthdate: moment(birthdate, 'DD/MM/YYYY')
     }

@@ -16,9 +16,14 @@ exports.getLogin = (req, res, next) => {
 exports.postLogin = async (req, res, next) => {
     let { email } = req.body
 
-    let user = await User.findOne({ email: email }).select('name cpf role').exec()
+    let user = { _id, name, email, role } = await User.findOne({ email: email }).select('name cpf email role').exec()
 
-    req.session.user = user._id
+    req.session.user = {
+        ...user._doc,
+        isAdmin: role == 1
+    }
+
+    console.log(req.session.user)
     req.session.save(err => {
         if (err) {
             next(err)
