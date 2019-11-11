@@ -1,5 +1,5 @@
 const roles = []
-roles['organization'] = 'Coordenação Geral'
+roles['coordinator'] = 'Coordenação Geral'
 roles['accreditation'] = 'Credenciamento'
 roles['organization'] = 'Apoio/Organização'
 roles['speaker'] = 'Palestrante'

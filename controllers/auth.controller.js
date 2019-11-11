@@ -20,7 +20,7 @@ exports.postLogin = async (req, res, next) => {
 
     req.session.user = {
         ...user._doc,
-        isAdmin: role == 1
+        isAdmin: role == 2
     }
 
     console.log(req.session.user)
