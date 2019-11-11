@@ -94,24 +94,29 @@
                                         let periods = obj.event.periods
                                         let numPeriods = Object.values(periods)
                                         numPeriods = numPeriods.splice(1).filter(e => e).length
+                                        periods = Object.values(periods).splice(1)
 
+                                        let text = ['Manhã', 'Tarde', 'Noite'].filter((el, idx) => periods[idx])
+                                        console.log(text)
                                         console.log('-------')
                                         console.log(days)
                                         console.log(periods)
                                         console.log(numPeriods)
 
                                         function getPeriod(i) {
-                                            // TODO: C
+                                            let idx = parseInt( i%text.length )
+
+                                            return text[idx]
                                         }
 
-                                    
+                                        <!-- (< %- i&1 ? 'Tarde' : 'Manhã' % >) -->
                                     %>
                                     <% if (locals.obj.event.days) {
                                         for (i=0; i < days*numPeriods; i++) { %>
-                                    <div class="form-block <%- i&1 ? 'mb30' : '' %>">
+                                    <div class="form-block <%- (i+1)%numPeriods==0 ? 'mb30' : '' %>">
                                         <div class="col-group">
                                             <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">Dia <%- parseInt(i/numPeriods)+1 %> (<%- i&1 ? 'Tarde' : 'Manhã' %>)</label>
+                                                <label class="form-block__name">Dia <%- parseInt(i/numPeriods)+1 %>  [<%= getPeriod(i) %>]</label>
                                             </div>
                                             <div class="col-mb-16 col-18">
                                                 <div class="input-field switchbox">
