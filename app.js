@@ -22,7 +22,7 @@ var institutionsRouter = require('./routes/institution.routes')
 var eventsRouter = require('./routes/event.routes')
 
 var ajaxRouter = require('./routes/ajax-internal.routes')
-var apiRouter = require('./routes/api.routes')
+var apiRouter = require('./routes/api')
 var saciAPI = require('./routes/saci.api')
 
 const app = express()
@@ -77,10 +77,12 @@ const apiLimiter = rateLimit({
 
 app.use('/api', apiLimiter)
 
-// routes
-app.use('/api/v1', apiRouter, (req, res) => {
-  return res.json({ errors: [req.message || 'What the fuck has happened?'] }, 400)
-})
+app.use('/api', apiRouter)
+
+// // routes
+// app.use('/api/v1', apiRouter, (req, res) => {
+//   return res.json({ errors: [req.message || 'What the fuck has happened?'] }, 400)
+// })
 
 // SACI API *
 const open = false
