@@ -91,3 +91,18 @@ exports.update = (req, res, next) => {
 exports.destroy = (req, res, next) => {
     return res.send("Olá mundo @destroy vindo do controller <strong>'Institution'</strong>")
 }
+
+exports.api = {
+    getAll: async (req, res, next) => {
+        res.json(await Institution.find({}).select('name').exec())
+    },
+    
+    getById: async (req, res, next) => {
+        const { id } = req.params
+
+        if (id)
+            return res.json(await Institution.findOne({ _id: id }).select('name').exec())
+
+        res.status(400).json({ errors:['Instituição não encontrada'] })
+    }
+}
