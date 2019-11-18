@@ -1,10 +1,59 @@
-const Event = require('../../models/event.model')
+const Event = require('../models/event.model')
+const Enrollment = require('../models/enrollment.model')
+const User = require('../models/user.model')
+const Lecture = require('../models/lecture.model')
+const Workshop = require('../models/workshop.model')
 
-const enroll = async (user, event) => {
-    let e = await Event.findOne(event).exec()
-
-    if (!e) return { errors: ['Evento não encontrado']}
-
+const isEnrolled = async (user, event) => {
+    let count = await Enrollment.findOne({ user, event }).countDocuments()
+    return count === 1
 }
 
-module.exports = Object.assign(Event, { enroll })
+const enroll = async (_user, _event) => {
+    let event = await Event.findOne({_id:_event})
+    if (!event) throw 'Evento não encontrado'
+    
+    let user = await User.findOne({ cpf: _user.cpf })
+    if (user) {        
+        if (isEnrolled(user, event))
+            throw 'Usuário já está inscrito'
+
+        await User.updateOne(user)
+
+    } else {
+        user = await User.create(_user)
+    }
+
+    let enrollment = {
+        user,
+        event
+    }
+
+    let ticket = await Enrollment.create(enrollment)
+    await Event.updateOne({ event }, {'$push': { 'enrolleds': ticket._id }})
+
+    // send mail
+
+    return {
+        message: 'Inscrito com sucesso',
+        data: {
+            name: user.name,
+            email: user.email,
+            cpf: user.cpf,
+            code: ticket.code,
+            qrcode: `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${ticket._id}&qzone=1&margin=0&size=200x200&ecc=L`
+        }
+    }  
+}
+
+const getLectures = async (event) => {
+    return await Lecture.find({ event }).select('name date description confirmed location speakers')
+        .populate('speakers', '-_id name institution instituicao')
+}
+
+const getWorkshops = async (event) => {
+    return await Workshop.find({ event }).select('name description date confirmed speakers limit location')
+        .populate('speakers', '-_id name institution instituicao')
+}
+
+module.exports = Object.assign(Event, { enroll, getLectures, getWorkshops })

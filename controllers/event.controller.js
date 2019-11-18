@@ -1,4 +1,5 @@
 const Event = require('../models/event.model')
+const EventService = require('../services/event')
 
 const moment = require('moment')
 
@@ -131,4 +132,91 @@ exports.subevents = (req, res) => {
     return res.render('events/event/subevents', {
         title: 'Subeventos'
     })
+}
+
+getEvents = async (params) => {
+    return await Event.find(params).select('name description location days hours periods startDate finishDate')
+}
+
+exports.api = {
+
+    getAll: async (req, res) => {
+        let events = await getEvents({})
+        return res.json(events)
+    },
+
+    getById: async (req, res) => {
+        let id = req.params.id
+
+        try {
+            event = await getEvents({ _id: id })
+            return res.json(event[0])
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: ['Evento não encontrado']})
+        }
+    },
+
+    getByIdFull: async (req, res) => {
+        let id = req.params.id
+
+        try {
+            event = await getEvents({ _id: id })
+            event = event[0]
+
+            lectures = await EventService.getLectures(id)
+            event.lectures = lectures
+
+            workshops = await EventService.getWorkshops(id)
+            event.workshops = workshops
+
+
+            return res.json(event)
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: ['Evento não encontrado']})
+        }
+    },
+
+    getLectures: async (req, res) => {
+        let id = req.params.id
+
+        try {
+            lectures = await EventService.getLectures(id)
+            return res.json(lectures)
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: ['Palestra não encontrado']})
+        }
+    },
+
+    getWorkshops: async (req, res) => {
+        let id = req.params.id
+
+        try {
+            workshops = await EventService.getWorkshops(id)
+            
+            return res.json(workshops)
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: ['Oficina não encontrado']})
+        }
+    },
+
+    postEnroll: async (req, res) => {
+        let id = req.params.id
+        let data = { name, cpf, email, birthdate, institution } = req.body
+        let user = {
+            ...data,
+            birthdate: new Date(Number(birthdate))
+        }
+
+        try {
+            user = await EventService.enroll(user, id)            
+            return res.json(user)
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: [e]})
+        }
+    }
 }
