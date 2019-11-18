@@ -135,6 +135,84 @@
             </div>
 
         </fieldset>
+        <fieldset>
+            <legend>Configurações API</legend>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name"><strong>API GERAL</strong></label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field switchbox">
+                            <label class="switch">
+                                <input class="switch-checkbox" type="checkbox" <%= event.api ? event.api.global ? 'checked' : '' : '' %> name="apiGlobal">
+                                <span class="switch-container"><span class="switch-handle"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Inscrições</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field switchbox">
+                            <label class="switch">
+                                <input class="switch-checkbox" type="checkbox" <%= event.api ? event.api.enroll ? 'checked' : '' : '' %> name="apiEnroll">
+                                <span class="switch-container"><span class="switch-handle"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Verificador de inscrição</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field switchbox">
+                            <label class="switch">
+                                <input class="switch-checkbox" type="checkbox" <%= event.api ? event.api.check ? 'checked' : '' : '' %> name="apiCheck">
+                                <span class="switch-container"><span class="switch-handle"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Listar palestras</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field switchbox">
+                            <label class="switch">
+                                <input class="switch-checkbox" type="checkbox" <%= event.api ? event.api.lectures ? 'checked' : '' : '' %> name="apiLectures">
+                                <span class="switch-container"><span class="switch-handle"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Listar oficinas</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field switchbox">
+                            <label class="switch">
+                                <input class="switch-checkbox" type="checkbox" <%= event.api ? event.api.workshops ? 'checked' : '' : '' %> name="apiWorkshops">
+                                <span class="switch-container"><span class="switch-handle"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
         <div class="app-content__footer">
             <div class="btn-group">
                 <button class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"

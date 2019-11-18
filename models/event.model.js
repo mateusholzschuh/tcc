@@ -60,7 +60,14 @@ let EventSchema = new Schema({
     hackathon: {
         type: Schema.Types.ObjectId,
         ref: 'Hackathon'
-    }
+    },
+    api: {
+        global: Boolean,
+        enroll: Boolean,
+        check: Boolean,
+        lectures: Boolean,
+        workshops: Boolean,
+    },
 }, 
 {
     // auto manage `createdAt` and `updatedAt`

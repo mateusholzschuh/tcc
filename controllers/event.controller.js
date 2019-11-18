@@ -94,6 +94,14 @@ exports.edit = async (req, res, next) => {
  */
 exports.update = (req, res, next) => {
     let form = { name, description, location, days, hours, startDate, finishDate, finished } = req.body
+    let { apiGlobal, apiEnroll, apiCheck, apiLectures, apiWorkshops } = req.body
+    let api = { 
+        global: apiGlobal == 'on', 
+        enroll: apiEnroll == 'on', 
+        check: apiCheck == 'on', 
+        lectures: apiLectures == 'on', 
+        workshops: apiWorkshops == 'on'
+    }
 
     let event = {
         ...form,
@@ -102,6 +110,7 @@ exports.update = (req, res, next) => {
         startDate: moment(startDate, 'DD/MM/YYYY - HH:mm'),
         finishDate: moment(finishDate, 'DD/MM/YYYY - HH:mm'),
         finished: finished == 'on' ? true : false,
+        api
     }
 
     Event.findByIdAndUpdate(req.params.id, event).then(doc => {
