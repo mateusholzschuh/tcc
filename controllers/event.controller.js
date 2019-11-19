@@ -218,5 +218,22 @@ exports.api = {
             return res.status(400)
                         .json({errors: [e]})
         }
+    },
+
+    postCheck: async (req, res) => {
+        let id = req.params.id
+        let user = { cpf } = req.body
+
+        try {
+            ticket = await EventService.checkEnroll(user, id)           
+            
+            return res.json({
+                message: 'Usuário está inscrito!',
+                data: ticket
+            })
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: [e]})
+        }
     }
 }

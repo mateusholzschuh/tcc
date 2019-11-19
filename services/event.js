@@ -46,6 +46,25 @@ const enroll = async (_user, _event) => {
     }  
 }
 
+const checkEnroll = async (user, event) => {
+    let u = await User.findOne({ cpf: user.cpf }).select('name cpf email')
+    let ticket = await Enrollment.findOne({ user: u, event }).select('code user event')
+
+    if (u && ticket) {
+        ticket = {
+            name: u.name,
+            email: u.email,
+            cpf: u.cpf,
+            code: ticket.code,
+            qrcode: `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${ticket._id}&qzone=1&margin=0&size=200x200&ecc=L`
+        }
+        return ticket
+    } else {
+        throw 'Usuário não inscrito'
+    }
+
+}
+
 const getLectures = async (event) => {
     return await Lecture.find({ event }).select('name date description confirmed location speakers')
         .populate('speakers', '-_id name institution instituicao')
@@ -56,4 +75,4 @@ const getWorkshops = async (event) => {
         .populate('speakers', '-_id name institution instituicao')
 }
 
-module.exports = Object.assign(Event, { enroll, getLectures, getWorkshops })
+module.exports = Object.assign(Event, { enroll, checkEnroll, getLectures, getWorkshops })
