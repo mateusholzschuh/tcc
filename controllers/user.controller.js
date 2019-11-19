@@ -115,3 +115,17 @@ exports.update = (req, res, next) => {
 exports.destroy = (req, res, next) => {
     return res.send("Olá mundo @destroy vindo do controller <strong>'User'</strong>")
 }
+
+exports.api = {
+    
+    getAll: async (req, res) => {
+        let users = await User.find().select('name email cpf')
+        return res.json(users)
+    },
+
+    getById: async (req, res) => {
+        let id = req.params.id
+        let user = await User.findOne({ _id: id }).select('-password -__v')
+        return res.json(user)
+    }
+}
