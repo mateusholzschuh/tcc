@@ -75,6 +75,16 @@ const getWorkshops = async (event) => {
         .populate('speakers', '-_id name institution instituicao')
 }
 
+const getWorkshop = async (workshop, event) => {
+    return await Workshop.findOne({ _id: workshop, event }).select('name description date confirmed speakers limit location enrolleds')
+        .populate([{
+            path:'speakers',
+            select: '-_id name institution instituicao'
+        },{
+            path: 'enrolleds.user'
+        }])
+}
+
 const getEnrolleds = async (event) => {
     return await Enrollment.find({ event }).select('user code')
         .populate({
@@ -96,4 +106,4 @@ const getApiConfig = async (event) => {
         throw 'Evento não encontrado'
 }
 
-module.exports = Object.assign(Event, { enroll, checkEnroll, getLectures, getWorkshops, getEnrolleds, getApiConfig })
+module.exports = Object.assign(Event, { enroll, checkEnroll, getLectures, getWorkshops, getWorkshop, getEnrolleds, getApiConfig })

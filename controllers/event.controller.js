@@ -200,7 +200,21 @@ exports.api = {
             return res.json(workshops)
         } catch(e) {
             return res.status(400)
-                        .json({errors: ['Oficina não encontrado']})
+                        .json({errors: ['Oficinas não encontradas']})
+        }
+    },
+
+    getWorkshop: async (req, res) => {
+        let event = req.params.id
+        let w_id = req.params.workshop
+
+        try {
+            let workshop = await EventService.getWorkshop(w_id, event)
+            
+            return res.json(workshop)
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: ['Oficina não encontrada']})
         }
     },
 

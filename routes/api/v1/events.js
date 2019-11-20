@@ -16,6 +16,8 @@ router.get('/:id/lectures', validators.api('getLectures'), controller.api.getLec
 
 router.get('/:id/workshops', validators.api('getWorkshops'), controller.api.getWorkshops)
 
+router.get('/:id/workshops/:workshop', validators.api('getWorkshops'), controller.api.getWorkshop)
+
 router.get('/:id/enrolleds', validators.api('getEnrolleds'), controller.api.getEnrolleds)
 
 router.post('/:id/enroll', validators.api('enroll'), validators.enroll.onSave, controller.api.postEnroll)
