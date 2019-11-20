@@ -95,13 +95,14 @@ exports.edit = async (req, res, next) => {
  */
 exports.update = (req, res, next) => {
     let form = { name, description, location, days, hours, startDate, finishDate, finished } = req.body
-    let { apiGlobal, apiEnroll, apiCheck, apiLectures, apiWorkshops } = req.body
+    let { apiGlobal, apiEnroll, apiCheck, apiLectures, apiWorkshops, apiEnrolleds } = req.body
     let api = { 
         global: apiGlobal == 'on', 
         enroll: apiEnroll == 'on', 
         check: apiCheck == 'on', 
-        lectures: apiLectures == 'on', 
-        workshops: apiWorkshops == 'on'
+        getLectures: apiLectures == 'on', 
+        getWorkshops: apiWorkshops == 'on',
+        getEnrolleds: apiEnrolleds == 'on'
     }
 
     let event = {
@@ -200,6 +201,19 @@ exports.api = {
         } catch(e) {
             return res.status(400)
                         .json({errors: ['Oficina não encontrado']})
+        }
+    },
+
+    getEnrolleds: async (req, res) => {
+        let id = req.params.id
+
+        try {
+            enrolleds = await EventService.getEnrolleds(id)
+            
+            return res.json(enrolleds)
+        } catch(e) {
+            return res.status(400)
+                        .json({errors: [e]})
         }
     },
 

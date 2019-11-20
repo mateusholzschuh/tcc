@@ -65,8 +65,9 @@ let EventSchema = new Schema({
         global: Boolean,
         enroll: Boolean,
         check: Boolean,
-        lectures: Boolean,
-        workshops: Boolean,
+        getLectures: Boolean,
+        getWorkshops: Boolean,
+        getEnrolleds: Boolean,
     },
 }, 
 {
