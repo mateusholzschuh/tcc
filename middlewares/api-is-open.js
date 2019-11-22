@@ -1,6 +1,6 @@
 const Event = require('../services/event')
 
-const permissions = ['enroll','check','getLectures','getWorkshops','getEnrolleds']
+const permissions = ['global','enroll','check','getLectures','getWorkshops','getEnrolleds']
 
 /**
  * @param {'global'|'enroll'|'check'|'getLectures'|'getWorkshops'|'getEnrolleds'} action

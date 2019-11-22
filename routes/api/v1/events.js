@@ -6,7 +6,7 @@ const validators = {
     enroll: require('../../../middlewares/validators/enrollments/api')
 }
 
-router.get('/', validators.api('global'), controller.api.getAll)
+router.get('/', controller.api.getAll)
 
 router.get('/:id', validators.api('global'), controller.api.getById)
 
