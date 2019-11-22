@@ -98,6 +98,12 @@
                         <span>Organizadores</span>
                     </a>
                 </li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'certificate') ? 'is-active' : '' : '' %>">
+                    <a href="<%- baseUrl %>/certificates" class="mdl-js-button mdl-js-ripple-effect">
+                        <i class="zmdi zmdi-star-outline"></i>
+                        <span>Certificados</span>
+                    </a>
+                </li>
 
             </ul>
         </div>

@@ -3,3 +3,4 @@
 node_modules/
 # this isn't stable
 #public/
+tmp/*.docx

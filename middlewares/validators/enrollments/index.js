@@ -53,5 +53,11 @@ async (req, res, next) => {
                 })
     }
 
+    //  TODO: ~refatorar!!!
+    if (!(/[\w\d]+/.test(req.body.institution) &&  req.body.institution.length == 24) ) {
+        req.body.instituicao = req.body.institution
+        delete req.body.institution
+    }
+    
     next()
 }]

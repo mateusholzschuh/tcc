@@ -27,6 +27,9 @@ const checkins = require('../routes/checkin.routes')
 // routes organizers
 const organizers = require('../routes/organizers.routes')
 
+// routes certificate
+const certificates = require('../routes/certificate.routes')
+
 // css menu
 router.all('/*', (req, res, next) => {
     res.locals.mainMenu = 'events'
@@ -81,6 +84,9 @@ router.use('/:id/checkin', hasPermission('accreditation'), checkins)
 
 // rotas dos organizadores
 router.use('/:id/organizers', hasPermission('coordinator'), organizers)
+
+// rotas configurações de certificado
+router.use('/:id/certificates', hasPermission('coordinator'), certificates)
 
 // exporta o router
 module.exports = router
