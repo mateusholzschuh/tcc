@@ -90,7 +90,8 @@ const getWorkshop = async (workshop, event) => {
             path:'speakers',
             select: '-_id name institution instituicao'
         },{
-            path: 'enrolleds.user'
+            path: 'enrolleds.user',
+            select: 'name email cpf institution instituicao'
         }])
 }
 
