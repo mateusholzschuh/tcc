@@ -13,7 +13,7 @@ exports.RoleName = (id) => {
  */
 exports.HasPermission = async (role, user, event) => {
     if (user.isAdmin) return true
-    if (role == null) return false
+    if (role == null || role == 'admin') return false
     
     let ue = await require('../models/user-event.model').findOne({ user, event })
 

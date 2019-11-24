@@ -47,37 +47,37 @@ router.all('/:id/*', (req, res, next) => {
 router.get('/', controller.index)
 
 // rota que mostra form para criar evento
-router.get('/create', controller.create)
+router.get('/create', hasPermission('admin'), controller.create)
 
 // rota que salva um novo evento
-router.post('/', validator.onSave, controller.store)
+router.post('/', hasPermission('admin'), validator.onSave, controller.store)
 
 // rota que mostra um evento
 router.get('/:id', controller.view)
 
 // rota que mostra form edição de um evento
-router.get('/:id/edit', hasPermission('coordinator'),controller.edit)
+router.get('/:id/edit', hasPermission('coordinator'), controller.edit)
 
 // rota que atualiza informações do evento
-router.post('/:id/edit', validator.onUpdate, controller.update)
+router.post('/:id/edit', hasPermission('coordinator'), validator.onUpdate, controller.update)
 
 // rota para remover eventos
 router.get('/:id/delete', hasPermission('admin'), controller.destroy)
 
 // rotas das oficinas
-router.use('/:id/workshops', workshop)
+router.use('/:id/workshops', hasPermission('speaker'), workshop)
 
 // rotas do hackathon
-router.use('/:id/hackathon', hackathon)
+router.use('/:id/hackathon', hasPermission('organization'), hackathon)
 
 // rotas das palestras
-router.use('/:id/lectures', lectures)
+router.use('/:id/lectures', hasPermission('organization'), lectures)
 
 // rotas dos inscritos
-router.use('/:id/enrolleds', enrolleds)
+router.use('/:id/enrolleds', hasPermission('organization'), enrolleds)
 
 // rotas dos subeventos
-router.use('/:id/subevents', controller.subevents)
+router.use('/:id/subevents', hasPermission('organization'), controller.subevents)
 
 // rotas do checkin
 router.use('/:id/checkin', hasPermission('accreditation'), checkins)

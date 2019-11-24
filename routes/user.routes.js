@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const hasPermission = require('../middlewares/has-authorization')
+
 // controller
 const controller = require('../controllers/user.controller')
 
@@ -16,13 +18,13 @@ router.all('/*', (req, res, next) => {
 // ROTAS DO RESOURCE
 
 // rota que exibe a lista de usuários
-router.get('/', controller.index)
+router.get('/', hasPermission('admin'), controller.index)
 
 // rota que exibe form para adicionar um novo usuário
-router.get('/create', controller.create)
+router.get('/create', hasPermission('admin'), controller.create)
 
 // rota que salva um novo usuário
-router.post('/', validator.onSave, controller.store)
+router.post('/', hasPermission('admin'), validator.onSave, controller.store)
 
 // rota que exibe um usuário
 // router.get('/:id', controller.view)
@@ -34,7 +36,7 @@ router.get('/edit/:id', controller.edit)
 router.post('/edit/:id', validator.onUpdate, controller.update)
 
 // rota que remove um usuário
-router.post('/delete', controller.destroy)
+router.post('/delete', hasPermission('admin'), controller.destroy)
 
 // exporta o router
 module.exports = router

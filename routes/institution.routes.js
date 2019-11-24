@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const hasPermission = require('../middlewares/has-authorization')
+
 // controller
 const controller = require('../controllers/institution.controller')
 
@@ -19,19 +21,19 @@ router.all('/*', (req, res, next) => {
 router.get('/', controller.index)
 
 // rota que exibe form para adicionar nova instituição
-router.get('/create', controller.create)
+router.get('/create', hasPermission('admin'), controller.create)
 
 // rota que salva nova instituição
-router.post('/', validator.onSave, controller.store)
+router.post('/', hasPermission('admin'), validator.onSave, controller.store)
 
 // rota que exibe uma instituição
 // router.get('/:id', controller.view)
 
 // rota que exibe form para editar uma instituição
-router.get('/edit/:id', controller.edit)
+router.get('/edit/:id', hasPermission('admin'), controller.edit)
 
 // rota que atualiza uma instituição
-router.post('/edit/:id', validator.onUpdate, controller.update)
+router.post('/edit/:id', hasPermission('admin'), validator.onUpdate, controller.update)
 
 // rota que remove uma instituição
 // router.post('/delete', controller.destroy)

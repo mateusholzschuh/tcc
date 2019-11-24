@@ -6,3 +6,12 @@
 <script type="text/javascript" src="/js/view_gridstack.js?a13c6ebafdb81e7f8fdf"></script>
 <script type="text/javascript" src="/js/forms_standard.js?a13c6ebafdb81e7f8fdf"></script>
 <script type="text/javascript" src="/js/view_datatables.js?a13c6ebafdb81e7f8fdf"></script>
+
+<% if(locals.error && locals.error != '') { %>
+    <script>window.addEventListener('load', function () {
+        setTimeout(() => {
+            AntaresNoty.callNoty("alert", "<%- locals.error %>", "lg", "border")
+        }, 2000)
+    })        
+        </script>
+<% } %>
