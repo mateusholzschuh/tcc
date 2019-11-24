@@ -12,7 +12,7 @@ const moment = require('moment')
  * Mostra a pagina com a listagem dos organizadores
  */
 exports.index = async (req, res, next) => {
-    let ues = await UserEvent.find({ event: req.params.id, role: { $regex: /[^(speaker)]/, $options: 'i' } }).populate('user').exec()
+    let ues = await UserEvent.find({ event: req.params.id/*, role: { $regex: /[^(speaker)]/, $options: 'i' }*/ }).populate('user').exec()
     // let users = await User.find().select('name')
     ues = ues.map(e => {
         e.role = RoleName(e.role)

@@ -9,7 +9,7 @@ const moment = require('moment')
  */
 exports.onSave = [
 [
-    body('role').matches(/(coordinator|accreditation|organization)/i)
+    body('role').matches(/(coordinator|accreditation|organization|speaker)/i)
                 .withMessage('Cargo inválido!'),
 ],
 async (req, res, next) => {
@@ -37,7 +37,7 @@ async (req, res, next) => {
  */
 exports.onUpdate = [
 [
-    body('role').matches(/(coordinator|accreditation|organization)/i)
+    body('role').matches(/(coordinator|accreditation|organization|speaker)/i)
                 .withMessage('Cargo inválido!'),
 ],
 async (req, res, next) => {

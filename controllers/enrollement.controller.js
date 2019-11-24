@@ -1,5 +1,6 @@
 const User = require('../models/user.model')
 const Event = require('../models/event.model')
+const EventService = require('../services/event')
 const Enrollment = require('../models/enrollment.model')
 
 const moment = require('moment')
@@ -30,38 +31,20 @@ exports.create = (req, res) => {
  */
 exports.store = async (req, res, next) => {
     let event = req.params.id
-    let form = { name, email, cpf, birthdate, institution } = req.body
-
-    // busca usuário
-    let user = await User.findOne({ cpf: form.cpf }).select('_id').exec()
-
-    // se não existe, cria
-    if (!user) {
-        user = await User.create({
-            name,
-            email,
-            cpf,
-            birthdate: moment(birthdate, 'DD/MM/YYYY'),
-            instituicao: institution,
-        })
+    let form = { name, email, cpf, birthdate, institution, instituicao } = req.body
+    let user = {
+        ...form,
+        birthdate: moment(birthdate, 'DD/MM/YYYY')
     }
 
-    // instancia inscrição
-    let enrollment = {
-        user,
-        event
-    }
-
-    // salva inscrição
-    Enrollment.create(enrollment).then(r => {
-        // insere inscrição no evento
-        Event.updateOne({ _id: event }, { '$push': { 'enrolleds': r._id } }).then(ok => {
-            return res.redirect('../enrolleds')
-        })
-    }).catch(e => {
+    try {
+        await EventService.enroll(user, event)
+        return res.redirect('../enrolleds')
+    } catch(e) {
         console.error(e)
-        next()
-    })
+        return next()
+    }
+
 }
 
 /**

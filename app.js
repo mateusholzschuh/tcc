@@ -15,6 +15,7 @@ const rateLimit = require('express-rate-limit')
 const isAuth = require('./middlewares/is-auth')
 
 // importing routers
+var publicRouter = require('./routes/public.routes')
 var indexRouter = require('./routes/index')
 var authRouter = require('./routes/auth.routes')
 var usersRouter = require('./routes/user.routes')
@@ -42,6 +43,8 @@ app.disable('x-powered-by')
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
+
+// app.set('env', 'prod')
 
 app.use(logger('dev'))
 app.use(express.json())
@@ -124,8 +127,9 @@ const webLimiter = rateLimit({
 app.use('/', webLimiter)
 
 // setting routes
+app.use('/', publicRouter)
 app.use('/', authRouter)
-app.use('/', isAuth, indexRouter)
+app.use('/', isAuth, (req, res, next) => {res.locals.error = req.flash('error') || '', next()},  indexRouter)
 app.use('/ajax', ajaxRouter)
 app.use('/users', usersRouter)
 app.use('/institutions', institutionsRouter)

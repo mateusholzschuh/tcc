@@ -69,6 +69,9 @@ let EventSchema = new Schema({
         getWorkshops: Boolean,
         getEnrolleds: Boolean,
     },
+    templates: {
+        certificate: String,
+    }
 }, 
 {
     // auto manage `createdAt` and `updatedAt`

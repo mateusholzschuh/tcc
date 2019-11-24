@@ -1,5 +1,6 @@
 const Event = require('../models/event.model')
 const Enrollment = require('../models/enrollment.model')
+const Certificate = require('../models/_certificate.model')
 const User = require('../models/user.model')
 const Lecture = require('../models/lecture.model')
 const Workshop = require('../models/workshop.model')
@@ -14,11 +15,11 @@ const enroll = async (_user, _event) => {
     if (!event) throw 'Evento não encontrado'
     
     let user = await User.findOne({ cpf: _user.cpf })
-    if (user) {        
-        if (isEnrolled(user, event))
+    if (user) {
+        if (await isEnrolled(user, event))
             throw 'Usuário já está inscrito'
 
-        await User.updateOne(user)
+        await User.updateOne({ _id:user._id }, user)
 
     } else {
         user = await User.create(_user)
@@ -33,6 +34,14 @@ const enroll = async (_user, _event) => {
     await Event.updateOne({ event }, {'$push': { 'enrolleds': ticket._id }})
 
     // send mail
+
+    // gen certificate
+    Certificate.create({
+        user,
+        event,
+        name: user.name,
+        cpf: user.cpf
+    })
 
     return {
         message: 'Inscrito com sucesso',
@@ -81,7 +90,8 @@ const getWorkshop = async (workshop, event) => {
             path:'speakers',
             select: '-_id name institution instituicao'
         },{
-            path: 'enrolleds.user'
+            path: 'enrolleds.user',
+            select: 'name email cpf institution instituicao'
         }])
 }
 

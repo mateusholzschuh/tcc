@@ -9,10 +9,12 @@ module.exports = (role, user, event) => {
         user = req.session.user || user
         event = req.params.id || event
         HasPermission(role, user, event).then(result => {
-            if(result)
+            if(result) {
                 return next()
-            else
-                return res.redirect('./')
+            } else {
+                req.flash('error', 'Você não tem permissão para acessar este recurso!')
+                return res.redirect('..')
+            }
         })
     }
 }
