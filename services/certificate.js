@@ -34,8 +34,8 @@ const uploadTemplate = async (file, event) => {
         if (error) throw error
 
         let update = {
-            templates : {
-                certificate: file.filename
+            $set : {
+                'templates.certificate': file.filename
             }
         }
 

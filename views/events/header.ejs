@@ -104,6 +104,12 @@
                         <span>Certificados</span>
                     </a>
                 </li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'mail') ? 'is-active' : '' : '' %>">
+                    <a href="<%- baseUrl %>/mail" class="mdl-js-button mdl-js-ripple-effect">
+                        <i class="zmdi zmdi-email"></i>
+                        <span>E-mail</span>
+                    </a>
+                </li>
 
             </ul>
         </div>

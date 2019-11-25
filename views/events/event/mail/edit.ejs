@@ -1,0 +1,223 @@
+<%- include('../../header') %>
+<div class="generals-form">
+        <form action="" method="POST">
+            <div class="page-notification-templates" style="margin: 0 1rem;">
+                <fieldset>
+                    <div class="page-notification-templates__content">
+                        <legend>
+                            Template Email de Inscrição
+                        </legend>
+                    </div>
+                    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                        <div class="left-tabs">
+                            <div class="mdl-tabs__tab-bar">
+                                <div class="mdl-tabs__left-content">
+                                    <a href="#wyswig-panel" class="mdl-tabs__tab is-active">Editor</a>
+                                </div>
+
+                                <div class="left-tabs__mobile-drop-down">
+                                    <div class="ddown left-tabs__mmobile-dropdown">
+                                        <div class="ddown__init ddown__init--clean btn-more mdl-js-button mdl-js-ripple-effect">
+                                            <i class="zmdi zmdi-more-vert"></i></div>
+                                        <div class="ddown__content">
+                                            <ul class="ddown__menu">                                                
+                                                <li>
+                                                    <a id="notification-templates-variables" class="mdl-tabs--open-variables-panel">
+                                                        <i class="mdl-tabs__icon zmdi zmdi-code"></i>
+                                                        Variáveis Disponíveis
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="left-tabs__desktop-links">
+                                    <a class="mdl-js-ripple-effect mdl-js-button mdl-tabs--open-variables-panel">
+                                        <i class="mdl-tabs__icon zmdi zmdi-code"></i>
+                                        <span class="mdl-tabs__text">Variáveis Disponíveis </span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="left-tabs__panels">
+                                <div class="mdl-tabs__panel is-active" id="wyswig-panel">
+                                                                <textarea name="template" id="wysiwyg" rows="10" cols="80" class="hidden"></textarea>
+                                </div>
+                                <div class="mdl-tabs__panel" id="html-panel">
+                                    <fieldset>
+                                      <textarea name="html-editor" id="html-editor" rows="10" cols="80"><%= form.template.mail_enroll || '' %></textarea>
+                                    </fieldset>
+                                </div>
+                                <div class="mdl-tabs__panel" id="php-panel">
+                                    <fieldset>
+                            <textarea name="php-editor" id="php-editor" rows="10" cols="80"></textarea>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="variables-pane">
+                            <div class="variables-pane__top">
+                                Variáveis Disponíveis
+                                <div class="variables-pane__close mdl-tabs--close-variables-panel">
+                                    <i class="zmdi zmdi-close"></i>
+                                </div>
+                            </div>
+                            <div class="variables-pane__inner">
+                                <div class="variables-pane__top variables-pane__top--mobile">
+                                    Variáveis Disponíveis
+                                    <div class="variables-pane__close mdl-tabs--close-variables-panel">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </div>
+                                </div>
+                                <div class="variables-pane__content">
+                                    <div class="variables-pane__instructions-type">
+                                        <div class="variables-pane__instructions-group">Inscrição</div>
+                                        <div class="variables-pane__instructions">
+                                            <div class="variables-pane__row">
+                                                <div class="variables-pane__instruction-name">
+                                                    Número inscrição (simples)
+                                                </div>
+                                                <div class="variables-pane__instruction-content">
+                                                    <div class="variables-pane__copy-tools">
+                                                        <i class="zmdi zmdi-copy variables-pane__copy" data-tooltip="true" data-clipboard-target="#email-driver"></i>
+                                                        <div class="tooltip-content">
+                                                            Copiar
+                                                        </div>
+                                                        <i class="zmdi zmdi-arrow-right variables-pane__paste insert-instruction" data-tooltip="true"></i>
+                                                        <div class="tooltip-content">
+                                                            Inserir
+                                                        </div>
+                                                    </div>
+                                                    <pre id="email-driver">
+{{ code }}
+                            </pre>
+                                                </div>
+                                            </div>
+                                            <div class="variables-pane__row">
+                                                <div class="variables-pane__instruction-name">
+                                                    QR Code
+                                                </div>
+                                                <div class="variables-pane__instruction-content">
+                                                    <div class="variables-pane__copy-tools">
+                                                        <i class="zmdi zmdi-copy variables-pane__copy" data-tooltip="true" data-clipboard-target="#email-port"></i>
+                                                        <div class="tooltip-content">
+                                                            Copiar
+                                                        </div>
+                                                        <i class="zmdi zmdi-arrow-right variables-pane__paste insert-instruction" data-tooltip="true"></i>
+                                                        <div class="tooltip-content">
+                                                            Inserir
+                                                        </div>
+                                                    </div>
+                                                    <pre id="email-port">
+<%= '<img src="{{ qr }}" alt="QR"/>' %>
+                            </pre>
+                                                </div>
+                                            </div>
+                                            <div class="variables-pane__row">
+                                                <div class="variables-pane__instruction-name">
+                                                    ID Inscrição
+                                                </div>
+                                                <div class="variables-pane__instruction-content">
+                                                    <div class="variables-pane__copy-tools">
+                                                        <i class="zmdi zmdi-copy variables-pane__copy" data-tooltip="true" data-clipboard-target="#email-form"></i>
+                                                        <div class="tooltip-content">
+                                                            Copiar
+                                                        </div>
+                                                        <i class="zmdi zmdi-arrow-right variables-pane__paste insert-instruction" data-tooltip="true"></i>
+                                                        <div class="tooltip-content">
+                                                            Inserir
+                                                        </div>
+                                                    </div>
+                                                    <pre id="email-form">
+{{ id }}
+                            </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="variables-pane__instructions-type">
+                                        <div class="variables-pane__instructions-group">Usuário</div>
+                                        <div class="variables-pane__instructions">
+                                            <div class="variables-pane__row">
+                                                <div class="variables-pane__instruction-name">
+                                                    Nome
+                                                </div>
+                                                <div class="variables-pane__instruction-content">
+                                                    <div class="variables-pane__copy-tools">
+                                                        <i class="zmdi zmdi-copy variables-pane__copy" data-tooltip="true" data-clipboard-target="#site-name"></i>
+                                                        <div class="tooltip-content">
+                                                            Copiar
+                                                        </div>
+                                                        <i class="zmdi zmdi-arrow-right variables-pane__paste insert-instruction" data-tooltip="true"></i>
+                                                        <div class="tooltip-content">
+                                                            Inserir
+                                                        </div>
+                                                    </div>
+                                                    <pre id="site-name">
+{{ name }}
+                            </pre>
+                                                </div>
+                                            </div>
+                                            <div class="variables-pane__row">
+                                                <div class="variables-pane__instruction-name">
+                                                    CPF
+                                                </div>
+                                                <div class="variables-pane__instruction-content">
+                                                    <div class="variables-pane__copy-tools">
+                                                        <i class="zmdi zmdi-copy variables-pane__copy" data-tooltip="true" data-clipboard-target="#site-description"></i>
+                                                        <div class="tooltip-content">
+                                                            Copiar
+                                                        </div>
+                                                        <i class="zmdi zmdi-arrow-right variables-pane__paste insert-instruction" data-tooltip="true"></i>
+                                                        <div class="tooltip-content">
+                                                            Inserir
+                                                        </div>
+                                                    </div>
+                                                    <pre id="site-description">
+{{ cpf }}
+                            </pre>
+                                                </div>
+                                            </div>
+                                            <div class="variables-pane__row">
+                                                <div class="variables-pane__instruction-name">
+                                                    Email
+                                                </div>
+                                                <div class="variables-pane__instruction-content">
+                                                    <div class="variables-pane__copy-tools">
+                                                        <i class="zmdi zmdi-copy variables-pane__copy" data-tooltip="true" data-clipboard-target="#email-host"></i>
+                                                        <div class="tooltip-content">
+                                                            Copiar
+                                                        </div>
+                                                        <i class="zmdi zmdi-arrow-right variables-pane__paste insert-instruction" data-tooltip="true"></i>
+                                                        <div class="tooltip-content">
+                                                            Inserir
+                                                        </div>
+                                                    </div>
+                                                    <pre id="email-host">
+{{ email }}
+                            </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="variables-pane__mobile-button">
+                                            <a class="btn w100p btn--primary btn--s-default mdl-button mdl-js-button mdl-js-ripple-effect">Fechar</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="app-content__footer">
+<div class="btn-group">
+<button class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect" type="submit">Salvar</button>
+<a href="./" class="btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+</div>
+</div>
+
+        </form>
+<script src="https://cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
+<script type="text/javascript" src="/js/app_cache.js?a13c6ebafdb81e7f8fdf"></script><script type="text/javascript" src="/js/view_brand_settings.js?a13c6ebafdb81e7f8fdf"></script><script type="text/javascript" src="/js/forms_standard.js?a13c6ebafdb81e7f8fdf"></script><script type="text/javascript" src="/js/view_notification_templates.js?a13c6ebafdb81e7f8fdf"></script></body>
+    </div>
+<%- include('../../footer') %>
