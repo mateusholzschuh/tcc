@@ -34,8 +34,14 @@ const enroll = async (_user, _event) => {
         event
     }
 
-    let ticket = await Enrollment.create(enrollment)
-    await Event.updateOne({ event }, {'$push': { 'enrolleds': ticket._id }})
+    let ticket = {}
+    
+    try {
+        ticket = await Enrollment.create(enrollment)
+        await Event.updateOne({ event }, {'$push': { 'enrolleds': ticket._id }})
+    } catch (e) {
+        throw 'Oops! Ocorreu um problema com sua inscrição!'
+    }
 
     // send mail
     try {
