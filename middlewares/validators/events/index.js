@@ -4,6 +4,21 @@ const { body, validationResult } = require('express-validator')
 const moment = require('moment')
 
 /**
+ * Permite prosseguir se o evento não está finalizado
+ */
+exports.isNotFinished = async (req, res, next) => {
+    let { id } = req.params
+    let event = await Event.findById(id).select('finished')
+
+    if (!event.finished || req.user.isAdmin) {
+        return next()
+    }
+    
+    req.flash('error', 'Ops! Evento já está finalizado!')
+    return res.redirect('../')
+}
+
+/**
  * Validador ao salvar novo evento
  */
 exports.onSave = [

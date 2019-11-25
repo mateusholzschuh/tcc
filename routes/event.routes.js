@@ -81,7 +81,7 @@ router.use('/:id/subevents', hasPermission('organization'), controller.subevents
 
 // rotas do email
 router.get('/:id/mail', hasPermission('coordinator'), controller.mailSettings)
-router.post('/:id/mail', hasPermission('coordinator'), controller.updateMailTemplate)
+router.post('/:id/mail', validator.isNotFinished, hasPermission('coordinator'), controller.updateMailTemplate)
 
 // rotas do checkin
 router.use('/:id/checkin', hasPermission('accreditation'), checkins)

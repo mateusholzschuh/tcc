@@ -82,11 +82,6 @@ app.use('/api', apiLimiter)
 
 app.use('/api', apiRouter)
 
-// // routes
-// app.use('/api/v1', apiRouter, (req, res) => {
-//   return res.json({ errors: [req.message || 'What the fuck has happened?'] }, 400)
-// })
-
 // SACI API *
 const open = false
 const SACI_TOKEN = process.env.SACI_TOKEN || 'saci'
@@ -109,8 +104,9 @@ saciAPI,
   return res.json({ errors: ['Opa! Rota inválida'] }, 404)
 })
 
-app.use('/api/?*', (req, res) => {
-  return res.json({ errors: ['Opa! Rota inválida'] }, 404)
+// catch errors
+app.use('/api*', (req, res) => {
+  return res.status(400).json({ errors: ['Opa! Rota inválida'] })
 })
 
 /*******************
