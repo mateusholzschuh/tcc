@@ -5,6 +5,10 @@ const User = require('../models/user.model')
 const Lecture = require('../models/lecture.model')
 const Workshop = require('../models/workshop.model')
 
+const handlebars = require('handlebars')
+const moment = require('moment')
+const mailer = require('../utils/mail-transporter')
+
 const isEnrolled = async (user, event) => {
     let count = await Enrollment.findOne({ user, event }).countDocuments()
     return count === 1
@@ -30,10 +34,50 @@ const enroll = async (_user, _event) => {
         event
     }
 
-    let ticket = await Enrollment.create(enrollment)
-    await Event.updateOne({ event }, {'$push': { 'enrolleds': ticket._id }})
+    let ticket = {}
+    
+    try {
+        ticket = await Enrollment.create(enrollment)
+        await Event.updateOne({ event }, {'$push': { 'enrolleds': ticket._id }})
+    } catch (e) {
+        throw 'Oops! Ocorreu um problema com sua inscrição!'
+    }
 
     // send mail
+    try {
+        let source = event.templates.mail_enroll
+        let template = handlebars.compile(source)
+
+        let data = {
+            name: user.name,
+            email: user.email,
+            cpf: user.cpf,
+            birthdate: moment(user.birthdate).format('DD/MM/YYYY'),
+            event: event.name,
+            code: ticket.code,
+            id: ticket._id,
+            qr: `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${ticket._id}&qzone=1&margin=0&size=200x200&ecc=L`
+        }
+
+        let result = template(data)
+
+        let options = {
+            from: `${event.name} <${process.env.MAIL_ADDR}>`, // sender address
+            to: user.email, // receiver user.email
+            subject: `Inscrição ${event.name}`, // Subject line
+            html: result, // plain text body
+        }
+
+        mailer.sendMail(options).then(ok => {
+            console.log(ok)
+        }).catch(err => {
+            console.error(err)
+        })
+
+    } catch (e) {
+        console.error('Não foi possível enviar o email de confirmação')
+        console.error(e)
+    }
 
     // gen certificate
     Certificate.create({

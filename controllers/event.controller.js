@@ -135,6 +135,37 @@ exports.subevents = (req, res) => {
     })
 }
 
+exports.mailSettings = async (req, res) => {
+    let event = req.params.id
+    event = await Event.findById(event).select('templates')
+    
+    template = event.templates ? event.templates.mail_enroll ? event.templates.mail_enroll : '' : ''
+
+    console.log(event)
+
+    return res.render('events/event/mail/edit', {
+        title: 'Email',
+        eventMenu: 'mail',
+        form: {
+            template: event.templates || {}
+        }
+    })
+}
+
+exports.updateMailTemplate = (req, res, next) => {
+    let { template } = req.body
+
+    let update = {
+        $set: {
+            'templates.mail_enroll': template || ''
+        }
+    }
+
+    Event.findByIdAndUpdate(req.params.id, update).then(doc => {
+        return res.redirect('./')
+    })
+}
+
 getEvents = async (params) => {
     return await Event.find(params).select('name description location days hours periods startDate finishDate')
 }
