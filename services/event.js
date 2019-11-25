@@ -140,7 +140,7 @@ const getWorkshop = async (workshop, event) => {
 }
 
 const getEnrolleds = async (event) => {
-    return await Enrollment.find({ event }).select('user code')
+    return await Enrollment.find({ event }).select('user code presences')
         .populate({
             path: 'user',
             select: '-_id name institution instituicao cpf email',

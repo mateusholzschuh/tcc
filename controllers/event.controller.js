@@ -166,6 +166,81 @@ exports.updateMailTemplate = (req, res, next) => {
     })
 }
 
+exports.showStats = async (req, res) => {
+    let event = await Event.findById(req.params.id)
+    let enrolleds = await EventService.getEnrolleds(event._id)
+
+    presences = enrolleds.map(e => {
+        return e.presences
+    })
+    
+    // let periods = Object.values(event.periods).slice(1).filter(e => e).length
+    // let days = event.days
+
+    // // presences = {
+    // //     dayIdx : {
+    // //         periodA: 222,
+    // //         periodB: 12
+    // //     } 
+    // // }
+
+    // namePeriods = Object.keys(event.periods).slice(1).filter(e => event.periods[e])
+    // // console.log(countPeriods)
+    
+    // let counter = []
+    // counter[0] = 0
+    // counter[1] = 0
+    // counter[2] = 0
+    
+
+    // let _presences = presences.map(e => {
+    //     e = e.map(e => e ? true : false)
+    //     while (e.length < days*periods) e.push(false)
+    //     return e
+    // })
+
+    // console.log(_presences)
+    // let DAYS = []
+    // for (i=0; i<days; i++) {
+    //     day = []
+
+    //     for (j=0; j<periods; j++) {
+    //         day.push(
+    //             _presences.map(e => {
+    //                 return e[]
+    //             })
+    //     }
+
+    //     DAYS.push(day)
+    // }
+    // console.log(DAYS)
+
+
+    // let STATS = {
+    //     DAYS: [
+    //         [{
+    //             PERIOD,
+    //             COUNT
+    //         }]
+    //     ],
+    //     PERIODS: [
+    //         COUNT
+    //     ]
+    // }
+    // console.log({
+    //     namePeriods,
+    //     counter
+    // })
+
+    // console.log(day)
+
+    return res.render('events/event/stats/index', {
+        title: 'Estatisticas',
+        event,
+        presences
+    })
+}
+
 getEvents = async (params) => {
     return await Event.find(params).select('name description location days hours periods startDate finishDate')
 }

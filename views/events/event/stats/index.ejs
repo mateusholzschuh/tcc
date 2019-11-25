@@ -1,0 +1,98 @@
+<%- include('../../header') %>
+<div class="grid-stack-item" data-gs-no-resize="1" data-gs-no-move="1" data-gs-x="12" data-gs-y="0" data-gs-width="12" data-gs-height="10" data-gs-min-width="11" data-gs-min-height="10">
+        <div class="grid-stack-item-content">
+            <div class="card__edit-view">
+<div class="card__edit-icons">
+<i data-tooltip-inline="Remove Widget" class="zmdi zmdi-delete remove-button mdl-js-button mdl-js-ripple-effect"></i>
+<i data-tooltip-inline="Move Widget" class="zmdi zmdi-arrows move-button mdl-js-button mdl-js-ripple-effect"></i>
+<i data-tooltip-inline="Detach Widget" class="zmdi zmdi-square-right detach-button mdl-js-button mdl-js-ripple-effect"></i>
+</div>
+</div>
+
+                <div class="card card--chart card--scrollbox" data-chart="true" data-preload>
+                    <div class="card__left">
+                        <div class="card__header">
+                            <div class="card__header-left">
+                                <span>Presenças</span>
+                            </div>
+                            <div class="card__header-right">
+                                <form action="" method="post">
+
+                                    <!-- <input data-daterangepicker="true" class="mr24"> -->
+                                    <!-- <input type="checkbox" data-icheck="true" name="subscriptions" id="subscriptions" class="compare-mode--checkbox"> -->
+                                    <!-- <label class="ml8" for="subscriptions">Compare</label> -->
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card__content card__content--chart">
+                            <div class="chart" id="chart--two">
+                                <canvas id="two-bar" width="400" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card__right">
+                        <!-- <div class="mobile-compare">
+                            <input type="checkbox" data-icheck="true" name="subscriptions" id="subscriptions" class="compare-mode--checkbox">
+                            <label class="ml8" for="subscriptions">Compare</label>
+                        </div> -->
+                        <header>
+                            <span class="card__title">Total de inscritos</span>
+                            <span class="card__ammount">
+                                <strong><%= event.enrolleds.length %></strong>
+                            </span>
+
+                        </header>
+                        <ul data-scrollable class="datarow mobile-toogle--target">
+
+                            <!--SINGLE-->
+                            <li class="datarow__sgl datarow__sgl--up">
+                                <div class="datarow__left">
+                                    <span class="datarow__status">Presentes</span>
+                                </div>
+                                <div class="datarow__right">
+                                    <span class="datarow__data">
+                                        <strong><%= presences.filter(e => e).length %></strong>
+                                    </span>
+                                </div>
+                            </li>
+
+                        </ul>
+                        <div class="mobile-toogle--box">
+                            <div class="card__mobile-toggle mdl-js-button mdl-js-ripple-effect">
+                                <i class="zmdi zmdi-caret-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/js/app_cache.js?a13c6ebafdb81e7f8fdf"></script>
+    <script>
+    (function(c,f,d,e,g,j,k){
+        for(var m=[],p=[],q=[],t=0;t<f;t++)
+            m.push("Dia "+(t+1)),
+            p.push((100*Math.random()+1)),
+            q.push((100*Math.random()+1));
+            
+        var l=document.getElementById(c).getContext("2d");
+        new Chart(l, {
+            type:"bar",
+            data:{
+                labels:m,
+                datasets:[
+                    {backgroundColor:e, hoverBackgroundColor:g, data:p},
+                    {backgroundColor:j, hoverBackgroundColor:k, data:q}
+                ]},
+                options:{
+                    responsive:!0,
+                    maintainAspectRatio:!1,
+                    legend:!1,
+                    scales:{
+                        yAxes:[{display:!1}],
+                        xAxes:[{display:!1,barPercentage:1}]
+                    }
+                }
+            })
+        })("two-bar",3, [],"#ffa726","#ef9c23","#e1e3e6","#d4d6d8")
+    </script>
+<%- include('../../footer') %>
