@@ -110,7 +110,7 @@ exports.uploadTemplate = (req, res, next) => {
  * e ter uma prévia de como ficará.
  */
 exports.downloadExample = async (req, res, next) => {
-    let event = await Event.findById(req.params.id).select('templates')
+    let event = await Event.findById(req.params.id).select('name hours location startDate finishDate templates')
 
     const template = await CertificateService.getTemplate(event.templates.certificate)
 

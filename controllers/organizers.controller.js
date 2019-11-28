@@ -6,6 +6,8 @@ const UserEvent = require('../models/user-event.model')
 
 const { RoleName } = require('../utils/roles')
 
+const mail = require('../utils/mail-transporter')
+
 const moment = require('moment')
 
 /**
@@ -52,7 +54,33 @@ exports.store = async (req, res, next) => {
         role
     }
 
+    let u = await User.findById(user)
+
+    let password = Math.random().toString(36).slice(-8)
+
+    if (u) {
+        u.password = password
+        u.save()
+    }
+
+    //send mail
+    let template = 
+`<h1> Olá ${u.name}!</h1>
+<p>Sua senha de acesso ao sistema é:</p>
+<p><strong>Email:</strong> ${u.email}</p>
+<p><strong>Senha:</strong> ${password}</p>
+`
+
+    mail.sendMail({
+        to: u.email,
+        subject: 'Credenciais de acesso ao sistema',
+        html: template
+    })
+
+
     UserEvent.create(ue).then(r => {
+
+
         return res.redirect('../organizers')
     }).catch(e => {
         // res.status(500).json(e)

@@ -75,7 +75,7 @@ async (req, res, next) => {
     let { pActual } = req.body
     let errors = validationResult(req).errors
 
-    User.findById(req.session.user).then(user => {
+    User.findById(req.session.user._id).then(user => {
         if (user) {
             user.comparePassword(pActual, (err, match) => {
                 if (err || !match) {
