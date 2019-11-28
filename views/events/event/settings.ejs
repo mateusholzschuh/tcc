@@ -136,7 +136,19 @@
 
         </fieldset>
         <fieldset>
-            <legend>Configurações API</legend>
+            <legend>Configurações API</legend>            
+            <div class="form-block">
+                <div class="col-group">
+                    <div class="col-mb-8 col-6">
+                        <label class="form-block__name">Token</label>
+                    </div>
+                    <div class="col-mb-16 col-18">
+                        <div class="input-field">
+                            <input type="text" placeholder="Token de acesso" name="token" value="<%- event.api.token %>">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="form-block">
                 <div class="col-group">
                     <div class="col-mb-8 col-6">

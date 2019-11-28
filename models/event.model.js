@@ -68,6 +68,7 @@ let EventSchema = new Schema({
         getLectures: Boolean,
         getWorkshops: Boolean,
         getEnrolleds: Boolean,
+        token: String,
     },
     templates: {
         certificate: String,

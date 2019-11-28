@@ -96,14 +96,15 @@ exports.edit = async (req, res, next) => {
  */
 exports.update = (req, res, next) => {
     let form = { name, description, location, days, hours, startDate, finishDate, finished } = req.body
-    let { apiGlobal, apiEnroll, apiCheck, apiLectures, apiWorkshops, apiEnrolleds } = req.body
+    let { token, apiGlobal, apiEnroll, apiCheck, apiLectures, apiWorkshops, apiEnrolleds } = req.body
     let api = { 
         global: apiGlobal == 'on', 
         enroll: apiEnroll == 'on', 
         check: apiCheck == 'on', 
         getLectures: apiLectures == 'on', 
         getWorkshops: apiWorkshops == 'on',
-        getEnrolleds: apiEnrolleds == 'on'
+        getEnrolleds: apiEnrolleds == 'on',
+        token: token || '',
     }
 
     let event = {
