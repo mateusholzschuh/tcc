@@ -110,12 +110,18 @@
                         <span>E-mail</span>
                     </a>
                 </li>
+                <li class="<%- locals.eventMenu ? (eventMenu == 'stats') ? 'is-active' : '' : '' %>">
+                    <a href="<%- baseUrl %>/stats" class="mdl-js-button mdl-js-ripple-effect">
+                        <i class="zmdi zmdi-chart"></i>
+                        <span>Estatísticas</span>
+                    </a>
+                </li>
 
             </ul>
         </div>
     </div>
 
-    <div class="grid-col grid-col--container  clients-details-gridstack clients-details--vu grid-stac ui-draggable-disabled ui-resizable-disabled">
+    <div class="grid-col grid-col--container  clients-details-gridstack <%= locals.gs ? 'grid-stack' : '' %> ui-draggable-disabled ui-resizable-disabled">
         <div class="menu-mobile-settings--box">
             <select class="menu-mobile-settings" data-select2--class="menu-aside-settings--blue"
                 data-selectar--search="true" name="select" id="select-anchor">

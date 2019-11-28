@@ -73,6 +73,7 @@ exports.view = async (req, res, next) => {
         title: event.name || 'Evento #BLABLA',
         event: event,
         moment: moment,
+        eventMenu: 'main'
     })
 }
 
@@ -167,77 +168,88 @@ exports.updateMailTemplate = (req, res, next) => {
 }
 
 exports.showStats = async (req, res) => {
-    let event = await Event.findById(req.params.id)
+    let event = await Event.findById(req.params.id).populate('lectures', 'confirmed').populate('workshops', 'confirmed')
     let enrolleds = await EventService.getEnrolleds(event._id)
 
     presences = enrolleds.map(e => {
         return e.presences
     })
+
+    let periods = Object.values(event.periods).slice(1).filter(e => e).length
+    let days = event.days
+
+
+    // ESTATÍSTICAS DE PRESENÇA
+    _days = []
     
-    // let periods = Object.values(event.periods).slice(1).filter(e => e).length
-    // let days = event.days
+    for (i=0; i<days; i++) {
+        _days[i] = []
+        for (j=0; j<periods; j++) {
+            _days[i][j] = 0
+        }
+    }
 
-    // // presences = {
-    // //     dayIdx : {
-    // //         periodA: 222,
-    // //         periodB: 12
-    // //     } 
-    // // }
-
-    // namePeriods = Object.keys(event.periods).slice(1).filter(e => event.periods[e])
-    // // console.log(countPeriods)
+    presences.map(e => {
+        e = e.map(e => e ? true : false)                // corrige null
+        while (e.length < days*periods) e.push(false)   // corrige empty
+        
+        day = []
+        for (i=0; i<days; i++) {
+            day[i] = e.slice(i*periods, (i+1)*periods)
+            for (j=0; j<periods; j++) {
+                if (day[i][j]) _days[i][j]++
+            }
+        }
+        
+        return e
+    })
     
-    // let counter = []
-    // counter[0] = 0
-    // counter[1] = 0
-    // counter[2] = 0
-    
+    namePeriods = Object.keys(event.periods).slice(1).filter(e => event.periods[e])
 
-    // let _presences = presences.map(e => {
-    //     e = e.map(e => e ? true : false)
-    //     while (e.length < days*periods) e.push(false)
-    //     return e
-    // })
+    let stats = {
+        byDay: _days,
+        periods: namePeriods
+    }
 
-    // console.log(_presences)
-    // let DAYS = []
-    // for (i=0; i<days; i++) {
-    //     day = []
+    // ESTATÍSTICAS DE PALESTRAS
+    stats['lectures'] = {
+        total: event.lectures.length,
+        confirmed: event.lectures.filter(e => e.confirmed).length,
+        notConfirmed: event.lectures.filter(e => !e.confirmed).length
+    }
 
-    //     for (j=0; j<periods; j++) {
-    //         day.push(
-    //             _presences.map(e => {
-    //                 return e[]
-    //             })
-    //     }
+    // ESTATÍSTICAS DE PALESTRAS
+    stats['workshops'] = {
+        total: event.workshops.length,
+        confirmed: event.workshops.filter(e => e.confirmed).length,
+        notConfirmed: event.workshops.filter(e => !e.confirmed).length
+    }
 
-    //     DAYS.push(day)
-    // }
-    // console.log(DAYS)
+    // ESTATÍSTICAS DE INSCRITOS/INSTITUIÇÃO
+    let users = enrolleds.map(e => e.user)
+    let institutions = []
 
+    users.forEach(e => {
+        i = e.instituicao || null
 
-    // let STATS = {
-    //     DAYS: [
-    //         [{
-    //             PERIOD,
-    //             COUNT
-    //         }]
-    //     ],
-    //     PERIODS: [
-    //         COUNT
-    //     ]
-    // }
-    // console.log({
-    //     namePeriods,
-    //     counter
-    // })
+        if (i)
+            institutions[i] = institutions[i] ? ++institutions[i] : 1
 
-    // console.log(day)
+    })
 
+    stats['institutions'] = {
+        labels: Object.keys(institutions),
+        data: Object.values(institutions)
+    }
+
+    // RENDER PAGE
     return res.render('events/event/stats/index', {
-        title: 'Estatisticas',
+        title: 'Estatistícas',
         event,
-        presences
+        presences,
+        stats,
+        eventMenu: 'stats',
+        gs:true
     })
 }
 
