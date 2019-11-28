@@ -92,7 +92,7 @@ router.use('/:id/organizers', hasPermission('coordinator'), organizers)
 // rotas configurações de certificado
 router.use('/:id/certificates', hasPermission('coordinator'), certificates)
 
-router.use('/:id/stats', controller.showStats)
+router.use('/:id/stats', hasPermission('organization'), controller.showStats)
 
 // exporta o router
 module.exports = router
