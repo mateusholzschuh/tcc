@@ -11,12 +11,11 @@
                         <div class="swiper-wrapper">
                             <!-- Slides -->
                             <div class="swiper-slide">
-                                <a href="#"
-                                    class="mdl-tabs__tab is-active">Configurações</a>
+                                <a href="#" class="mdl-tabs__tab is-active">Configurações</a>
                             </div>
                             <div class="swiper-slide">
-                                <a href="list" onclick="window.location='./certificates/list'"
-                                    class="mdl-tabs__tab">Lista de certificados</a>
+                                <a href="list" onclick="window.location='./certificates/list'" class="mdl-tabs__tab">Lista
+                                    de certificados</a>
                             </div>
                         </div>
                         <div class="swiper-mdl-tabs-next"></div>
@@ -26,195 +25,259 @@
 
                 <div class="mdl-tabs__panel is-active" id="add-panel">
                     <section class="generals-form" style="width:100%">
-                        <form action="./certificates/upload" method="POST"  enctype="multipart/form-data">
+                        <form action="./certificates/upload" method="POST" enctype="multipart/form-data">
                             <div class="form-block">
 
                                 <div class="col-group">
-                                        <% if (locals.message && locals.message.length != 0) { %>
-                                        
-                                            <div class="col">
-                                                <p class="alert alert alert--glow alert--success alert--lg alert--border mb20">
-                                                    <%- message %></p>
-                                            </div>
-                                        
-                                        <% } %>
+                                    <% if (locals.message && locals.message.length != 0) { %>
+
+                                    <div class="col">
+                                        <p class="alert alert alert--glow alert--success alert--lg alert--border mb20">
+                                            <%- message %>
+                                        </p>
+                                    </div>
+
+                                    <% } %>
                                 </div>
                                 <div class="col-group">
-                                        <% if (locals.error && locals.error.length != 0) { %>
-                                        
-                                            <div class="col">
-                                                <p class="alert alert alert--glow alert--error alert--lg alert--border mb20">
-                                                    <%- error %></p>
-                                            </div>
-                                        
-                                        <% } %>
-                                </div>
-                            </div>
+                                    <% if (locals.error && locals.error.length != 0) { %>
 
-
-                                <fieldset name="inputs" class="col-mb-24 col-12">
-                                    <a name="AntaresInputs" id="AntaresInputs">
-                                        <legend>Dados Gerais</legend>
-                                    </a>
-
-                                    <div class="form-block">
-                                        <% if (locals.errors) { 
-                                            errors.forEach(error => { %>
-                                        <div class="col-group">
-                                            <div class="col">
-                                                <p
-                                                    class="alert alert alert--glow alert--error alert--md alert--border mb20">
-                                                    <%- error %></p>
-                                            </div>
-                                        </div>
-                                        <% })
-                                          } %>
+                                    <div class="col">
+                                        <p class="alert alert alert--glow alert--error alert--lg alert--border mb20">
+                                            <%- error %>
+                                        </p>
                                     </div>
 
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">                                                    
-                                                <label class="form-block__name">Template (docx)</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <div class="input-field">
-                                                    <input type="file" placeholder="Arquivo do template" name="file"
-                                                         value="<%= template.certificate %>" required accept=".doc,.docx">
-                                                         <button class="btn btn--primary">Enviar</button>
-                                                </div>
-                                                <div>
-                                                    <% if (template.certificate) { %>
-                                                        <small>Atual: <a href="./certificates/model" title="Baixar modelo">Baixar Modelo</a></small>
-                                                        <small>Baixar Exemplo: <a href="./certificates/test" title="Baixar Exemplo">Baixar Exemplo</a></small>
-                                                    <% } else { %>
-                                                        <small>Nenhum modelo selecionado</small>
-                                                    <% } %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <% if (template.certificate) { %>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">                                                    
-                                                <label class="form-block__name">Gerar Certificados</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <div class="input-field">
-                                                    <a href="./certificates/generate" class="btn btn--primary">Gerar</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <% } %>
-
-                                    <div style="display: none;" class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">CPF</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <div class="input-field">
-                                                    <input type="text" placeholder="CPF do inscrito" name="cpf"
-                                                        value="<%- locals.form ? form.cpf : ''%>" maxlength="11" minlength="11"
-                                                        >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <a><legend>TAGS DISPONÍVEIS</legend></a>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">{nome}</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <span>Nome do participante</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">{key}</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <span>Chave de autenticação</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">{evento.nome}</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <span>Nome do evento</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">{evento.horas}</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <span>Quantidade de horas do evento</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">{evento.local}</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <span>Local do evento</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">{evento.dataInicio}</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <span>Data inicial do evento</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-block">
-                                        <div class="col-group">
-                                            <div class="col-mb-8 col-6">
-                                                <label class="form-block__name">{evento.dataFim}</label>
-                                            </div>
-                                            <div class="col-mb-16 col-18">
-                                                <span>Data final do evento</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-
+                                </div>
                             </div>
-                        </form>
-                                <div class="display-none app-content__footer">
-                                    <div class="btn-group">
-                                        <button
-                                            class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
-                                            type="submit">Salvar</button>
-                                        <a
-                                            class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+
+
+                            <fieldset name="inputs" class="col-mb-24 col-12">
+                                <a name="AntaresInputs" id="AntaresInputs">
+                                    <legend>Dados Gerais</legend>
+                                </a>
+
+                                <div class="form-block">
+                                    <% if (locals.errors) { 
+                                            errors.forEach(error => { %>
+                                    <div class="col-group">
+                                        <div class="col">
+                                            <p class="alert alert alert--glow alert--error alert--md alert--border mb20">
+                                                <%- error %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <% })
+                                          } %>
+                                </div>
+
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">Template Geral do evento (docx)</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <div class="input-field">
+                                                <input type="file" placeholder="Arquivo do template" name="file[certificate]" value="<%= template.certificate %>"
+                                                    accept=".doc,.docx">
+                                                <button class="btn btn--primary">Enviar</button>
+                                            </div>
+                                            <div>
+                                                <% if (template.certificate) { %>
+                                                <small>Atual: <a href="./certificates/model" title="Baixar modelo">Baixar
+                                                        Modelo</a></small>
+                                                <small>Baixar Exemplo: <a href="./certificates/test" title="Baixar Exemplo">Baixar
+                                                        Exemplo</a></small>
+                                                <% } else { %>
+                                                <small>Nenhum modelo selecionado</small>
+                                                <% } %>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                    </section>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">Template Palestrante (docx)</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <div class="input-field">
+                                                <input type="file" placeholder="Arquivo do template" name="file[lecture]" value="<%= template.lecture %>"
+                                                    accept=".doc,.docx">
+                                                <button class="btn btn--primary">Enviar</button>
+                                            </div>
+                                            <div>
+                                                <% if (template.lecture) { %>
+                                                <small>Atual: <a href="./certificates/model/lecture" title="Baixar modelo">Baixar
+                                                        Modelo</a></small>
+                                                <!-- <small>Baixar Exemplo: <a href="./certificates/test" title="Baixar Exemplo">Baixar
+                                                        Exemplo</a></small> -->
+                                                <% } else { %>
+                                                <small>Nenhum modelo selecionado</small>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">Template Ministrante de Oficina (docx)</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <div class="input-field">
+                                                <input type="file" placeholder="Arquivo do template" name="file[workshop]" value="<%= template.workshop %>"
+                                                    accept=".doc,.docx">
+                                                <button class="btn btn--primary">Enviar</button>
+                                            </div>
+                                            <div>
+                                                <% if (template.workshop) { %>
+                                                <small>Atual: <a href="./certificates/model/workshop" title="Baixar modelo">Baixar
+                                                        Modelo</a></small>
+                                                <!-- <small>Baixar Exemplo: <a href="./certificates/test" title="Baixar Exemplo">Baixar
+                                                        Exemplo</a></small> -->
+                                                <% } else { %>
+                                                <small>Nenhum modelo selecionado</small>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">Template Ouvinte (de uma oficina) (docx)</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <div class="input-field">
+                                                <input type="file" placeholder="Arquivo do template" name="file[wenrolled]" value="<%= template.wenrolled %>"
+                                                    accept=".doc,.docx">
+                                                <button class="btn btn--primary">Enviar</button>
+                                            </div>
+                                            <div>
+                                                <% if (template.wenrolled) { %>
+                                                <small>Atual: <a href="./certificates/model/wenrolled" title="Baixar modelo">Baixar
+                                                        Modelo</a></small>
+                                                <!-- <small>Baixar Exemplo: <a href="./certificates/test" title="Baixar Exemplo">Baixar
+                                                        Exemplo</a></small> -->
+                                                <% } else { %>
+                                                <small>Nenhum modelo selecionado</small>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <% if (template.certificate) { %>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">Gerar Certificados</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <div class="input-field">
+                                                <a href="./certificates/generate" class="btn btn--primary">Gerar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+
+                            </fieldset>
+                            <fieldset>
+                                <a>
+                                    <legend>TAGS DISPONÍVEIS</legend>
+                                </a>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">{nome}</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <span>Nome do participante</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">{key}</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <span>Chave de autenticação</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">{evento.nome}</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <span>Nome do evento</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">{evento.horas}</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <span>Quantidade de horas do evento</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">{evento.local}</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <span>Local do evento</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">{evento.dataInicio}</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <span>Data inicial do evento</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-block">
+                                    <div class="col-group">
+                                        <div class="col-mb-8 col-6">
+                                            <label class="form-block__name">{evento.dataFim}</label>
+                                        </div>
+                                        <div class="col-mb-16 col-18">
+                                            <span>Data final do evento</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
 
                 </div>
+                </form>
+                <div class="display-none app-content__footer">
+                    <div class="btn-group">
+                        <button class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect" type="submit">Salvar</button>
+                        <a class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+                    </div>
+                </div>
+
+                </section>
+
             </div>
         </div>
     </div>
+</div>
 </div>
 <%- include('../../footer') %>

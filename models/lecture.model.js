@@ -22,6 +22,10 @@ let LectureSchema = new Schema({
         type: Date,
         default: Date.now()
     },
+    hours: {
+        type: Number,
+        default: 1
+    },
     confirmed: {
         type: Boolean,
         default: false

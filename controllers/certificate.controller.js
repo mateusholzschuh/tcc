@@ -21,7 +21,15 @@ var storage = multer.diskStorage({
 
 var upload = multer({ //multer settings for single upload
     storage
-}).single('file');
+}).fields([{
+    name: 'file[certificate]', maxCount: 1
+  }, {
+    name: 'file[lecture]', maxCount: 1
+  }, {
+    name: 'file[workshop]', maxCount: 1
+  }, {
+    name: 'file[wenrolled]', maxCount: 1
+  }]);
 
 /**
  * Mostra a página de configurações
@@ -91,11 +99,23 @@ exports.uploadTemplate = (req, res, next) => {
         if (err) return res.json({error:true, m: err})
 
         let event = req.params.id
+// res.json(req.files)
+// console.log(Object.values(req.files).map(e => e[0]))
+
+let files = Object.values(req.files).map(e => e[0]).map(e => {
+    e.type = e.fieldname.replace('file[', '').replace(']', '')
+    return e
+})
+
+console.log(files)
+        // return;
 
         try {
-            await CertificateService.uploadTemplate(req.file, event)
+            await CertificateService.uploadTemplate(files, event)
             req.flash('message', 'Modelo de certificado atualizado com sucesso')
-            fs.unlinkSync(req.file.path)
+            files.forEach(file => {
+                fs.unlinkSync(file.path)
+            })
         } catch(e) {
             console.error(e)
             req.flash('error', 'Ocorreu um erro ao atualizar! Tente novamente')
@@ -148,8 +168,9 @@ exports.downloadExample = async (req, res, next) => {
  */
 exports.downloadModel = async (req, res, next) => {
     let event = await Event.findById(req.params.id).select('templates')
+    let type = req.params.type || 'certificate'
 
-    let buffer = await CertificateService.getTemplate(event.templates.certificate)
+    let buffer = await CertificateService.getTemplate(event.templates[type])
 
     res.setHeader('Content-Disposition', 'attachment; filename=modelo.docx');
     return res.send(buffer)

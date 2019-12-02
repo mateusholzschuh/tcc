@@ -37,13 +37,14 @@ exports.create = async (req, res) => {
  */
 exports.store = async (req, res, next) => {
     let event = req.params.id    
-    const form = { name, description, location, date, limit, confirmed, speakers } = req.body
+    const form = { name, description, location, date, hours, limit, confirmed, speakers } = req.body
 
     let workshop = {
         name,
         description,
         location,
         date: moment(date, 'DD/MM/YYYY - HH:mm'),
+        hours: Number(hours) || 1,
         limit: Number(limit) || 1,
         confirmed: confirmed == 'on' ? true : false,
         speakers,
@@ -138,7 +139,7 @@ exports.unEnroll = (req, res, next) => {
  * Função responsável por salvar as alterações do item vindos da rota "edit" 
  */
 exports.update = async (req, res, next) => {
-    const form = { name, description, location, date, limit, confirmed, speakers } = req.body
+    const form = { name, description, location, date, hours, limit, confirmed, speakers } = req.body
 
     let workshop = {
         name,
@@ -146,6 +147,7 @@ exports.update = async (req, res, next) => {
         location,
         limit: Number(limit) || 1,
         date: moment(date, 'DD/MM/YYYY - HH:mm'),
+        hours: Number(hours) || 1,
         confirmed: confirmed == 'on' ? true : false,
         speakers
     }

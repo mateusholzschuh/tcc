@@ -18,7 +18,9 @@ router.get('/', controller.index)
 
 router.get('/list', controller.list)
 
-router.get('/model', controller.downloadModel)
+// router.get('/model', controller.downloadModel)
+
+router.get('/model/:type?', controller.downloadModel)
 
 router.get('/test', controller.downloadExample)
 

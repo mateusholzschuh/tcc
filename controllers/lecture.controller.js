@@ -36,13 +36,14 @@ exports.create = async (req, res) => {
  */
 exports.store = async (req, res, next) => {
     let event = req.params.id
-    let form = { name, description, location, date, confirmed, speakers } = req.body
+    let form = { name, description, location, date, hours, confirmed, speakers } = req.body
 
     let lecture = {
         name,
         description,
         location,
         date: moment(date, 'DD/MM/YYYY - HH:mm'),
+        hours: Number(hours) || 1,
         confirmed: confirmed == 'on' ? true : false,
         speakers,
         event
@@ -77,13 +78,14 @@ exports.edit = async (req, res, next) => {
  * Função responsável por atualizar a palestra
  */
 exports.update = async (req, res, next) => {   
-    let form = { name, description, location, date, confirmed, speakers } = req.body
+    let form = { name, description, location, date, hours, confirmed, speakers } = req.body
 
     let lecture = {
         name,
         description,
         location,
         date: moment(date, 'DD/MM/YYYY - HH:mm'),
+        hours: Number(hours) || 1,
         confirmed: confirmed == 'on' ? true : false,
         speakers
     }

@@ -18,43 +18,78 @@ connection.on('connected', () => {
  * @param {Express.Multer.File} file Representação do arquivo de template
  * @param {ObjectId} event Id do evento
  */
-const uploadTemplate = async (file, event) => {
-    if (!file) throw 'Arquivo inválido'
+const uploadTemplate = async (files, event) => {
+    if (!files) throw 'Arquivos inválido'
     if (!event) throw 'Evento inválido'
     if (await Event.findById(event).countDocuments() == 0) throw 'Evento não encontrado'
 
-    let options = {
-        filename: file.filename,
-        contentType: file.mimetype
-    }
+    files.forEach(file => {
+        console.log('----')
+        console.log(file)
+        let options = {
+            filename: file.filename,
+            contentType: file.mimetype
+        }
+    
+        let stream = createReadStream(file.path)
 
-    let stream = createReadStream(file.path)
+        Template.writeFile(options, stream, async (error, fileA) => {
+            if (error) throw error
+    
+            let type = file.type
+            let path = 'templates.'.concat(type)
 
-    return Template.writeFile(options, stream, async (error, file) => {
-        if (error) throw error
+        console.log(file)
 
-        let update = {
-            $set : {
-                'templates.certificate': file.filename
+            let update = {
+                $set : {
+                    [path]: fileA.filename
+                }
             }
-        }
-
-        let e = await Event.findById(event)
-
-        // unlink previous template
-        if(e.templates.certificate) {
-            Template.findOne({ filename: e.templates.certificate }, (err, file) => {
-                if (err) console.error(err)
-                Template.deleteFile(file._id, (err, result) => {
-                    if (err) console.log(err)
+    
+            let e = await Event.findById(event)
+    
+            // unlink previous template
+            if(e.templates[type]) {
+                Template.findOne({ filename: e.templates[type] }, (err, fileB) => {
+                    if (err) console.error(err)
+                    Template.deleteFile(fileB._id, (err, result) => {
+                        if (err) console.log(err)
+                    })
                 })
-            })
-        }
-
-        await e.updateOne(update)
-
-        return file
+            }
+    
+            await e.updateOne(update)
+    
+            return file
+        })
     })
+    return true;
+    // return Template.writeFile(options, stream, async (error, file) => {
+    //     if (error) throw error
+
+    //     let update = {
+    //         $set : {
+    //             'templates.certificate': file.filename
+    //         }
+    //     }
+
+    //     let e = await Event.findById(event)
+
+    //     // unlink previous template
+    //     if(e.templates.certificate) {
+    //         Template.findOne({ filename: e.templates.certificate }, (err, file) => {
+    //             if (err) console.error(err)
+    //             Template.deleteFile(file._id, (err, result) => {
+    //                 if (err) console.log(err)
+    //             })
+    //         })
+    //     }
+
+    //     await e.updateOne(update)
+
+    //     return file
+    // })
 }
 
 /**

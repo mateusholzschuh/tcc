@@ -72,6 +72,9 @@ let EventSchema = new Schema({
     },
     templates: {
         certificate: String,
+        lecture: String,
+        workshop: String,
+        wenrolled: String,
         mail_enroll: String,
     }
 }, 

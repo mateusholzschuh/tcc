@@ -45,12 +45,12 @@ exports.create = async (req, res) => {
  */
 exports.store = async (req, res, next) => {
     // return res.json(req.body)
-    let event = req.params.id    
+    let event = await Event.findById(req.params.id).select('name')
     const form = { user, role } = req.body
 
     let ue = {
         user,
-        event,
+        event: event._id,
         role
     }
 
@@ -59,8 +59,9 @@ exports.store = async (req, res, next) => {
     let password = Math.random().toString(36).slice(-8)
 
     if (u) {
-        u.password = password
-        u.save()
+        u.role = 1              // enable login
+        u.password = password   // set a new password to login
+        u.save()                // save changes
     }
 
     //send mail
@@ -69,9 +70,14 @@ exports.store = async (req, res, next) => {
 <p>Sua senha de acesso ao sistema é:</p>
 <p><strong>Email:</strong> ${u.email}</p>
 <p><strong>Senha:</strong> ${password}</p>
+<br>
 `
+    if (role != 'speaker') {
+        template = template.concat(`<small>Você foi cadastrado para a função de <strong>${RoleName(role)}</strong> no evento <strong>${event.name}</strong></small>`)
+    }
 
     mail.sendMail({
+        from: 'IF Eventos',
         to: u.email,
         subject: 'Credenciais de acesso ao sistema',
         html: template
