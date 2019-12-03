@@ -20,11 +20,21 @@ exports.onSave = [
                         if (user) {
                             return Promise.reject('Este CPF já está cadastrado no sistema!')  
                         }
+                        return true
                     })
                 }),
 
     body('email').isEmail()
                  .withMessage('Endereço de email deve ser válido')
+                 .custom(email => {
+                    // verifica se já está cadastrado no sistema
+                    return User.findOne({ email }).then(user => {
+                        if (user) {
+                            return Promise.reject('Este email já está cadastrado no sistema!')  
+                        }
+                        return true
+                    })
+                 })
                  .normalizeEmail(),
 
     body('birthdate').isString()

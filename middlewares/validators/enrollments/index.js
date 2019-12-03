@@ -10,6 +10,15 @@ exports.onSave = [
 [
     body('email').isEmail()
                  .withMessage('Email inválido')
+                 .custom((email, { req }) => {
+                    // busca usuario pelo email
+                    return User.findOne({ email }).then(user => {
+                        if (user && user.cpf != req.body.cpf) {
+                            return Promise.reject('Este email já está sendo usado por outro inscrito')
+                        }
+                        return true
+                    })
+                 })
                  .normalizeEmail(),
 
     body('name').isString()
