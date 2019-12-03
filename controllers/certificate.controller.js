@@ -228,10 +228,10 @@ exports.postValidate = async (req, res) => {
     let { key } = req.body
 
     try {
-        let cert = await Certificate.findOne({ key })
+        let cert = await Certificate.findOne({ key }).populate('user', 'name cpf')
         if (!cert) throw 'e'
 
-        req.flash('message', 'Certificado Válido de <strong>' + cert.name + '</strong>')
+        req.flash('message', 'Certificado Válido de <strong>' + cert.user.name + '</strong>')
         req.flash('download', cert.key)
         
     } catch (e) {
@@ -281,7 +281,7 @@ exports.postCertificates = async (req, res) => {
     let { cpf } = req.body
 
     try {
-        let user = await User.findOne({ cpf })
+        let user = await User.findOne({ cpf }).select('name cpf')
         let certificates = await Certificate.find({ user: user._id }).populate('event', 'name finished')
 
         certificates = certificates.filter(e => e.event.finished)
@@ -292,8 +292,11 @@ exports.postCertificates = async (req, res) => {
         if (certificates.length == 0)
             throw 'Oops! Você ainda não tem certificados! :/'
 
+        // TODO: find better way to solve
         certificates = certificates.map(c => {
             c._doc.createdAt = moment(c.createdAt).format('DD[/]MM[/]YYYY')
+            c._doc.name = user.name
+            c._doc.cpf = user.cpf
             return {
                 ...c._doc
             }
