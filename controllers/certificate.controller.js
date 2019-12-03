@@ -1,4 +1,5 @@
 const Event = require('../models/event.model')
+const User = require('../models/user.model')
 const Enrollment = require('../models/enrollment.model')
 const Certificate = require('../models/_certificate.model')
 
@@ -58,7 +59,22 @@ exports.list = async (req, res, next) => {
         return res.redirect('../certificates')
     }
 
-    let list = await Enrollment.find({event}).select('code user').populate('user', 'name email cpf instituicao institution').exec()
+    // let list = await Enrollment.find({event}).select('code user').populate('user', 'name email cpf instituicao institution').exec()
+
+    // return res.render('events/event/certificates/list', {
+    //     title: 'Lista de Certificados',
+    //     list
+    // })
+
+    let list = await CertificateService.find({event})
+                        .populate('user', 'name email cpf instituicao institution')
+                        .exec()
+
+    list = list.map(e => {
+        x = e.type
+        e.type = x == 'certificate' ? 'Geral' : x == 'lecture' ? 'Palestrante' : x == 'workshop' ? 'Palestrante (Oficina)' : x == 'wenrolled' ? 'Ouvinte (Oficina)' : '???'
+        return e
+    })
 
     return res.render('events/event/certificates/list', {
         title: 'Lista de Certificados',
@@ -180,7 +196,7 @@ exports.downloadModel = async (req, res, next) => {
  * Faz o download do certificado com base no user_id e event_id [area administrativa]
  */
 exports.see = async (req, res, next) => {
-    let certificate = await Certificate.findOne({user:req.params.user, event: req.params.id})
+    let certificate = await Certificate.findOne({ key: req.params.key })
 
     const filename = await CertificateService.downloadCertificate(certificate.key)
 
@@ -265,8 +281,11 @@ exports.postCertificates = async (req, res) => {
     let { cpf } = req.body
 
     try {
-        let certificates = await Certificate.find({ cpf }).populate('event', 'name')
-        
+        let user = await User.findOne({ cpf })
+        let certificates = await Certificate.find({ user: user._id }).populate('event', 'name finished')
+
+        certificates = certificates.filter(e => e.event.finished)
+
         if (!certificates)
             throw 'Oops! Ocorreu um erro'
 

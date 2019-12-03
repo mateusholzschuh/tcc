@@ -53,9 +53,12 @@ const uploadTemplate = async (files, event) => {
             if(e.templates[type]) {
                 Template.findOne({ filename: e.templates[type] }, (err, fileB) => {
                     if (err) console.error(err)
-                    Template.deleteFile(fileB._id, (err, result) => {
-                        if (err) console.log(err)
-                    })
+                    // ensure that file exists
+                    if (fileB) {
+                        Template.deleteFile(fileB._id, (err, result) => {
+                            if (err) console.log(err)
+                        })
+                    }
                 })
             }
     
@@ -100,12 +103,46 @@ const downloadCertificate = async (key) => new Promise(async (resolve, reject) =
     let certificate = await Certificate.findOne({ key })
                             .populate('user', 'name cpf')
                             .populate('event', 'name location hours startDate finishDate templates')
+                            .populate('lecture', 'name hours date')
+                            .populate('workshop', 'name hours date')
 
     if (!certificate) {
         return reject('Certificado não encontrado!')
     }
 
-    let template = certificate.event.templates.certificate
+    // base data
+    let dados = {
+        nome: certificate.user.name || certificate.name,
+        cpf: certificate.user.cpf || certificate.cpf,
+        key: certificate.key,
+        evento: {
+            nome: certificate.event.name,
+            horas: certificate.event.hours,
+            local: certificate.event.location,
+            dataInicio: moment(certificate.event.startDate).format('DD/MM/YYYY - HH:mm'),
+            dataFim: moment(certificate.event.finishDate).format('DD/MM/YYYY - HH:mm')
+        }
+    }
+
+    // additional for lecture
+    if (certificate.type == 'lecture') {
+        dados['palestra'] = {
+            nome: certificate.lecture.name,
+            data: moment(certificate.lecture.date).format('DD/MM/YYYY - HH:mm'),
+            carga: certificate.lecture.hours,
+        }
+    }
+
+    // additional for workshop or enrolled (workshop)
+    if (certificate.type == 'workshop' || certificate.type == 'wenrolled') {
+        dados['workshop'] = {
+            nome: certificate.workshop.name,
+            data: moment(certificate.workshop.date).format('DD/MM/YYYY - HH:mm'),
+            carga: certificate.workshop.hours,
+        }
+    }
+
+    let template = certificate.event.templates[certificate.type]
     let filename = 'tmp/'.concat(Date.now(), '.docx')
 
     getTemplate(template).then(async buffer => {
@@ -114,18 +151,7 @@ const downloadCertificate = async (key) => new Promise(async (resolve, reject) =
             output: filename,
             template:buffer,
             cmdDelimiter: ['{', '}'],
-            additionalJsContext: {
-                nome: certificate.user.name || certificate.name,
-                cpf: certificate.user.cpf || certificate.cpf,
-                key: certificate.key,
-                evento: {
-                    nome: certificate.event.name,
-                    horas: certificate.event.hours,
-                    local: certificate.event.location,
-                    dataInicio: moment(certificate.event.startDate).format('DD/MM/YYYY - HH:mm'),
-                    dataFim: moment(certificate.event.finishDate).format('DD/MM/YYYY - HH:mm')
-                }
-            },
+            additionalJsContext: dados,
             processLineBreaks: true,
             noSandbox: false,
         })        

@@ -255,7 +255,7 @@ exports.showStats = async (req, res) => {
 }
 
 getEvents = async (params) => {
-    return await Event.find(params).select('name description location days hours periods startDate finishDate')
+    return await Event.find(params).select('name description location days hours periods startDate finishDate finished')
 }
 
 exports.api = {

@@ -16,6 +16,26 @@ let CertificateSchema = new Schema({
     key: {
         type: String,
     },
+    lecture: {  // if certificate type is 'lecture' => this has the reference
+        type: Schema.Types.ObjectId,
+        ref: 'Lecture',
+        required: false
+    },
+    workshop: {  // if certificate type is 'workshop' or 'wenrolled' => this has the reference
+        type: Schema.Types.ObjectId,
+        ref: 'Workshop',
+        required: false
+    },
+    type: {
+        type: String,
+        enum: [
+            'certificate',  // default type. this is the event certificate
+            'lecture',      // this is for the lecture speaker/s
+            'workshop',     // this is for the workhop speaker/s
+            'wenrolled'     // this is for the enrolled in one workshop
+        ],
+        default: 'certificate'
+    },
 
     // replicação de dados do usuario
     name: String,

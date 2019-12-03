@@ -1,6 +1,7 @@
 const User = require('../models/user.model')
 const Event = require('../models/event.model')
 const Lecture = require('../models/lecture.model')
+const LectureService = require('../services/lecture')
 
 const moment = require('moment')
 
@@ -49,13 +50,19 @@ exports.store = async (req, res, next) => {
         event
     }
 
-    Lecture.create(lecture).then(r => {
-        Event.findOneAndUpdate({ _id: event }, { '$push': { 'lectures': r._id } }).then(ok => {
-            return res.redirect('../lectures')
-        })
-    }).catch(e => {
-        next()
-    })
+    // Lecture.create(lecture).then(r => {
+    //     Event.findOneAndUpdate({ _id: event }, { '$push': { 'lectures': r._id } }).then(ok => {
+    //         return res.redirect('../lectures')
+    //     })
+    // }).catch(e => {
+    //     next()
+    // })
+    try {
+        await LectureService.createOne(lecture, event)
+        return res.redirect('../lectures')
+    } catch (e) {
+        return next(e)
+    }
 }
 
 /**

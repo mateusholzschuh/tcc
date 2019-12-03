@@ -148,7 +148,8 @@
                     <% certificates.forEach(c => { %>
                     <div style="border-bottom: 1px solid #eee; padding: .5rem 0;margin-bottom: .25rem;display: flex;justify-content: space-between;">
                         <div>
-                            <h4><%= c.event.name %></h4>
+                            <% x = c.type; c.type = x == 'certificate' ? 'Geral' : x == 'lecture' ? 'Palestrante' : x == 'workshop' ? 'Palestrante (Oficina)' : x == 'wenrolled' ? 'Ouvinte (Oficina)' : '???'%>
+                            <h4><%= c.event.name %> <small>(<%= c.type %>)</small></h4>
                             <a href="/validar-certificado/<%= c.key %>" download>Baixar Certificado</a>
                         </div>
                         <p><%= c.createdAt %></p>

@@ -2,6 +2,8 @@ const User = require('../models/user.model')
 const Event = require('../models/event.model')
 const Enrollment = require('../models/enrollment.model')
 const Workshop = require('../models/workshop.model')
+const WorkshopService = require('../services/workshop')
+const CertificateService = require('../services/certificate')
 
 const moment = require('moment')
 
@@ -51,14 +53,20 @@ exports.store = async (req, res, next) => {
         event
     }
 
-    Workshop.create(workshop).then(r => {
-        Event.findOneAndUpdate({ _id: event }, { '$push': { 'workshops': r._id } }).then(ok => {
-            return res.redirect('../workshops')
-        })
-    }).catch(e => {
-        // res.status(500).json(e)
-        next()
-    })
+    // Workshop.create(workshop).then(r => {
+    //     Event.findOneAndUpdate({ _id: event }, { '$push': { 'workshops': r._id } }).then(ok => {
+    //         return res.redirect('../workshops')
+    //     })
+    // }).catch(e => {
+    //     // res.status(500).json(e)
+    //     next()
+    // })
+    try {
+        await WorkshopService.createOne(workshop, event)
+        return res.redirect('../workshops')
+    } catch (e) {
+        return next(e)
+    }
 }
 
 /**
@@ -104,6 +112,7 @@ exports.enrolleds = async (req, res, next) => {
 exports.enroll = async (req, res, next) => {
     const { user } = req.body
     const workshop = req.params.workshop
+    const event = req.params.id
 
     let count = await Workshop.findOne({ _id: workshop, enrolleds: { '$elemMatch': { user: user } } }).countDocuments()
 
@@ -113,12 +122,18 @@ exports.enroll = async (req, res, next) => {
         return res.redirect('./enrolleds')
     }
 
-    Workshop.findByIdAndUpdate(workshop, { '$push': { 'enrolleds': { user: user } } }).then(doc => {
+    // Workshop.findByIdAndUpdate(workshop, { '$push': { 'enrolleds': { user: user } } }).then(doc => {
+    //     return res.redirect('./enrolleds')
+    // }).catch(err => {
+    //     // res.json(err)
+    //     next()
+    // })
+    try {
+        WorkshopService.enroll(workshop, user)
         return res.redirect('./enrolleds')
-    }).catch(err => {
-        // res.json(err)
-        next()
-    })
+    } catch (e) {
+        return next(e)
+    }
 }
 
 /**
@@ -178,11 +193,31 @@ exports.ajax = {
      */
     updatePresence: async (req, res) => {
         const { enroll, workshop, checked } = req.body
+        let _worshop = await Workshop.findById(workshop)
+        let user = _worshop.enrolleds.filter(e => e._id == enroll)[0]
 
-        await Workshop.findOneAndUpdate({_id : workshop, 'enrolleds._id' : enroll }, { '$set' : { 'enrolleds.$.presence' : checked }}).exec()
-        .then(ok => {        
+        if (checked == 'true') {
+            console.log('criou')
+            console.log(
+                await CertificateService.create({
+                    user: user.user,
+                    event: _worshop.event,
+                    workshop,
+                    type: 'wenrolled'
+                })
+            )
+        } else {
+            console.log('eliminou?')
+            console.log(
+                await CertificateService.deleteOne({ type: 'wenrolled', workshop, user: user.user}).then(r => console.log(r))
+            )
+        }
+
+        await Workshop.updateOne({_id : workshop, 'enrolleds._id' : enroll }, { '$set' : { 'enrolleds.$.presence' : checked }})
+        .then(ok => {            
             return res.status(200).json({message:'Presença atualizada com sucesso'})
         }).catch(err => {
+            console.error(err)
             return res.status(500).json({errors: ["Ocorreu um erro ao processar, tente novamente"]})
         })
     }

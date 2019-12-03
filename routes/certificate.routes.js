@@ -29,7 +29,7 @@ router.post('/upload', controller.uploadTemplate)
 
 router.get('/generate', controller.generate)
 
-router.get('/see/:user', controller.see)
+router.get('/see/:key', controller.see)
 
 // exporta o router
 module.exports = router
