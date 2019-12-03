@@ -10,6 +10,7 @@
                         <span>Geral</span>
                     </a>
                 </li>
+                <% if (can('organization')) { %>
                 <li class="<%- locals.eventMenu ? (eventMenu == 'enrolleds') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/enrolleds" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-accounts-list"></i>
@@ -22,12 +23,15 @@
                         <span>Palestras</span>
                     </a>
                 </li>
+                <% } %>
+                <% if (can('speaker')) { %>
                 <li class="<%- locals.eventMenu ? (eventMenu == 'workshops') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/workshops" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-gamepad"></i>
                         <span>Oficinas</span>
                     </a>
                 </li>
+                <% } %>
                 <!-- <li class="<%- locals.eventMenu ? (eventMenu == 'hackathon') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/hackathon" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-code"></i>
@@ -80,18 +84,21 @@
                         </li>
                     </ul>
                 </li> -->
+                <% if (can('accreditation')) { %>
                 <li class="<%- locals.eventMenu ? (eventMenu == 'checkin') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/checkin" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-check-all"></i>
                         <span>Check-in</span>
                     </a>
                 </li>
+                <% } %>
+                <% if (can('coordinator')) { %>
                 <li class="<%- locals.eventMenu ? (eventMenu == 'settings') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/edit" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-settings"></i>
                         <span>Configurações</span>
                     </a>
-                </li>
+                </li>                
                 <li class="<%- locals.eventMenu ? (eventMenu == 'organizers') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/organizers" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-accounts-alt"></i>
@@ -110,6 +117,7 @@
                         <span>E-mail</span>
                     </a>
                 </li>
+                <% } %>
                 <li class="<%- locals.eventMenu ? (eventMenu == 'stats') ? 'is-active' : '' : '' %>">
                     <a href="<%- baseUrl %>/stats" class="mdl-js-button mdl-js-ripple-effect">
                         <i class="zmdi zmdi-chart"></i>

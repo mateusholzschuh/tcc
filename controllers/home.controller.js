@@ -11,7 +11,7 @@ exports.getHome = async (req, res, next) => {
 
     // let _u = await User.findById(user).exec()
     // let isAdmin = _u.role > 0
-    let isAdmin = user.isAdmin
+    let isAdmin = user.isAdmin || user.role == 2
 
     let ues = []
 

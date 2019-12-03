@@ -1,0 +1,150 @@
+<%- include('../../header') %>
+<div class="grid-stack-item" data-gs-no-move="1" data-gs-no-resize="1" data-gs-x="0" data-gs-y="0" data-gs-width="24"
+    data-gs-height="19" data-gs-min-width="13" data-gs-min-height="18" data-gs-auto-position="0">
+    <div class="grid-stack-item-content">
+        <div class="card card--pagination card--tabs no-padding" data-preload>
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <div class="swiper-container swiper-mdl-tabs tab-bar--tape">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <a href="#"
+                                    class="mdl-tabs__tab">Editar inscrito</a>
+                            </div>
+                        </div>
+                        <div class="swiper-mdl-tabs-next"></div>
+                        <div class="swiper-mdl-tabs-prev"></div>
+                    </div>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="add-panel">
+                    <section class="generals-form" style="width:100%">
+                        <form action="../<%- obj._id %>/edit" method="POST">
+                            <div class="col-group">
+
+
+                                <fieldset name="inputs" class="col-mb-24 col-12">
+                                    <a name="AntaresInputs" id="AntaresInputs">
+                                        <legend>Dados Gerais</legend>
+                                    </a>
+
+                                    <div class="form-block">
+                                        <% if (locals.errors) { 
+                                            errors.forEach(error => { %>
+                                        <div class="col-group">
+                                            <div class="col">
+                                                <p
+                                                    class="alert alert alert--glow alert--error alert--md alert--border mb20">
+                                                    <%- error %></p>
+                                            </div>
+                                        </div>
+                                        <% })
+                                          } %>
+                                    </div>
+
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Nome</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="text" placeholder="Nome do inscrito" name="name"
+                                                        value="<%- obj.name %>" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">CPF</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="text" placeholder="CPF do inscrito" name="cpf"
+                                                        value="<%- obj.cpf %>" maxlength="11" minlength="11"
+                                                        required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Email</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field">
+                                                    <input type="email" placeholder="Email do inscrito" name="email"
+                                                        value="<%- obj.email %>" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+                                        <div class="col-group">
+
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Data de nascimento</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field datepicker-icon">
+                                                    <input data-datepicker="true" name="birthdate"
+                                                        placeholder="Data de nascimento" type="datetime"
+                                                        value="<%- obj.birthdate %>" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-block">
+
+                                        <div class="col-group">
+                                            <div class="col-mb-8 col-6">
+                                                <label class="form-block__name">Instituição</label>
+                                            </div>
+                                            <div class="col-mb-16 col-18">
+                                                <div class="input-field ">
+                                                    <select data-selectar--search name="institution"
+                                                        data-placeholder="Selecione a instituição" required>
+                                                        <option value="">---</option>
+                                                        <option <%- obj.instituicao == 'ifsul-bage' ?  'selected' : '' %> value="ifsul-bage">IFsul - Campus Bagé</option>
+                                                        <option <%- obj.instituicao == 'ifsul-pelotas' ?  'selected' : '' %> value="ifsul-pelotas">IFsul - Campus Pelotas</option>
+                                                        <option <%- obj.instituicao == 'unipampa' ?  'selected' : '' %> value="unipampa">Unipampa</option>
+                                                        <option <%- obj.instituicao == 'urcamp' ?  'selected' : '' %> value="urcamp">Urcamp</option>
+                                                        <option <%- obj.instituicao == 'ideau' ?  'selected' : '' %> value="ideau">IDEAU</option>
+                                                        <option <%- obj.instituicao == 'unicesumar' ?  'selected' : '' %> value="unicesumar">Unicesumar</option>
+                                                        <option <%- obj.instituicao == 'estacio' ?  'selected' : '' %> value="estacio">Estácio</option>
+                                                        <option <%- obj.instituicao == 'outros' ?  'selected' : '' %> value="outros">Outros</option>
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                            </div>
+                            <div class="app-content__footer">
+                                <div class="btn-group">
+                                    <button
+                                        class="btn btn--md btn--primary mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="submit">Atualizar</button>
+                                    <a
+                                        class="display-none btn btn--md btn--default mdl-button mdl-js-button mdl-js-ripple-effect">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../../footer') %>

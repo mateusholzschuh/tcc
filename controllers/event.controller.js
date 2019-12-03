@@ -143,8 +143,6 @@ exports.mailSettings = async (req, res) => {
     
     template = event.templates ? event.templates.mail_enroll ? event.templates.mail_enroll : '' : ''
 
-    console.log(event)
-
     return res.render('events/event/mail/edit', {
         title: 'Email',
         eventMenu: 'mail',

@@ -36,8 +36,20 @@ router.all('/*', (req, res, next) => {
     next()
 })
 
-router.all('/:id/*', (req, res, next) => {
-    res.locals.baseUrl = `/events/${req.params.id}`    
+router.all('/:id/*', async (req, res, next) => {
+    res.locals.baseUrl = `/events/${req.params.id}`
+    
+    if (!req.params.id.startsWith('/') && !req.params.id.includes('create')) {
+        let ue = await require('../models/user-event.model').findOne({ event: req.params.id, user: req.user._id })
+        let roles = []
+        if (ue)
+            roles = require('../utils/roles').all(ue.role)
+
+        res.locals.can = (role) => {
+            return req.user.role == 2 || roles.includes(role)
+        }
+    }
+    
     next()
 })
 

@@ -14,7 +14,7 @@ router.all('/*', (req, res, next) => {
         email: req.user.email,
       }
 
-      res.locals.isAdmin = () => req.user.isAdmin ? true : false
+      res.locals.isAdmin = () => req.user.role == 2
   }
   
   next()

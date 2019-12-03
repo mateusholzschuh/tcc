@@ -24,6 +24,10 @@ router.get('/add', controller.create)
 // rota que salva uma nova inscrição
 router.post('/add', validator.onSave, controller.store)
 
+// rota que mostra form editar usuario
+router.get('/:user/edit', controller.edit)
+router.post('/:user/edit', validator.onUpdate, controller.update)
+
 // remove inscrição //! Desabilitado em produção
 // router.post('/:enroll/delete',  controller.destroy)
 

@@ -13,7 +13,9 @@ module.exports = (role, user, event) => {
                 return next()
             } else {
                 req.flash('error', 'Você não tem permissão para acessar este recurso!')
-                return res.redirect('..')
+                if (event)
+                    return res.redirect(`/events/${event}/`)
+                return res.redirect('/events')            
             }
         })
     }

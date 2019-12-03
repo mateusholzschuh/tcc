@@ -31,3 +31,17 @@ exports.HasPermission = async (role, user, event) => {
 
     return false
 }
+
+exports.all = (base) => {
+    let _roles = []
+    _roles.push(base)
+    
+    let roleRecursive = roles[base].extends
+
+    while (roleRecursive) {
+        _roles.push(roleRecursive)
+        roleRecursive = roles[roleRecursive].extends
+    }
+
+    return _roles
+}

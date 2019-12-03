@@ -48,6 +48,42 @@ exports.store = async (req, res, next) => {
 }
 
 /**
+ * Mostra formulário para editar inscrição no evento
+ */
+exports.edit = async (req, res) => {
+    let user = await User.findById(req.params.user).select('name email cpf instituicao institution birthdate')
+
+    user._doc.birthdate = moment(user.birthdate).format('DD/MM/YYYY')
+
+    return res.render('events/event/enrolleds/edit', {
+        title: 'Editar inscrição',
+        obj: user
+    })
+}
+
+/**
+ * Função responsável por ataulizar a inscrição
+ */
+exports.update = async (req, res, next) => {
+    let event = req.params.id
+    let uid = req.params.user
+    let form = { name, email, cpf, birthdate, institution, instituicao } = req.body
+    let user = {
+        ...form,
+        birthdate: moment(birthdate, 'DD/MM/YYYY'),
+    }
+
+    try {
+        await User.updateOne({ email }, user)
+        return res.redirect('../../enrolleds')
+    } catch(e) {
+        console.error(e)
+        return next()
+    }
+
+}
+
+/**
  * Função responsável por deletar inscrição //! Não deve ser usada em produção
  */
 exports.destroy = (req, res, next) => {
