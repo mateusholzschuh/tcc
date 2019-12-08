@@ -5,6 +5,7 @@ const { createReadStream } = require('fs')
 const { createModel, createBucket } = require('mongoose-gridfs')
 const createReport = require('docx-templates')
 const moment = require('moment')
+const { toCompleteDate } = require('../utils/date')
 
 const connection = require('mongoose').connection
 
@@ -128,16 +129,16 @@ const downloadCertificate = async (key) => new Promise(async (resolve, reject) =
     if (certificate.type == 'lecture') {
         dados['palestra'] = {
             nome: certificate.lecture.name,
-            data: moment(certificate.lecture.date).format('DD/MM/YYYY - HH:mm'),
+            data: toCompleteDate(certificate.lecture.date),
             carga: certificate.lecture.hours,
         }
     }
 
     // additional for workshop or enrolled (workshop)
     if (certificate.type == 'workshop' || certificate.type == 'wenrolled') {
-        dados['workshop'] = {
+        dados['oficina'] = {
             nome: certificate.workshop.name,
-            data: moment(certificate.workshop.date).format('DD/MM/YYYY - HH:mm'),
+            data: toCompleteDate(certificate.workshop.date),
             carga: certificate.workshop.hours,
         }
     }
