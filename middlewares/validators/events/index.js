@@ -24,8 +24,8 @@ exports.isNotFinished = async (req, res, next) => {
 exports.onSave = [
 [
     body('name').isString()
-                .isLength({ min: 5, max: 50 })
-                .withMessage('Nome inválido, deve ter entre 5 e 50 caracteres'),
+                .isLength({ min: 5, max: 70 })
+                .withMessage('Nome inválido, deve ter entre 5 e 70 caracteres'),
 
     body('location').isString()
                     .isLength({ min: 5, max: 50 })
@@ -79,8 +79,8 @@ async (req, res, next) => {
 exports.onUpdate = [
 [
     body('name').isString()
-                .isLength({ min: 5, max: 50 })
-                .withMessage('Nome inválido, deve ter entre 5 e 50 caracteres'),
+                .isLength({ min: 5, max: 70 })
+                .withMessage('Nome inválido, deve ter entre 5 e 70 caracteres'),
 
     body('location').isString()
                     .isLength({ min: 5, max: 50 })

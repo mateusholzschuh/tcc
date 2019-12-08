@@ -8,8 +8,8 @@ const { body, validationResult } = require('express-validator')
 exports.onSave = [
 [
     body('name').isString()
-                .isLength({ min:5, max: 50 })
-                .withMessage('Nome inválido, deve ter entre 5 e 50 caracteres')
+                .isLength({ min:5, max: 70 })
+                .withMessage('Nome inválido, deve ter entre 5 e 70 caracteres')
 ],
 async (req, res, next) => {
     // check if has errors in the validation
@@ -35,8 +35,8 @@ async (req, res, next) => {
 exports.onUpdate = [
 [
     body('name').isString()
-                .isLength({ min:5, max: 50 })
-                .withMessage('Nome inválido, deve ter entre 5 e 50 caracteres')
+                .isLength({ min:5, max: 70 })
+                .withMessage('Nome inválido, deve ter entre 5 e 70 caracteres')
 ],
 async (req, res, next) => {
     // check if has errors in the validation

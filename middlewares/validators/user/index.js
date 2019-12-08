@@ -9,8 +9,8 @@ const moment = require('moment')
  */
 exports.onSave = [
 [
-    body('name').isLength({ min:5, max:50 })
-                .withMessage('Nome inválido, deve ter entre 5 e 50 caracteres!'),
+    body('name').isLength({ min:5, max:70 })
+                .withMessage('Nome inválido, deve ter entre 5 e 70 caracteres!'),
 
     body('cpf').isLength({ min:11, max:11 })
                .withMessage('CPF inválido, deve ter 11 digitos numéricos!')
@@ -66,8 +66,8 @@ async (req, res, next) => {
  */
 exports.onUpdate = [
 [
-    body('name').isLength({ min:5, max:50 })
-                .withMessage('Nome inválido, deve ter entre 5 e 50 caracteres!'),
+    body('name').isLength({ min:5, max:70 })
+                .withMessage('Nome inválido, deve ter entre 5 e 70 caracteres!'),
 
     body('cpf').isLength({ min:11, max:11 })
                 .withMessage('CPF inválido, deve ter 11 digitos numéricos!'),

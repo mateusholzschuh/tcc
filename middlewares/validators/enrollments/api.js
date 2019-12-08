@@ -22,8 +22,8 @@ exports.onSave = [
                  .normalizeEmail(),
 
     body('name').isString()
-                .isLength({ min: 5, max: 50 })
-                .withMessage('Nome inválido, deve ter entre 5 e 50 caracteres'),
+                .isLength({ min: 5, max: 70 })
+                .withMessage('Nome inválido, deve ter entre 5 e 70 caracteres'),
 
     body('cpf').isNumeric()
                .isLength({ min: 11, max: 11 })
